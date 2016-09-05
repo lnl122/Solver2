@@ -36,7 +36,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(926, 362);
             this.Name = "Form1";
-            this.Text = "name of app";
+            this.Text = "new name of app";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
 
