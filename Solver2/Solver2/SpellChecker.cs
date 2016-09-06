@@ -15,6 +15,7 @@ namespace Solver2
     // public bool Check(string SingleWord)
     // public bool CheckOne(string SingleWord)
     //
+
     class SpellChecker
     {
         // словари - загружаемый и создающийся в процессе работы
@@ -26,6 +27,9 @@ namespace Solver2
         private static bool isObjectReady = false;
         // словарь был ли загружен?
         private static bool isDicionaryLoaded = false;
+
+        // тестовая строка для проверки работоспособности
+        private static string teststring = "мама мыла раму";
 
         // внешний объект
         private Microsoft.Office.Interop.Word.Application WordApp = null;
@@ -118,7 +122,7 @@ namespace Solver2
             try
             {
                 var wa = new Microsoft.Office.Interop.Word.Application();
-                wa.CheckSpelling("мама мыла раму");
+                wa.CheckSpelling(teststring);
                 wa.Quit();
                 Log.Write("words MS Word точно есть");
                 return true;
