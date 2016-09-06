@@ -1,12 +1,13 @@
-﻿using Microsoft.Win32;
+﻿// *** при необходимости проверки более 1000 слов за один прием - разбивать на несколько процессов по 1000 слов.
+// *** добавить поиск ассоциаций по трем словам
+//
+
+
+using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Solver2
 {
@@ -88,7 +89,7 @@ namespace Solver2
                 Log.Write("check ERROR: Не удалось определить версию Microsoft Word"); return false;
             }
             Log.Write("check Найден Microsoft Word версии " + WordVersion);
-            /*try
+            try
             {
                 var testSC = new SpellChecker();
                 if (testSC.CheckOne("мама") && testSC.CheckOne("мыла") && testSC.CheckOne("раму"))
@@ -99,7 +100,7 @@ namespace Solver2
             catch
             {
                 Log.Write("ERROR: Не удалось запустить проверку орфографии, или же проверка русского языка не установлена.."); return false;
-            }*/
+            }
 
             // проверка открытия web-ресурсов
             WebClient wc1 = null;
@@ -122,19 +123,19 @@ namespace Solver2
         public static void InitComponents()
         {
             string localpath = Environment.CurrentDirectory + @"\Data\";
-            //SpellChecker.Init();
-            //SpellChecker.LoadDictionary(localpath + "SpChDict.dat");
-            //Associations.Init();
-            //Associations.LoadDictionary(localpath + "AssocDict.dat");
-            //Associations.LoadDictionaryBad(localpath + "AssocDictBad.dat");
+            SpellChecker.Init();
+            SpellChecker.LoadDictionary(localpath + "SpChDict.dat");
+            Associations.Init();
+            Associations.LoadDictionary(localpath + "AssocDict.dat");
+            Associations.LoadDictionaryBad(localpath + "AssocDictBad.dat");
         }
 
         // завершаем работы наших объектов
         public static void CloseComponents()
         {
-            //SpellChecker.SaveDictionary();
-            //Associations.SaveDictionary();
-            //Associations.SaveDictionaryBad();
+            SpellChecker.SaveDictionary();
+            Associations.SaveDictionary();
+            Associations.SaveDictionaryBad();
         }
 
         // код основной программы
