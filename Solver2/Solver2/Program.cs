@@ -129,7 +129,6 @@ namespace Solver2
             Associations.LoadDictionary(localpath + "AssocDict.dat");
             Associations.LoadDictionaryBad(localpath + "AssocDictBad.dat");
         }
-
         // завершаем работы наших объектов
         public static void CloseComponents()
         {
