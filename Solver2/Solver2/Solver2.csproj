@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Associations.cs" />
+    <Compile Include="Engine.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Logon.cs" />
     <Compile Include="Program.cs" />
