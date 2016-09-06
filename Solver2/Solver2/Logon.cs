@@ -98,17 +98,32 @@ namespace Solver2
                         //MF.Text = mainform_caption + " / user: " + user;
                         // запомним параметры игрока
                         pageSource = pageSource.ToLower();
-                        pageSource = pageSource.Substring(pageSource.IndexOf(user.ToLower()));
-                        pageSource = pageSource.Substring(pageSource.IndexOf("(id"));
-                        pageSource = pageSource.Substring(pageSource.IndexOf(">") + 1);
-                        userid = pageSource.Substring(0, pageSource.IndexOf("<"));
-                        username = user;
-                        password = pass;
-                        isSuccessful = true;
-                        // поставим флаг выхода
-                        fl = false;
-                        // в лог
-                        Log.Write("Имя и пароль пользователя проверены, успешный логон для id=" + userid);
+                        try
+                        {
+                            pageSource = pageSource.Substring(pageSource.IndexOf(user.ToLower()));
+                            pageSource = pageSource.Substring(pageSource.IndexOf("(id"));
+                            pageSource = pageSource.Substring(pageSource.IndexOf(">") + 1);
+                            userid = pageSource.Substring(0, pageSource.IndexOf("<"));
+                            username = user;
+                            password = pass;
+                            isSuccessful = true;
+                            // поставим флаг выхода
+                            fl = false;
+                            // в лог
+                            Log.Write("Имя и пароль пользователя проверены, успешный логон для id=" + userid);
+                        }
+                        catch
+                        {
+                            // если была ошибка в парсинге
+                            userid = "";
+                            username = user;
+                            password = pass;
+                            isSuccessful = false;
+                            // поставим флаг выхода
+                            fl = false;
+                            // в лог
+                            Log.Write("Не получилось определить id польвзоателя, хотя логон прошел успешно. ник=" + user);
+                        }
                     }
                     else
                     {
