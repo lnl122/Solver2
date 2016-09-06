@@ -36,6 +36,8 @@ namespace Solver2
         private static int MaxTryToReadPage = 3;
         // на сколько миллисекунд засыпать при неудачном одном чтении
         private static int TimeToSleepMs = 1000;
+        // константа
+        private static string url_sociationorg = "http://sociation.org/word/";
 
         // конструктор
         // выход - объект
@@ -169,7 +171,7 @@ namespace Solver2
         {
             System.Net.WebClient WebClient = new System.Net.WebClient();
             WebClient.Encoding = System.Text.Encoding.UTF8;
-            string url = "http://sociation.org/word/" + word;
+            string url = url_sociationorg + word;
             string Page = "";
             bool isNeedReadPage = true;
             int CountTry = 0;
