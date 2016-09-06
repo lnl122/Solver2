@@ -3,6 +3,7 @@ using System.Net;
 
 namespace Solver2
 {
+    // public static string GetPage(string url) - получает текст страницы по урлу
     // public static string Logon(string url1, string name, string pass) - выход - страница после попытки авторизации
     //
 
@@ -13,18 +14,22 @@ namespace Solver2
 
 
         // получает страницу по урлу
-        public static string get_page(string url)
+        // вход - урл
+        // выход - текст страницы в нижнем регистре
+        public static string GetPage(string url)
         {
             string ps = "";
             HttpWebRequest getRequest = (HttpWebRequest)WebRequest.Create(url);
+
             //getRequest.Headers.Add("Accept-Language", "ru-ru,ru");
             //getRequest.Headers.Add("Content-Language", "ru-ru,ru");
-            ////getRequest.Headers.Set("Accept-Charset", "utf-8");
-            ////getRequest.Headers.Set("Accept-Encoding", "utf-8");
-            ////getRequest.Headers.
-            ////Accept-Charset
-            ////Accept-Encoding
+            //getRequest.Headers.Set("Accept-Charset", "utf-8");
+            //getRequest.Headers.Set("Accept-Encoding", "utf-8");
+            //getRequest.Headers.
+            //Accept-Charset
+            //Accept-Encoding
             //getRequest.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1";
+
             try
             {
                 getRequest.CookieContainer = cCont;
@@ -41,7 +46,7 @@ namespace Solver2
             }
             return ps.ToLower();
         }
-        
+
         // выполняем логон в движке
         // вход - урл, логин, пасс
         // выход - страница с ответом
@@ -72,5 +77,6 @@ namespace Solver2
             }
             return pageSource;
         }
+
     }
 }
