@@ -156,6 +156,13 @@ namespace Solver2
             }
             // инициализируем наши собственные компоненты
             InitComponents();
+            // выполняем логон в системе
+            Logon logonData = new Logon();
+            if (!logonData.isSuccessful) { System.Windows.Forms.MessageBox.Show("Жаль, что не помните ник и пароль... :(\r\n\r\nМожет быть вам необходимо зарегистрироваться на ***.en.cx?"); }
+            else
+            {
+                System.Windows.Forms.MessageBox.Show("Едем!");
+            }
 
             // создаём форму, передаём её управление
             //MainForm MF1 = new MainForm();

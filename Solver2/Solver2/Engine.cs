@@ -36,7 +36,7 @@ namespace Solver2
             }
             catch
             {
-                Log.Write("gpage ERROR: Не удалось прочитать страницу ", url);
+                Log.Write("en.cx ERROR: Не удалось прочитать страницу ", url);
                 ps = "";
             }
             return ps.ToLower();

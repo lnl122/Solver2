@@ -8,13 +8,13 @@ namespace Solver2
 
     class Logon
     {
-        private static int border = 5; // расстояния между элементами форм, константа
-        private static string url_game_en_cx = "http://game.en.cx/Login.aspx";
+        private int border = 5; // расстояния между элементами форм, константа
+        private string url_game_en_cx = "http://game.en.cx/Login.aspx";
 
-        public static bool isLogon;
-        public static string username;
-        public static string password;
-        public static string userid;
+        public bool isSuccessful = false;
+        public string username = "";
+        public string password = "";
+        public string userid = "";
 
         public Logon()
         {
@@ -104,7 +104,7 @@ namespace Solver2
                         userid = pageSource.Substring(0, pageSource.IndexOf("<"));
                         username = user;
                         password = pass;
-                        isLogon = true;
+                        isSuccessful = true;
                         // поставим флаг выхода
                         fl = false;
                         // в лог
@@ -116,7 +116,7 @@ namespace Solver2
                         userid = "";
                         username = "";
                         password = "";
-                        isLogon = false;
+                        isSuccessful = false;
                         Log.Write("Неверные логин/пароль");
                         MessageBox.Show("Неверные логин/пароль");
                     }
