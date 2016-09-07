@@ -36,7 +36,7 @@ namespace Solver2
 
             // форма для ввода данных
             Form Login = new Form();
-            Login.Text = "Введите ник игрока и его пароль..";
+            Login.Text = "Авторизация..";
             Login.StartPosition = FormStartPosition.CenterScreen;
             Login.Width = 35 * border;
             Login.Height = 25 * border;

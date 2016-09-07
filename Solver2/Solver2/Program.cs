@@ -168,6 +168,7 @@ namespace Solver2
                 if (!GameSelectData.isSuccessful) { System.Windows.Forms.MessageBox.Show("Жаль, что не можете выбрать игру... :(\r\n\r\nМожет быть вам необходимо освежить память открыв список игр в браузере?"); }
                 else
                 {
+                    Levels Levels = new Levels(GameSelectData);
                     System.Windows.Forms.MessageBox.Show("Едем!");
                     // *** тут нужно прочитать все уровни, заполнить инитные данные для формы, создать её и открыть.
                 }

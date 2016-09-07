@@ -22,6 +22,7 @@ namespace Solver2
         public static string userid = "";
         public static string gamedomain = "";
         public static string gameid = "";
+        public static bool isStorm = false;
         public static int gamelevels = 0;
 
         private static string[] g_names;
@@ -212,9 +213,10 @@ namespace Solver2
                         int fr = ps5.IndexOf("игра:мозговой штурм");
                         int fe = ps5.IndexOf("covering zone:brainstorm");
                         if (fr + fe < 0) { isSuccessful = false; MessageBox.Show("Это не МШ.."); continue; }
-                        //fr = ps5.IndexOf("<td>последовательность прохождения:штурмовая</td>");
-                        //fe = ps5.IndexOf("<td>the levels passing sequence:storm</td>");
-                        //if (fr + fe < 0) { isSuccessful = false; MessageBox.Show("Последовательность не штурмовая.."); continue; }
+                        isStorm = true;
+                        fr = ps5.IndexOf("<td>последовательность прохождения:штурмовая</td>");
+                        fe = ps5.IndexOf("<td>the levels passing sequence:storm</td>");
+                        if (fr + fe < 0) { isStorm = false; }
                         page = Engine.GetPage("http://" + gamedomain + "/gameengines/encounter/play/" + gameid);
                         if (page.IndexOf("class=\"gamecongratulation\"") != -1) { isSuccessful = false; MessageBox.Show("Эта игра уже закончилась.."); continue; }
                         if (page.IndexOf("<span id=\"animate\">поздравляем!!!</span>") != -1) { isSuccessful = false; MessageBox.Show("Эта игра уже закончилась.."); continue; }
@@ -239,6 +241,7 @@ namespace Solver2
                             if (Int32.TryParse(q_lvl, out i2)) { gamelevels = i2; }
                             if (gamelevels == 0) { isSuccessful = false; MessageBox.Show("Не удалось определить количество уровней.."); continue; }
                         }
+                        if ((isStorm == true) && (gamelevels == 0)) { isSuccessful = false; MessageBox.Show("Выходит что штурмовая последовательность с 0 уровнями, фигня.."); continue; }
                         // поставим флаг выхода
                         fl = false;
                         // в лог
