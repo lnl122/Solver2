@@ -8,9 +8,30 @@ namespace Solver2
 
     class Engine
     {
-        private static string cHead;            // куки
-        private static CookieContainer cCont;   // куки
+        private static string username = "";    // логин пользователя
+        private static string password = "";    // пасс пользвоателя
+        private static string userid = "";      // ид пользователя
+        private static string gamedomain = "";  // домен игры
+        private static string gameid = "";      // ид игры
+        private static int levels = 0;          // колво уровней
+        public static bool isReady = false;     // структура готова
 
+        public static int last_level;           // последний уровень, к которому было обращение
+
+        public static string cHead;            // куки
+        public static CookieContainer cCont;   // куки
+
+        // установить полученные в форме параметры
+        public static void SetId(string s1, string s2, string s3, string s4, string s5, int i1)
+        {
+            userid = s1;
+            username = s2;
+            password = s3;
+            gameid = s4;
+            gamedomain = s5;
+            levels = i1;
+            isReady = true;
+        }
 
         // получает страницу по урлу
         public static string get_page(string url)

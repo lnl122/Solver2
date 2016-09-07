@@ -1,7 +1,7 @@
 ﻿// *** при необходимости проверки более 1000 слов за один прием - разбивать на несколько процессов по 1000 слов.
 // *** добавить поиск ассоциаций по трем словам
 //
-
+// *** GameSelect           нарушен принцип атомарности, код надо разбить на более мелкие куски
 
 using Microsoft.Win32;
 using System;
@@ -161,7 +161,13 @@ namespace Solver2
             if (!logonData.isSuccessful) { System.Windows.Forms.MessageBox.Show("Жаль, что не помните ник и пароль... :(\r\n\r\nМожет быть вам необходимо зарегистрироваться на ***.en.cx?"); }
             else
             {
-                System.Windows.Forms.MessageBox.Show("Едем!");
+                GameSelect GameSelectData = new GameSelect(logonData);
+                if (!GameSelectData.isSuccessful) { System.Windows.Forms.MessageBox.Show("Жаль, что не можете выбрать игру... :(\r\n\r\nМожет быть вам необходимо освежить память открыв список игр в браузере?"); }
+                else
+                {
+                    System.Windows.Forms.MessageBox.Show("Едем!");
+                    // *** тут нужно прочитать все уровни, заполнить инитные данные для формы, создать её и открыть.
+                }
             }
 
             // создаём форму, передаём её управление
