@@ -204,7 +204,7 @@ namespace Solver2
                     if (ps2.IndexOf("action=logout") != -1)
                     {
                         // прочесть игру и узнать её параметры
-                        string ps3 = Engine.get_page("http://" + gamedomain + "/GameDetails.aspx?gid=" + gameid);
+                        string ps3 = Engine.GetPage("http://" + gamedomain + "/GameDetails.aspx?gid=" + gameid);
                         string ps4 = RemoveTags(ps3).ToLower().Replace("\r\n", "");
                         ps4 = ps4.Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
                         ps4 = ps4.Replace(" >", ">").Replace(" <", "<").Replace("< ", "<").Replace("> ", ">");
@@ -215,7 +215,7 @@ namespace Solver2
                         //fr = ps5.IndexOf("<td>последовательность прохождения:штурмовая</td>");
                         //fe = ps5.IndexOf("<td>the levels passing sequence:storm</td>");
                         //if (fr + fe < 0) { isSuccessful = false; MessageBox.Show("Последовательность не штурмовая.."); continue; }
-                        page = Engine.get_page("http://" + gamedomain + "/gameengines/encounter/play/" + gameid);
+                        page = Engine.GetPage("http://" + gamedomain + "/gameengines/encounter/play/" + gameid);
                         if (page.IndexOf("class=\"gamecongratulation\"") != -1) { isSuccessful = false; MessageBox.Show("Эта игра уже закончилась.."); continue; }
                         if (page.IndexOf("<span id=\"animate\">поздравляем!!!</span>") != -1) { isSuccessful = false; MessageBox.Show("Эта игра уже закончилась.."); continue; }
                         if (page.IndexOf("капитан команды не включил вас в состав для участия в этой игре.") != -1) { isSuccessful = false; MessageBox.Show("Капитан команды не включил вас в состав для участия в этой игре.."); continue; }
