@@ -98,6 +98,7 @@ namespace Solver2
             string self_name = System.Diagnostics.Process.GetCurrentProcess().MainModule.ModuleName;
             string PathToLogs = CheckCreateFolder(local_path, "Log");
             string PathToData = CheckCreateFolder(local_path, "Data");
+            string PathToPics = CheckCreateFolder(local_path, "Pics");
             PathToPages = CheckCreateFolder(local_path, "Pages");
             string pathfilename = PathToLogs + "\\" + self_name + ".log";
             logfile = new System.IO.StreamWriter(System.IO.File.AppendText(pathfilename).BaseStream);
