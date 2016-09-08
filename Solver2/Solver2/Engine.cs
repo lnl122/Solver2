@@ -3,6 +3,7 @@ using System.Net;
 
 namespace Solver2
 {
+    // public static void SetId(string s1, string s2, string s3, string s4, string s5, int i1)
     // public static string GetPage(string url) - получает текст страницы по урлу
     // public static string Logon(string url1, string name, string pass) - выход - страница после попытки авторизации
     //
@@ -17,7 +18,7 @@ namespace Solver2
         private static int levels = 0;          // колво уровней
         public static bool isReady = false;     // структура готова
 
-        public static int last_level;           // последний уровень, к которому было обращение
+        public static int lastlevel;           // последний уровень, к которому было обращение
 
         public static string cHead;            // куки
         public static CookieContainer cCont;   // куки

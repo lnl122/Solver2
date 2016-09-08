@@ -1,4 +1,5 @@
-﻿
+﻿// *** Levels           доделать отдельную ветки для линейных МШ
+
 using System;
 using System.Collections.Generic;
 
@@ -6,13 +7,14 @@ namespace Solver2
 {
     class Levels
     {
-        GameSelect Game;
+        public static GameSelect Game;
         public struct level
         {
             public int number;
             public string name;
             public string page;
             public string text;
+            public string html;
             public bool isClose;
             public List<string> answers_good;
             public List<string> answers_bad;
@@ -26,12 +28,342 @@ namespace Solver2
             public DateTime dt;
         }
 
-        public static level[] L;
+        public level[] L;
 
         public Levels(GameSelect GameParams)
         {
             Game = GameParams;
+            if (Game.isStorm == true) { L = new level[Game.gamelevels]; } else { L = new level[1]; }
+            // *** доделать отдельную ветки для линейных МШ
+            // весь код ниже пока относиться (08.09.16) только к штурмам
+
+            for (int i = 0; i < Game.gamelevels; i++)
+            {
+                level lev = new level();
+                lev.number = i + 1;
+                lev.page = GetPageLevel(i + 1);
+                Log.Store("level_" + i.ToString(), lev.page);
+                lev.name = GetLvlName(lev.page);
+                lev.isClose = GetLvlClose(lev.page);
+                lev.answers_bad = GetLvlAnsBad(lev.page);
+                lev.answers_good = GetLvlAnsGood(lev.page);
+                lev.sector = GetLvlSectors(lev.page);
+                lev.sectors = lev.sector.Length;
+                lev.bonus = GetLvlBonuses(lev.page);
+                lev.bonuses = lev.bonus.Length;
+                lev.formlevelid = "";
+                lev.formlevelnumber = "";
+                if (!lev.isClose)
+                {
+                    lev.formlevelid = GetLvlFormlevelid(lev.page);
+                    lev.formlevelnumber = GetLvlFormlevelnumber(lev.page);
+                }
+                lev.text = GetLvlText(lev.page);
+                lev.html = GetLvlHtml(lev.page);
+                lev.urls = GetLvlUrls(lev.page);
+                lev.dt = DateTime.Now;
+                L[i] = lev;
+            }
+
+        }
+        // получает страницу по номеру уровня
+        public static string GetPageLevel(int idx)
+        {
+            string url = "http://" + Game.gamedomain + "/gameengines/encounter/play/" + Game.gameid + "/?level=" + idx.ToString();
+            Engine.lastlevel = idx;
+            return Engine.GetPage(url);
+        }
+        // возвращает наименование текущего уровня со страницы
+        private static string GetLvlName(string g)
+        {
+            int i1 = g.IndexOf("<ul class=\"section level\">");
+            if (i1 == -1) { return "не определен"; }
+            g = g.Substring(i1);
+            int i2 = g.IndexOf("</ul>");
+            g = g.Substring(0, i2);
+            i1 = g.IndexOf("<span>");
+            if (i1 == -1) { return "не определен"; }
+            g = g.Substring(i1 + 6);
+            i2 = g.IndexOf("</span>");
+            g = g.Substring(0, i2);
+            return g;
+        }
+        // возвращает признак - уровень закрыт или нет
+        private static bool GetLvlClose(string g)
+        {
+            int i1 = g.IndexOf("<label for=\"answer\">");
+            if (i1 == -1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        // возвращает ид уровня
+        private static string GetLvlFormlevelid(string g)
+        {
+            int i1 = g.IndexOf("<form method=\"post\">");
+            if (i1 == -1) { return ""; }
+            else
+            {
+                g = g.Substring(i1);
+                i1 = g.IndexOf("</form>");
+                g = g.Substring(0, i1);
+                string[] ar1 = System.Text.RegularExpressions.Regex.Split(g, "<input");
+                foreach (string s1 in ar1)
+                {
+                    if (s1.Contains("levelid"))
+                    {
+                        string s2 = s1.Substring(s1.IndexOf("value=\"") + 7);
+                        s2 = s2.Substring(0, s2.IndexOf("\""));
+                        return s2;
+                    }
+                }
+            }
+            return "";
+        }
+        // возвращает номер уровня для формы
+        private static string GetLvlFormlevelnumber(string g)
+        {
+            int i1 = g.IndexOf("<form method=\"post\">");
+            if (i1 == -1) { return ""; }
+            else
+            {
+                g = g.Substring(i1);
+                i1 = g.IndexOf("</form>");
+                g = g.Substring(0, i1);
+                string[] ar1 = System.Text.RegularExpressions.Regex.Split(g, "<input");
+                foreach (string s1 in ar1)
+                {
+                    if (s1.Contains("levelnumber"))
+                    {
+                        string s2 = s1.Substring(s1.IndexOf("value=\"") + 7);
+                        s2 = s2.Substring(0, s2.IndexOf("\""));
+                        return s2;
+                    }
+                }
+            }
+            return "";
+        }
+        // возвращает список неудачных ответов
+        private static List<string> GetLvlAnsBad(string g)
+        {
+            List<string> res = new List<string>();
+            int i1 = g.IndexOf("<ul class=\"history\">");
+            if (i1 == -1) { return res; }
+            g = g.Substring(i1);
+            i1 = g.IndexOf("</ul>");
+            g = g.Substring(0, i1);
+            string[] ar1 = System.Text.RegularExpressions.Regex.Split(g, "<i>");
+            foreach (string s1 in ar1)
+            {
+                int i2 = s1.IndexOf("</i>");
+                if (i2 == -1) { continue; }
+                string s2 = s1.Substring(0, i2);
+                res.Add(s2);
+            }
+            return res;
+        }
+        // возвращает список удачных ответов
+        private static List<string> GetLvlAnsGood(string g)
+        {
+            List<string> res = new List<string>();
+            int i1 = g.IndexOf("<ul class=\"history\">");
+            if (i1 == -1) { return res; }
+            g = g.Substring(i1 + 20);
+            i1 = g.IndexOf("</ul>");
+            g = g.Substring(0, i1);
+            g = g.Replace("\r", " ").Replace("\n", " ").Replace("\t", " ").Replace("<i>", " ").Replace("</i>", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
+            string[] ar1 = System.Text.RegularExpressions.Regex.Split(g, "</li>");
+            foreach (string s1 in ar1)
+            {
+                int i2 = s1.IndexOf("<li class=\"correct\">");
+                if (i2 == -1) { continue; }
+                i2 = s1.IndexOf("<span");
+                string s2 = s1.Substring(i2);
+                i2 = s2.IndexOf(">");
+                s2 = s2.Substring(i2 + 1);
+                i2 = s2.IndexOf("<");
+                s2 = s2.Substring(0, i2).Trim();
+                if ((s2 != "") && (s2 != "пройден по таймауту")) { res.Add(s2); }
+            }
+            return res;
+        }
+        // возвращает перечень секторов и ответы на них
+        private static string[] GetLvlSectors(string g)
+        {
+            List<string> res2 = new List<string>();
+            string[] res = new string[0];
+            g = g.Replace("\r", " ").Replace("\n", " ").Replace("\t", " ").Replace("<i>", " ").Replace("</i>", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
+            int i1 = g.IndexOf("<div class=\"cols-wrapper\">");
+            if (i1 == -1)
+            {
+                string[] res1 = new string[0];
+                return res1;
+            }
+            g = g.Substring(i1 + ("<div class=\"cols-wrapper\">").Length);
+            i1 = g.IndexOf("</div><!--end cols-wrapper -->");
+            g = g.Substring(0, i1);
+            g = g.Replace("<div class=\"cols\">", "").Replace("</div><!--end cols-->", "").Replace("<div class=\"cols w100per\">", "").Trim();
+            string[] ar1 = System.Text.RegularExpressions.Regex.Split(g, "<p>");
+            foreach (string s1 in ar1)
+            {
+                if (s1.Length < 5) { continue; }
+                int i2 = s1.IndexOf("class");
+                string s2 = s1.Substring(i2);
+                if (s2.Contains("color_dis"))
+                {
+                    res2.Add("");
+                }
+                if (s2.Contains("color_correct"))
+                {
+                    i2 = s2.IndexOf(">");
+                    s2 = s2.Substring(i2 + 1);
+                    i2 = s2.IndexOf("<");
+                    s2 = s2.Substring(0, i2);
+                    res2.Add(s2);
+                }
+            }
+            res = new string[res2.Count];
+            for (int i = 0; i < res2.Count; i++)
+            {
+                res[i] = res2[i];
+            }
+            return res;
+        }
+        // возвращает перечень бонусов и ответы на них
+        private static string[] GetLvlBonuses(string g)
+        {
+            List<string> res2 = new List<string>();
+            string[] res = new string[0];
+            g = g.Replace("\r", " ").Replace("\n", " ").Replace("\t", " ").Replace("<i>", " ").Replace("</i>", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
+            int i1 = g.IndexOf("<h3>задание</h3>");
+            if (i1 == -1)
+            {
+                i1 = g.IndexOf("<h3>task</h3>");
+                if (i1 == -1)
+                {
+                    return res;
+                }
+            }
+            g = g.Substring(i1);
+            string[] ar1 = System.Text.RegularExpressions.Regex.Split(g, "<div class=\"spacer\"></div>");
+            foreach (string s1 in ar1)
+            {
+                if (s1.Contains("<h3 class=\"color_bonus\">"))
+                {
+                    res2.Add("");
+                }
+                if (s1.Contains("<h3 class=\"color_correct\">"))
+                {
+                    int i2 = s1.IndexOf("<p>");
+                    if (i2 == -1)
+                    {
+                        res2.Add("");
+                    }
+                    else
+                    {
+                        string s2 = s1.Substring(i2);
+                        i2 = s2.IndexOf("</p>");
+                        s2 = s2.Substring(0, i2);
+                        s2 = s2.Replace("<p>", "").Replace("</p>", "").Trim();
+                        res2.Add(s2);
+                    }
+                }
+            }
+            res = new string[res2.Count];
+            for (int i = 0; i < res2.Count; i++)
+            {
+                res[i] = res2[i];
+            }
+            return res;
+        }
+        // возвращает хтмл текст уровня
+        private static string GetLvlHtml(string g)
+        {
+            string res = "";
+            res = ParsePage.ParseTags(g, tags4textlvl);
+            res = ParsePage.ParseTags(res, tags4textlvl2);
+            res = res.Replace("\t", " ").Replace("\n", "\r").Replace("<div class=\"spacer\"></div>", "\r").Replace("<br>", "\r").Replace("<ul>", "\r");
+            res = res.Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
+            res = res.Replace("\r\r", "\r").Replace("\r\r", "\r").Replace("\r\r", "\r").Replace("\r\r", "\r").Replace("\r\r", "\r");
+            res = res.Replace("\r", "\r\n").Replace(" \r\n", "\r\n").Replace("\r\n ", "\r\n");
+            return res;
+        }
+        // возвращает текст уровня
+        private static string GetLvlText(string g)
+        {
+            string res = "";
+            g = g.Replace("\t", " ").Replace("&nbsp;", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
+            int i1 = g.IndexOf("<h3>задание</h3>");
+            if (i1 == -1)
+            {
+                i1 = g.IndexOf("<h3>task</h3>");
+                if (i1 == -1)
+                {
+                    return res;
+                }
+            }
+            g = g.Substring(i1).Replace("<h3>задание</h3>", "").Replace("<h3>task</h3>", "");
+            i1 = g.IndexOf("</h3>"); if (i1 != -1) { g = g.Substring(0, i1); }
+            i1 = g.IndexOf("</div>"); if (i1 != -1) { g = g.Substring(0, i1); }
+            g = g.Replace("\n", "\r").Replace("<br/>", "\r").Replace("<p>", " ").Replace("</p>", " ").Replace("\n", "\r").Replace("\n", "\r").Replace("\n", "\r");
+            g = g.Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("\r ", "\r").Replace(" \r", "\r").Replace("\r\r", "\r").Replace("\r\r", "\r").Replace("\r\r", "\r").Replace("\r\r", "\r");
+            string[] ar1 = System.Text.RegularExpressions.Regex.Split(g, "<div class=\"spacer\">");
+            res = res + ParsePage.ParseTags(ar1[0], tags4bonus) + "\r\r";
+
+            foreach (string s1 in ar1)
+            {
+                if (s1.Contains("<h3 class=\"color_bonus\">"))
+                {
+                    string s2 = ParsePage.ParseTags(s1, tags4bonus);
+                    res = res + s1 + "\r\r"; // *** надо изменить, учесть обработку скриптов для картинок, выкинуть лишнее
+                }
+            }
+            res = res.Replace("\r", "\r\n");
+            return res;
+        }
+        // возвращает набор урлов
+        private static List<string> GetLvlUrls(string g)
+        {
+            List<string> res = new List<string>();
+            g = g.Replace("\t", " ").Replace("&nbsp;", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
+            int i1 = g.IndexOf("<h3>задание</h3>");
+            if (i1 == -1)
+            {
+                i1 = g.IndexOf("<h3>task</h3>");
+                if (i1 == -1)
+                {
+                    return res;
+                }
+            }
+            g = g.Substring(i1).Replace("<h3>задание</h3>", "").Replace("<h3>task</h3>", "");
+
+            string[] ar1 = System.Text.RegularExpressions.Regex.Split(g, "<img src=\"");
+            foreach (string s1 in ar1)
+            {
+                if (s1.Substring(0, 4) == "http")
+                {
+                    string s2 = s1.Substring(0, s1.IndexOf("\""));
+                    res.Add(s2);
+                }
+            }
+            return res;
         }
 
+        private static string[,] tags4bonus = {
+                { "<span class=\"color_sec\">", "бонус ", "bonus ", "<img"   },
+                { "</span>"                   , " "     , " "     , ">"      }
+            };
+        private static string[,] tags4textlvl = {
+                { "<!--[if lte ie 7]>", "<form",   "<iframe",   "<li class=\"refresh\">", "<ul class=\"history\">", "<ul class=\"section level\">", "<p class=\"globalmess\">", "<div class=\"cols-wrapper\">", "<div class=\"cols\">" },
+                { "<![endif]-->"      , "</form>", "</iframe>", "</ul>"                 , "</ul>"                 , "</ul>"                       , "</p>"                    , "<!--end cols-wrapper -->",     "<!--end cols-->"  }           
+            };
+        private static string[,] tags4textlvl2 = {
+                { "<h3 class=\"color_"   },
+                { "</h3>"                }
+            };
     }
 }

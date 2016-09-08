@@ -1,4 +1,5 @@
-﻿// *** GameSelect           нарушен принцип атомарности, код надо разбить на более мелкие куски
+﻿// *** GameSelect       нарушен принцип атомарности, код надо разбить на более мелкие куски
+// *** GameSelect       потом убрать. заглушка для потенциальных линейных игр МШ
 
 using System;
 using System.Collections.Generic;
@@ -17,13 +18,13 @@ namespace Solver2
         public static TextBox tbGname;
 
         public bool isSuccessful = false;
-        public static string username = "";
-        public static string password = "";
-        public static string userid = "";
-        public static string gamedomain = "";
-        public static string gameid = "";
-        public static bool isStorm = false;
-        public static int gamelevels = 0;
+        public string username = "";
+        public string password = "";
+        public string userid = "";
+        public string gamedomain = "";
+        public string gameid = "";
+        public bool isStorm = false;
+        public int gamelevels = 0;
 
         private static string[] g_names;
         private static string[] g_urls;
@@ -217,6 +218,10 @@ namespace Solver2
                         fr = ps5.IndexOf("<td>последовательность прохождения:штурмовая</td>");
                         fe = ps5.IndexOf("<td>the levels passing sequence:storm</td>");
                         if (fr + fe < 0) { isStorm = false; }
+
+                        // *** потом убрать. заглушка для потенциальных линейных игр МШ
+                        if (!isStorm) { isSuccessful = false; MessageBox.Show("Последовательность не штурмовая.."); continue; }
+
                         page = Engine.GetPage("http://" + gamedomain + "/gameengines/encounter/play/" + gameid);
                         if (page.IndexOf("class=\"gamecongratulation\"") != -1) { isSuccessful = false; MessageBox.Show("Эта игра уже закончилась.."); continue; }
                         if (page.IndexOf("<span id=\"animate\">поздравляем!!!</span>") != -1) { isSuccessful = false; MessageBox.Show("Эта игра уже закончилась.."); continue; }
