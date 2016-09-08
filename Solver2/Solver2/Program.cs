@@ -13,6 +13,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Windows.Forms;
 
 namespace Solver2
 {
@@ -142,6 +143,7 @@ namespace Solver2
             Associations.SaveDictionaryBad();
         }
 
+        [STAThread]
         // код основной программы
         static void Main(string[] args)
         {
@@ -171,7 +173,17 @@ namespace Solver2
                 else
                 {
                     Levels Levels = new Levels(GameSelectData);
-                    System.Windows.Forms.MessageBox.Show("Едем!");
+                    //System.Windows.Forms.MessageBox.Show("Едем!");
+
+                    Form ff = new Form();
+                    ff.Width = 850;
+                    ff.Height = 650;
+                    WebBrowser wb = new WebBrowser();
+                    wb.Width = 800;
+                    wb.Height = 600;
+                    wb.DocumentText = Levels.L[2].html;
+                    ff.Controls.Add(wb);
+                    ff.ShowDialog();
 
                     // *** тут нужно прочитать все уровни, заполнить инитные данные для формы, создать её и открыть.
                 }

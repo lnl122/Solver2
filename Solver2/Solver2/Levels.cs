@@ -287,9 +287,11 @@ namespace Solver2
             res = ParsePage.ParseTags(g, tags4textlvl);
             res = ParsePage.ParseTags(res, tags4textlvl2);
             res = res.Replace("\t", " ").Replace("\n", "\r").Replace("<div class=\"spacer\"></div>", "\r").Replace("<br>", "\r").Replace("<ul>", "\r");
+            res = res.Replace("<div class=\"container\">", "\r").Replace("<div class=\"content\">", "\r");
             res = res.Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
             res = res.Replace("\r\r", "\r").Replace("\r\r", "\r").Replace("\r\r", "\r").Replace("\r\r", "\r").Replace("\r\r", "\r");
             res = res.Replace("\r", "\r\n").Replace(" \r\n", "\r\n").Replace("\r\n ", "\r\n");
+
             return res;
         }
         // возвращает текст уровня
@@ -362,8 +364,8 @@ namespace Solver2
                 { "<![endif]-->"      , "</form>", "</iframe>", "</ul>"                 , "</ul>"                 , "</ul>"                       , "</p>"                    , "<!--end cols-wrapper -->",     "<!--end cols-->"  }           
             };
         private static string[,] tags4textlvl2 = {
-                { "<h3 class=\"color_"   },
-                { "</h3>"                }
+                { "<h3 class=\"color_", "<div class=\"pane\"", "<div class=\"aside\">", "<div class=\"header\">", "<script"  , "<h3>"   },
+                { "</h3>"             , "</div>"             , "</div>"               , "</div>"                , "</script>", "</h3>"  }
             };
     }
 }
