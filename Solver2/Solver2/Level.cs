@@ -25,6 +25,22 @@ namespace Solver2
         public DateTime dt;
 
         public static GameSelect Game;
+        /*
+        public static Level[] GetAllLevels(GameSelect GameParams)
+        {
+            Game = GameParams;
+            Level[] L;
+            if (Game.isStorm == true) { L = new Level[Game.gamelevels]; } else { L = new Level[1]; }
+            // *** доделать отдельную ветки для линейных МШ
+            // весь код ниже пока относиться (08.09.16) только к штурмам
+
+            for (int i = 0; i < Game.gamelevels; i++)
+            {
+                L[i] = new Level(Game, i + 1);
+            }
+            return L;
+        }
+        */
 
         // вход - пераметры игры, номер уровня 1..99
         // выход - объект с данными уровня

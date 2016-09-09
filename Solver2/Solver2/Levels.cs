@@ -1,8 +1,5 @@
 ﻿// нет смысла в модуле. вероятно предстоит убить его нафиг.
 
-using System;
-using System.Collections.Generic;
-
 namespace Solver2
 {
     class Levels
@@ -22,7 +19,6 @@ namespace Solver2
             {
                 L[i] = new Level(Game, i + 1);
             }
-
         }
     }
 }

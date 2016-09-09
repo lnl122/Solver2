@@ -13,12 +13,13 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
-using System.Windows.Forms;
 
 namespace Solver2
 {
     static class Program
     {
+        public static Level[] L;
+        public static AppForm AF;
 
         // получаем строку с версиями установленных .net
         private static string GetVersionDotNetFromRegistry()
@@ -172,28 +173,35 @@ namespace Solver2
                 if (!GameSelectData.isSuccessful) { System.Windows.Forms.MessageBox.Show("Жаль, что не можете выбрать игру... :(\r\n\r\nМожет быть вам необходимо освежить память открыв список игр в браузере?"); }
                 else
                 {
-                    Levels Levels = new Levels(GameSelectData);
                     //System.Windows.Forms.MessageBox.Show("Едем!");
 
+                    // *** тут нужно прочитать все уровни, заполнить инитные данные для формы, создать её и открыть.
+                    //Levels Levels = Level.GetAllLevels(GameSelectData);
+
+                    // *** доделать отдельную ветки для линейных МШ
+                    // весь код ниже пока относиться (08.09.16) только к штурмам
+                    if (GameSelectData.isStorm == true) { L = new Level[GameSelectData.gamelevels]; } else { L = new Level[1]; }
+                    for (int i = 0; i < GameSelectData.gamelevels; i++) { L[i] = new Level(GameSelectData, i + 1); }
+
+                    AF = new AppForm(GameSelectData, L);
+                    System.Windows.Forms.Form F = AF.MF;
+                    System.Windows.Forms.Application.Run(F);
+
+                    /*
                     Form ff = new Form();
-                    ff.Width = 850;
-                    ff.Height = 650;
                     WebBrowser wb = new WebBrowser();
-                    wb.Width = 800;
-                    wb.Height = 600;
                     wb.DocumentText = Levels.L[2].html;
                     ff.Controls.Add(wb);
-                    ff.ShowDialog();
+                    */
+                    //var tt = Upload.UploadFile_saveimgru(@"C:\1\34\pics\g24889_l2_p1_n1.jpg");
 
-                    // *** тут нужно прочитать все уровни, заполнить инитные данные для формы, создать её и открыть.
+
                 }
             }
 
             // создаём форму, передаём её управление
-            //MainForm MF1 = new MainForm();
-            //System.Windows.Forms.Application.Run(MainForm.MF);
 
-            //var tt = Upload.UploadFile_saveimgru(@"C:\1\34\pics\g24889_l2_p1_n1.jpg");
+
 
             // закругляемся
             CloseComponents();

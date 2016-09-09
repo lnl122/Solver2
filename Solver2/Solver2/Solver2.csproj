@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppForm.cs" />
     <Compile Include="Associations.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="GameSelect.cs" />
