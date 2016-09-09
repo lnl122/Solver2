@@ -48,6 +48,7 @@
     <Compile Include="Associations.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="GameSelect.cs" />
+    <Compile Include="Level.cs" />
     <Compile Include="Levels.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Logon.cs" />
