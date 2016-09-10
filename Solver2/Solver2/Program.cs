@@ -7,6 +7,7 @@
 // *** GameSelect       нарушен принцип атомарности, код надо разбить на более мелкие куски
 // *** GameSelect       потом убрать. заглушка для потенциальных линейных игр МШ
 // *** Levels           доделать отдельную ветки для линейных МШ
+// bug                  если нет имени словарей по причине их отсутствия, при выходе делается попытка записи, вызывающая ошибку
 
 using Microsoft.Win32;
 using System;
@@ -18,8 +19,19 @@ namespace Solver2
 {
     static class Program
     {
-        public static Level[] L;
-        public static AppForm AF;
+        //public static Level[] L;
+        //public static AppForm AF;
+
+        public struct Data
+        {
+            public AppForm AF;
+            public System.Windows.Forms.Form F;
+            public System.Windows.Forms.TabControl Tabs;
+            public System.Windows.Forms.TabPage[] Tab;
+            public GameSelect Game;
+            public Level[] Lvl;
+        }
+        public static Data D;
 
         // получаем строку с версиями установленных .net
         private static string GetVersionDotNetFromRegistry()
@@ -125,7 +137,6 @@ namespace Solver2
             // все проверки пройдены
             return true;
         }
-
         // инициализируем наши объекты
         public static void InitComponents()
         {
@@ -173,6 +184,7 @@ namespace Solver2
                 if (!GameSelectData.isSuccessful) { System.Windows.Forms.MessageBox.Show("Жаль, что не можете выбрать игру... :(\r\n\r\nМожет быть вам необходимо освежить память открыв список игр в браузере?"); }
                 else
                 {
+                    D.Game = GameSelectData;
                     //System.Windows.Forms.MessageBox.Show("Едем!");
 
                     // *** тут нужно прочитать все уровни, заполнить инитные данные для формы, создать её и открыть.
@@ -180,12 +192,14 @@ namespace Solver2
 
                     // *** доделать отдельную ветки для линейных МШ
                     // весь код ниже пока относиться (08.09.16) только к штурмам
-                    if (GameSelectData.isStorm == true) { L = new Level[GameSelectData.gamelevels]; } else { L = new Level[1]; }
-                    for (int i = 0; i < GameSelectData.gamelevels; i++) { L[i] = new Level(GameSelectData, i + 1); }
+                    if (D.Game.isStorm == true) { D.Lvl = new Level[D.Game.gamelevels]; } else { D.Lvl = new Level[1]; }
+                    for (int i = 0; i < D.Game.gamelevels; i++) { D.Lvl[i] = new Level(D.Game, i + 1); }
 
-                    AF = new AppForm(GameSelectData, L);
-                    System.Windows.Forms.Form F = AF.MF;
-                    System.Windows.Forms.Application.Run(F);
+                    D.AF = new AppForm(D.Game, D.Lvl);
+                    D.F = D.AF.MF;
+                    D.Tabs = D.AF.Tabs;
+                    D.Tab = D.AF.Tab;
+                    System.Windows.Forms.Application.Run(D.F);
 
                     /*
                     Form ff = new Form();
