@@ -53,6 +53,7 @@
     <Compile Include="Levels.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Logon.cs" />
+    <Compile Include="OneTab.cs" />
     <Compile Include="ParsePage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -8,6 +8,7 @@
 // *** GameSelect       потом убрать. заглушка для потенциальных линейных игр МШ
 // *** Levels           доделать отдельную ветки для линейных МШ
 // bug                  если нет имени словарей по причине их отсутствия, при выходе делается попытка записи, вызывающая ошибку
+// *** OneTab           в html на экран выводиться все строчными буквами. надо переделать парсинг страницы аккуратнее
 
 using Microsoft.Win32;
 using System;
@@ -28,6 +29,7 @@ namespace Solver2
             public System.Windows.Forms.Form F;
             public System.Windows.Forms.TabControl Tabs;
             public System.Windows.Forms.TabPage[] Tab;
+            public OneTab[] OneTab;
             public GameSelect Game;
             public Level[] Lvl;
         }
@@ -195,10 +197,10 @@ namespace Solver2
                     if (D.Game.isStorm == true) { D.Lvl = new Level[D.Game.gamelevels]; } else { D.Lvl = new Level[1]; }
                     for (int i = 0; i < D.Game.gamelevels; i++) { D.Lvl[i] = new Level(D.Game, i + 1); }
 
-                    D.AF = new AppForm(D.Game, D.Lvl);
-                    D.F = D.AF.MF;
-                    D.Tabs = D.AF.Tabs;
-                    D.Tab = D.AF.Tab;
+                    D.AF = new AppForm(D.Game);
+                    //D.F = D.AF.MF;
+                    //D.Tabs = D.AF.Tabs;
+                    //D.Tab = D.AF.Tab;
                     System.Windows.Forms.Application.Run(D.F);
 
                     /*
