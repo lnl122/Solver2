@@ -1,16 +1,25 @@
 ﻿// *** OneTab           в html на экран выводиться все строчными буквами. надо переделать парсинг страницы аккуратнее
 
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Solver2
 {
     class OneTab
     {
+        // типы заданий
+        public string[] TaskTypes = {
+            "Картинки (только решить)",
+            "Картинки + олимпийки",
+            "Кубрая / Букаря / Яарбук",
+            "Кубрая + олимпийки"
+        };
+
         // constants
         private int border = 5;
-        private int part1 = 20;
-        private int part2 = 80;
+        private int part1 = 15;
+        private int part2 = 85;
         private string blank_html = "<!DOCTYPE html><html lang=\"ru\"><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><title>Сеть городских игр Encounter</title><meta name=\"description\" content=\"\"></head><body class=\"\">решение ещё не началось, или в задании нет картинок</body></html>";
 
         // main vars
@@ -25,20 +34,34 @@ namespace Solver2
         public TextBox tbAnswerMulti;
         public Button btAnswerMulti;
 
+        public int SettingsPositions;
         // settings and choice
         public Label lbType;
         public ComboBox cbType;
         public int[] iCols;
         public int[] iRows;
         public int[] iBeginNum;
-        public enum prot { none, begin1, begin2, begin3, end1, end2, end3 };
-        public prot enProtect;
+
+        public Label lbImageCuttingMethod;
+        public ComboBox cbImageCuttingMethod;
+        public CheckBox chImageSizeFlag;
+        public Label lbImageNumber;
+        public NumericUpDown nudImageNumber;
+        public Label lbCols;
+        public ComboBox cbCols;
+        public Label lbStrs;
+        public ComboBox cbStrs;
+        public Label lbProtect;
+        public ComboBox cbProtect;
+
+        /*
         public enum kubr { kubray, bukari1, bukari2, yarbuk, kubr_gybrid2, kubr_gybrid3 };
-        public prot enKubray;
+        public kubr enKubray;
         public int iLetterInWord1; // для метаграмм/логогрифов/брюкв и прочих
         public int iLetterInWord2;
         public int iGybridMin; // для гибридов/циклоидов
         public int iGybridMax;
+        */
 
         // 2 column
         public TabControl tcTabWeb;
@@ -90,7 +113,85 @@ namespace Solver2
             Tab.Controls.Add(btAnswerMulti);
 
             // settings
+            lbType = new Label();
+            lbType.Text = "Вид задания:";
+            Tab.Controls.Add(lbType);
 
+            cbType = new ComboBox();
+            foreach(string st1 in TaskTypes) { cbType.Items.Add(st1); }
+            cbType.SelectedIndex = 0;
+            cbType.SelectedIndexChanged += new EventHandler(Event_Change_cbType);
+            Tab.Controls.Add(cbType);
+
+            iCols = new int[level.urls.Count];
+            iRows = new int[level.urls.Count];
+            iBeginNum = new int[level.urls.Count];
+
+            lbImageCuttingMethod = new Label();
+            lbImageCuttingMethod.Text = "Метод нарезки картинок:";
+            lbImageCuttingMethod.Visible = false;
+            Tab.Controls.Add(lbImageCuttingMethod);
+
+            cbImageCuttingMethod = new ComboBox();
+            cbImageCuttingMethod.Items.Add("Указан в ручную, равные доли");
+            cbImageCuttingMethod.SelectedIndex = 0;
+            cbImageCuttingMethod.Visible = false;
+            Tab.Controls.Add(cbImageCuttingMethod);
+
+            chImageSizeFlag = new CheckBox();
+            chImageSizeFlag.Text = "Одинаковые размеры у всех";
+            chImageSizeFlag.Visible = false;
+            Tab.Controls.Add(chImageSizeFlag);
+
+            lbImageNumber = new Label();
+            lbImageNumber.Text = "Количество картинок:";
+            lbImageNumber.Visible = false;
+            Tab.Controls.Add(lbImageNumber);
+
+            nudImageNumber = new NumericUpDown();
+            nudImageNumber.Visible = false;
+            nudImageNumber.Minimum = 1;
+            nudImageNumber.Maximum = level.urls.Count;
+            Tab.Controls.Add(nudImageNumber);
+
+            lbStrs = new Label();
+            lbStrs.Text = "Строк:";
+            lbStrs.Visible = false;
+            Tab.Controls.Add(lbStrs);
+
+            cbStrs = new ComboBox();
+            for(int i=1; i<=10; i++) { cbStrs.Items.Add(i.ToString()); }
+            cbStrs.SelectedIndex = 3;
+            cbStrs.Visible = false;
+            Tab.Controls.Add(cbStrs);
+
+            lbCols = new Label();
+            lbCols.Text = "Колонок:";
+            lbCols.Visible = false;
+            Tab.Controls.Add(lbCols);
+
+            cbCols = new ComboBox();
+            for (int i = 1; i <= 10; i++) { cbCols.Items.Add(i.ToString()); }
+            cbCols.SelectedIndex = 3;
+            cbCols.Visible = false;
+            Tab.Controls.Add(cbCols);
+
+            lbProtect = new Label();
+            lbProtect.Text = "Защита:";
+            lbProtect.Visible = false;
+            Tab.Controls.Add(lbProtect);
+
+            cbProtect = new ComboBox();
+            cbProtect.Items.Add("нет"); cbProtect.Items.Add("1слово"); cbProtect.Items.Add("01слово"); cbProtect.Items.Add("слово1"); cbProtect.Items.Add("слово01");
+            cbProtect.SelectedIndex = 0;
+            cbProtect.Visible = false;
+            Tab.Controls.Add(cbProtect);
+
+            /*
+            
+        public ComboBox cbProtect;
+        
+            */
 
             // 2 column
             tcTabWeb = new TabControl();
@@ -129,7 +230,78 @@ namespace Solver2
             tbTextHints.Text = "решение ещё не началось, или нет смысла сюда выводить варианты";
             tpTextHints.Controls.Add(tbTextHints);
 
+            // 3 column
+            lbSectors = new Label();
+            lbSectors.Text = "Сектора:";
+            Tab.Controls.Add(lbSectors);
+            tbSectors = new TextBox();
+            tbSectors.Multiline = true;
+            string sec1 = "";
+            for(int i = 0; i < level.sectors; i++) { sec1 = sec1 + (i+1).ToString() + ": " + level.sector[i] + "\r\n"; }
+            tbSectors.Text = sec1;
+            Tab.Controls.Add(tbSectors);
+            lbBonuses = new Label();
+            lbBonuses.Text = "Бонусы:";
+            Tab.Controls.Add(lbBonuses);
+            tbBonuses = new TextBox();
+            tbBonuses.Multiline = true;
+            string bon1 = "";
+            for (int i = 0; i < level.bonuses; i++) { bon1 = bon1 + (i+1).ToString() + ": " + level.bonus[i] + "\r\n"; }
+            tbBonuses.Text = bon1;
+            Tab.Controls.Add(tbBonuses);
+
             Event_ChangeSize(this, null);
+            Event_Change_cbType(this, null);
+        }
+
+        private void Event_Change_cbType(object sender, EventArgs e)
+        {
+            lbImageCuttingMethod.Visible = false;
+            cbImageCuttingMethod.Visible = false;
+            chImageSizeFlag.Visible = false;
+            lbImageNumber.Visible = false;
+            nudImageNumber.Visible = false;
+            lbCols.Visible = false;
+            cbCols.Visible = false;
+            lbStrs.Visible = false;
+            cbStrs.Visible = false;
+            lbProtect.Visible = false;
+            cbProtect.Visible = false;
+
+            // SettingsPositions
+
+            if (cbType.SelectedItem.ToString() == "Картинки (только решить)")
+            {
+                List<object> objs = new List<object>();
+                objs.Add(lbImageCuttingMethod);
+                objs.Add(cbImageCuttingMethod);
+                objs.Add(chImageSizeFlag);
+                objs.Add(lbImageNumber);
+                objs.Add(nudImageNumber);
+                objs.Add(lbCols);
+                objs.Add(cbCols);
+                objs.Add(lbStrs);
+                objs.Add(cbStrs);
+                objs.Add(lbProtect);
+                objs.Add(cbProtect);
+                ShowSettingsOnScreen(objs, SettingsPositions);
+            }
+
+        }
+
+        private void ShowSettingsOnScreen(List<object> objs, int sp2)
+        {
+            int sp = sp2;
+            foreach(object o1 in objs)
+            {
+                string t1 = o1.GetType().Name;
+                if (t1 == "Label") { ((Label)o1).Visible = true; ((Label)o1).Top = sp; sp = ((Label)o1).Bottom + border; }
+                if (t1 == "Button") { ((Button)o1).Visible = true; ((Button)o1).Top = sp; sp = ((Button)o1).Bottom + border; }
+                if (t1 == "ComboBox") { ((ComboBox)o1).Visible = true; ((ComboBox)o1).Top = sp; sp = ((ComboBox)o1).Bottom + border; }
+                if (t1 == "CheckBox") { ((CheckBox)o1).Visible = true; ((CheckBox)o1).Top = sp; sp = ((CheckBox)o1).Bottom + border; }
+                if (t1 == "NumericUpDown") { ((NumericUpDown)o1).Visible = true; ((NumericUpDown)o1).Top = sp; sp = ((NumericUpDown)o1).Bottom + border; }
+                if (t1 == "TextBox") { ((TextBox)o1).Visible = true; ((TextBox)o1).Top = sp; sp = ((TextBox)o1).Bottom + border; }
+            }
         }
 
         public void Event_ChangeSize(object sender, EventArgs e)
@@ -165,6 +337,41 @@ namespace Solver2
             btAnswerMulti.Left = tbAnswerMulti.Right + border;
             btAnswerMulti.Width = btAnswer.Width;
 
+            // settings
+            lbType.Top = tbAnswerMulti.Bottom + 2 * border;
+            lbType.Left = left1;
+            lbType.Width = width1;
+            cbType.Top = lbType.Bottom + border;
+            cbType.Left = left1;
+            cbType.Width = width1;
+
+            // left & width
+            lbImageCuttingMethod.Left = left1;
+            lbImageCuttingMethod.Width = width1;
+            cbImageCuttingMethod.Left = left1;
+            cbImageCuttingMethod.Width = width1;
+            chImageSizeFlag.Left = left1;
+            chImageSizeFlag.Width = width1;
+            lbImageNumber.Left = left1;
+            lbImageNumber.Width = width1;
+            nudImageNumber.Left = left1;
+            nudImageNumber.Width = width1;
+            lbCols.Left = left1;
+            lbCols.Width = width1;
+            cbCols.Left = left1;
+            cbCols.Width = width1;
+            lbStrs.Left = left1;
+            lbStrs.Width = width1;
+            cbStrs.Left = left1;
+            cbStrs.Width = width1;
+            lbProtect.Left = left1;
+            lbProtect.Width = width1;
+            cbProtect.Left = left1;
+            cbProtect.Width = width1;
+
+            // for others settings
+            SettingsPositions = cbType.Bottom + border;
+
             // 2
             tcTabWeb.Top = top;
             tcTabWeb.Left = left2;
@@ -192,6 +399,21 @@ namespace Solver2
             tbTextHints.Width = tbTextTask.Width;
             tbTextHints.Height = tbTextTask.Height;
 
+            // 3
+            lbSectors.Top = top;
+            lbSectors.Left = left3;
+            lbSectors.Width = width3;
+            tbSectors.Top = lbSectors.Bottom + border;
+            tbSectors.Left = left3;
+            tbSectors.Width = width3;
+            tbSectors.Height = (height / 2) - (8 * border);
+            lbBonuses.Top = tbSectors.Bottom + border;
+            lbBonuses.Left = left3;
+            lbBonuses.Width = width3;
+            tbBonuses.Top = lbBonuses.Bottom + border;
+            tbBonuses.Left = left3;
+            tbBonuses.Width = width3;
+            tbBonuses.Height = tbSectors.Height;
         }
     }
 }

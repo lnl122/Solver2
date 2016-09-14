@@ -9,10 +9,6 @@ namespace Solver2
         public static string mainform_caption = "Solver2";
         private int border = 5;
 
-        //public Form MF;
-        //public TabControl Tabs;
-        //public TabPage[] Tab;
-
         public AppForm(GameSelect G)
         {
             Program.D.F = new Form();
