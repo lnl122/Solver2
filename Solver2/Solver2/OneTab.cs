@@ -11,9 +11,30 @@ namespace Solver2
         // типы заданий
         public string[] TaskTypes = {
             "Картинки (только решить)",
-            "Картинки + олимпийки",
-            "Кубрая / Букаря / Яарбук",
-            "Кубрая + олимпийки"
+            "* Олимпийки картинками",
+            "* Гибриды картинками (буКВАс)",
+            "* Логогрифы картинками (сон-слон)",
+            "* Метаграммы картинками (кот-кит)",
+            "* Брюквы картинками (брюква-буква)",
+            "* Матрицы картинками",
+            "* Словосочетания сущ+сущ картинками",
+            "* Словосочетания сущ+прил картинками",
+            "* Анаграмматрицы картинками",
+            "* Ассоциации картинками",
+            "* Брутфорс по картинке",
+            "* Расчленёнки",
+            "* ГаПоИФиКа книжная",
+            "* ГаПоИФиКа фильмов",
+            "* ЛеДиДа книжная",
+            "* ЛеДиДа фильмов",
+            "* Расчленёнки",
+            "* Гибриды текстом (буКВАс)",
+            "* Логогрифы текстом (сон-слон)",
+            "* Метаграммы текстом (кот-кит)",
+            "* Кубрая / Букаря / Яарбук",
+            "* Куброолимпийки",
+            "* Куброгибриды (кубрая + гибриды)",
+            "* Трикуброгибриды (кубрая + тригибрид)"
         };
 
         // constants
@@ -268,13 +289,13 @@ namespace Solver2
             lbProtect.Visible = false;
             cbProtect.Visible = false;
 
-            // SettingsPositions
-
             if (cbType.SelectedItem.ToString() == "Картинки (только решить)")
             {
                 List<object> objs = new List<object>();
                 objs.Add(lbImageCuttingMethod);
                 objs.Add(cbImageCuttingMethod);
+                objs.Add(lbProtect);
+                objs.Add(cbProtect);
                 objs.Add(chImageSizeFlag);
                 objs.Add(lbImageNumber);
                 objs.Add(nudImageNumber);
@@ -282,8 +303,6 @@ namespace Solver2
                 objs.Add(cbCols);
                 objs.Add(lbStrs);
                 objs.Add(cbStrs);
-                objs.Add(lbProtect);
-                objs.Add(cbProtect);
                 ShowSettingsOnScreen(objs, SettingsPositions);
             }
 

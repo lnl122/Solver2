@@ -1,15 +1,4 @@
-﻿// *** Program          для скрашивания одиночества в процессе запуска нужен сплешскрин на этап инициализации и проверок.
-// *** CheckSpell       при необходимости проверки более 1000 слов за один прием - разбивать на несколько процессов по 1000 слов.
-// *** Associations     добавить поиск ассоциаций по трем словам
-// *** Upload           сделать привязку к настройкам
-// *** Upload           добавить в проверки при старте полный цикл: картинка (чебурашка) распознавание + ассоциации = проверяемый результат (гена)
-// *** Upload           добавить функционал инициализации - выбор исправно работающего постащика услуг, сохранение выбора в стат.переменной
-// *** GameSelect       нарушен принцип атомарности, код надо разбить на более мелкие куски
-// *** GameSelect       потом убрать. заглушка для потенциальных линейных игр МШ
-// *** Levels           доделать отдельную ветки для линейных МШ
-// bug                  если нет имени словарей по причине их отсутствия, при выходе делается попытка записи, вызывающая ошибку
-// *** OneTab           в html на экран выводиться все строчными буквами. надо переделать парсинг страницы аккуратнее
-
+﻿
 using Microsoft.Win32;
 using System;
 using System.Diagnostics;
@@ -20,9 +9,7 @@ namespace Solver2
 {
     static class Program
     {
-        //public static Level[] L;
-        //public static AppForm AF;
-
+        // структыра основных данных
         public struct Data
         {
             public AppForm AF;
@@ -33,6 +20,8 @@ namespace Solver2
             public GameSelect Game;
             public Level[] Lvl;
         }
+
+        // основные данные программы
         public static Data D;
 
         // получаем строку с версиями установленных .net
@@ -187,37 +176,16 @@ namespace Solver2
                 else
                 {
                     D.Game = GameSelectData;
-                    //System.Windows.Forms.MessageBox.Show("Едем!");
 
-                    // *** тут нужно прочитать все уровни, заполнить инитные данные для формы, создать её и открыть.
-                    //Levels Levels = Level.GetAllLevels(GameSelectData);
-
-                    // *** доделать отдельную ветки для линейных МШ
                     // весь код ниже пока относиться (08.09.16) только к штурмам
                     if (D.Game.isStorm == true) { D.Lvl = new Level[D.Game.gamelevels]; } else { D.Lvl = new Level[1]; }
                     for (int i = 0; i < D.Game.gamelevels; i++) { D.Lvl[i] = new Level(D.Game, i + 1); }
 
+                    // создаём форму, передаём её управление
                     D.AF = new AppForm(D.Game);
-                    //D.F = D.AF.MF;
-                    //D.Tabs = D.AF.Tabs;
-                    //D.Tab = D.AF.Tab;
                     System.Windows.Forms.Application.Run(D.F);
-
-                    /*
-                    Form ff = new Form();
-                    WebBrowser wb = new WebBrowser();
-                    wb.DocumentText = Levels.L[2].html;
-                    ff.Controls.Add(wb);
-                    */
-                    //var tt = Upload.UploadFile_saveimgru(@"C:\1\34\pics\g24889_l2_p1_n1.jpg");
-
-
                 }
             }
-
-            // создаём форму, передаём её управление
-
-
 
             // закругляемся
             CloseComponents();
