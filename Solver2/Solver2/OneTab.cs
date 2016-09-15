@@ -1,6 +1,4 @@
-﻿// *** OneTab           в html на экран выводиться все строчными буквами. надо переделать парсинг страницы аккуратнее
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
@@ -61,19 +59,23 @@ namespace Solver2
         public ComboBox cbType;
         public int[] iCols;
         public int[] iRows;
-        public int[] iBeginNum;
+        //public int[] iBeginNum;
+        public int levelUrlsCount;
 
         public Label lbImageCuttingMethod;
         public ComboBox cbImageCuttingMethod;
         public CheckBox chImageSizeFlag;
         public Label lbImageNumber;
-        public NumericUpDown nudImageNumber;
+        public ComboBox cbImageNumber;
         public Label lbCols;
         public ComboBox cbCols;
         public Label lbStrs;
         public ComboBox cbStrs;
         public Label lbProtect;
         public ComboBox cbProtect;
+
+        public Label lbSolve;
+        public Button btSolve;
 
         /*
         public enum kubr { kubray, bukari1, bukari2, yarbuk, kubr_gybrid2, kubr_gybrid3 };
@@ -106,6 +108,8 @@ namespace Solver2
         public OneTab(Program.Data D, Level lvl)
         {
             level = lvl;
+            levelUrlsCount = level.urls.Count;
+
             Tab = new TabPage();
             Tab.Text = level.number.ToString() + " : " + level.name;
             D.F.SizeChanged += new EventHandler(Event_ChangeSize);
@@ -139,14 +143,18 @@ namespace Solver2
             Tab.Controls.Add(lbType);
 
             cbType = new ComboBox();
-            foreach(string st1 in TaskTypes) { cbType.Items.Add(st1); }
+            foreach(string st1 in TaskTypes)
+            {
+                if ((levelUrlsCount > 0) || (st1.IndexOf("артин") == -1)) { cbType.Items.Add(st1); }
+            }
             cbType.SelectedIndex = 0;
             cbType.SelectedIndexChanged += new EventHandler(Event_Change_cbType);
             Tab.Controls.Add(cbType);
 
-            iCols = new int[level.urls.Count];
-            iRows = new int[level.urls.Count];
-            iBeginNum = new int[level.urls.Count];
+            iCols = new int[levelUrlsCount];
+            for (int i = 0; i < levelUrlsCount; i++) { iCols[i] = 4; }
+            iRows = new int[levelUrlsCount];
+            for (int i = 0; i < levelUrlsCount; i++) { iRows[i] = 4; }
 
             lbImageCuttingMethod = new Label();
             lbImageCuttingMethod.Text = "Метод нарезки картинок:";
@@ -162,18 +170,24 @@ namespace Solver2
             chImageSizeFlag = new CheckBox();
             chImageSizeFlag.Text = "Одинаковые размеры у всех";
             chImageSizeFlag.Visible = false;
+            if (levelUrlsCount >= 2) { chImageSizeFlag.Enabled = true; } else { chImageSizeFlag.Enabled = false; }
+            chImageSizeFlag.CheckedChanged += new EventHandler(Event_Change_chImageSizeFlag);
             Tab.Controls.Add(chImageSizeFlag);
 
             lbImageNumber = new Label();
-            lbImageNumber.Text = "Количество картинок:";
+            lbImageNumber.Text = "Номер картинки:";
             lbImageNumber.Visible = false;
             Tab.Controls.Add(lbImageNumber);
 
-            nudImageNumber = new NumericUpDown();
-            nudImageNumber.Visible = false;
-            nudImageNumber.Minimum = 1;
-            nudImageNumber.Maximum = level.urls.Count;
-            Tab.Controls.Add(nudImageNumber);
+            cbImageNumber = new ComboBox();
+            cbImageNumber.Visible = false;
+            if (levelUrlsCount > 0)
+            {
+                for (int i = 1; i <= levelUrlsCount; i++) { cbImageNumber.Items.Add(i.ToString()); }
+                cbImageNumber.SelectedIndex = 0;
+            }
+            cbImageNumber.SelectedIndexChanged += new EventHandler(Event_Change_cbImageNumber);
+            Tab.Controls.Add(cbImageNumber);
 
             lbStrs = new Label();
             lbStrs.Text = "Строк:";
@@ -184,6 +198,7 @@ namespace Solver2
             for(int i=1; i<=10; i++) { cbStrs.Items.Add(i.ToString()); }
             cbStrs.SelectedIndex = 3;
             cbStrs.Visible = false;
+            cbStrs.SelectedIndexChanged += new EventHandler(Event_Change_cbStrs);
             Tab.Controls.Add(cbStrs);
 
             lbCols = new Label();
@@ -195,6 +210,7 @@ namespace Solver2
             for (int i = 1; i <= 10; i++) { cbCols.Items.Add(i.ToString()); }
             cbCols.SelectedIndex = 3;
             cbCols.Visible = false;
+            cbCols.SelectedIndexChanged += new EventHandler(Event_Change_cbCols);
             Tab.Controls.Add(cbCols);
 
             lbProtect = new Label();
@@ -208,11 +224,14 @@ namespace Solver2
             cbProtect.Visible = false;
             Tab.Controls.Add(cbProtect);
 
-            /*
-            
-        public ComboBox cbProtect;
-        
-            */
+            lbSolve = new Label();
+            lbSolve.Text = "__________";
+            Tab.Controls.Add(btSolve);
+            btSolve = new Button();
+            btSolve.Text = "Начать решение";
+            btSolve.Click += new EventHandler(Event_Click_btSolve);
+            Tab.Controls.Add(btSolve);
+
 
             // 2 column
             tcTabWeb = new TabControl();
@@ -257,6 +276,7 @@ namespace Solver2
             Tab.Controls.Add(lbSectors);
             tbSectors = new TextBox();
             tbSectors.Multiline = true;
+            tbSectors.ScrollBars = ScrollBars.Both;
             string sec1 = "";
             for(int i = 0; i < level.sectors; i++) { sec1 = sec1 + (i+1).ToString() + ": " + level.sector[i] + "\r\n"; }
             tbSectors.Text = sec1;
@@ -266,6 +286,7 @@ namespace Solver2
             Tab.Controls.Add(lbBonuses);
             tbBonuses = new TextBox();
             tbBonuses.Multiline = true;
+            tbBonuses.ScrollBars = ScrollBars.Both;
             string bon1 = "";
             for (int i = 0; i < level.bonuses; i++) { bon1 = bon1 + (i+1).ToString() + ": " + level.bonus[i] + "\r\n"; }
             tbBonuses.Text = bon1;
@@ -275,19 +296,73 @@ namespace Solver2
             Event_Change_cbType(this, null);
         }
 
+        private void Event_Click_btSolve(object sender, EventArgs e)
+        {
+            if (cbType.SelectedItem.ToString() == "Картинки (только решить)")
+            {
+                //
+            }
+        }
+
+        private void Event_Change_cbImageNumber(object sender, EventArgs e)
+        {
+            cbCols.SelectedIndex = iCols[cbImageNumber.SelectedIndex] - 1;
+            cbStrs.SelectedIndex = iRows[cbImageNumber.SelectedIndex] - 1;
+        }
+
+        private void Event_Change_chImageSizeFlag(object sender, EventArgs e)
+        {
+            if (chImageSizeFlag.Checked == true)
+            {
+                for (int i = 0; i < iCols.Length; i++) { iCols[i] = cbCols.SelectedIndex + 1; }
+                for (int i = 0; i < iRows.Length; i++) { iRows[i] = cbStrs.SelectedIndex + 1; }
+                lbImageNumber.Enabled = false;
+                cbImageNumber.Enabled = false;
+            } else
+            {
+                lbImageNumber.Enabled = true;
+                cbImageNumber.Enabled = true;
+            }
+        }
+
+        private void Event_Change_cbCols(object sender, EventArgs e)
+        {
+            if (chImageSizeFlag.Checked == false)
+            {
+                iCols[cbImageNumber.SelectedIndex] = cbCols.SelectedIndex + 1;
+            } else
+            {
+                for (int i = 0; i < iCols.Length; i++) { iCols[i] = cbCols.SelectedIndex + 1; }
+            }
+        }
+
+        private void Event_Change_cbStrs(object sender, EventArgs e)
+        {
+            if (chImageSizeFlag.Checked == false)
+            {
+                iRows[cbImageNumber.SelectedIndex] = cbStrs.SelectedIndex + 1;
+            }
+            else
+            {
+                for (int i = 0; i < iRows.Length; i++) { iRows[i] = cbStrs.SelectedIndex + 1; }
+            }
+        }
+
         private void Event_Change_cbType(object sender, EventArgs e)
         {
             lbImageCuttingMethod.Visible = false;
             cbImageCuttingMethod.Visible = false;
             chImageSizeFlag.Visible = false;
             lbImageNumber.Visible = false;
-            nudImageNumber.Visible = false;
+            cbImageNumber.Visible = false;
             lbCols.Visible = false;
             cbCols.Visible = false;
             lbStrs.Visible = false;
             cbStrs.Visible = false;
             lbProtect.Visible = false;
             cbProtect.Visible = false;
+            lbSolve.Visible = false;
+            btSolve.Visible = false;
 
             if (cbType.SelectedItem.ToString() == "Картинки (только решить)")
             {
@@ -298,11 +373,13 @@ namespace Solver2
                 objs.Add(cbProtect);
                 objs.Add(chImageSizeFlag);
                 objs.Add(lbImageNumber);
-                objs.Add(nudImageNumber);
+                objs.Add(cbImageNumber);
                 objs.Add(lbCols);
                 objs.Add(cbCols);
                 objs.Add(lbStrs);
                 objs.Add(cbStrs);
+                objs.Add(lbSolve);
+                objs.Add(btSolve);
                 ShowSettingsOnScreen(objs, SettingsPositions);
             }
 
@@ -363,6 +440,10 @@ namespace Solver2
             cbType.Top = lbType.Bottom + border;
             cbType.Left = left1;
             cbType.Width = width1;
+            lbSolve.Left = left1;
+            lbSolve.Width = width1;
+            btSolve.Left = left1;
+            btSolve.Width = width1;
 
             // left & width
             lbImageCuttingMethod.Left = left1;
@@ -373,8 +454,8 @@ namespace Solver2
             chImageSizeFlag.Width = width1;
             lbImageNumber.Left = left1;
             lbImageNumber.Width = width1;
-            nudImageNumber.Left = left1;
-            nudImageNumber.Width = width1;
+            cbImageNumber.Left = left1;
+            cbImageNumber.Width = width1;
             lbCols.Left = left1;
             lbCols.Width = width1;
             cbCols.Left = left1;
