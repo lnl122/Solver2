@@ -23,6 +23,7 @@ namespace Solver2
         public string formlevelid;
         public string formlevelnumber;
         public DateTime dt;
+        public GameSelect G;
 
         public static GameSelect Game;
         /*
@@ -48,6 +49,7 @@ namespace Solver2
         public Level(GameSelect GameParams, int lvl_number)
         {
             Game = GameParams;
+            G = GameParams;
             //if (Game.isStorm == true) { L = new level[Game.gamelevels]; } else { L = new level[1]; }
             // *** доделать отдельную ветки для линейных МШ
             // весь код ниже пока относиться (08.09.16) только к штурмам

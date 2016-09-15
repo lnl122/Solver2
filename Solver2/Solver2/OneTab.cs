@@ -300,7 +300,7 @@ namespace Solver2
         {
             if (cbType.SelectedItem.ToString() == "Картинки (только решить)")
             {
-                //
+                var R1 = new Picture(this);
             }
         }
 
