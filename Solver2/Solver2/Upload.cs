@@ -15,8 +15,8 @@ namespace Solver2
         // выход - урл картинки после аплоада
         public static string UploadFile(string fp)
         {
-            return UploadFile_pixicru(fp);
-            //return UploadFile_ipicsu(fp);
+            //return UploadFile_pixicru(fp);
+            return UploadFile_ipicsu(fp);
         }
 
         // аплоад картинки по пути, получени внешней ссылки
@@ -49,17 +49,17 @@ namespace Solver2
             catch
             {
                 Log.Write("upld1 ERROR: pixicru не удалось выполнить аплоад картинки ", uriaction, filepath);
-                sd = "";
+                return "";
             }
             if (sd.Length < 5)
             {
                 Log.Write("upld1 ERROR: pixicru вернулась слишком короткая ссылка", sd, filepath);
-                sd = "";
+                return "";
             }
             if (sd.Substring(0, 4) != "http")
             {
                 Log.Write("upld1 ERROR: pixicru то что вернулось не является ссылкой http", sd, filepath);
-                sd = "";
+                return "";
             }
             return sd;
         }

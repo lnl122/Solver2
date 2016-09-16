@@ -13,7 +13,8 @@ namespace Solver2
         private static string PathToPages = "";         // путь (без слеша в конце, к папке для сохраняемых страниц
         private static System.IO.StreamWriter logfile;  // поток лога
         public static bool isReady = false;             // инициализация проведена?
-        private static bool isBusy = false;             // счас заняты? чтоб подождать если необходимо. для устранения коллизий при активном логгировании
+        private static bool isBusyWrite = false;             // счас заняты? чтоб подождать если необходимо. для устранения коллизий при активном логгировании
+        private static bool isBusyStore = false;             // счас заняты? чтоб подождать если необходимо. для устранения коллизий при активном логгировании
         private static int fileidx = 1;                 // индекс/номер сохраняемого файла
 
         // записывает строку текста в лог-файл
@@ -23,8 +24,8 @@ namespace Solver2
         {
             if (isReady)
             {
-                while (isBusy) { } // ожидание освобождения флага
-                isBusy = true;
+                while (isBusyWrite) { } // ожидание освобождения флага
+                isBusyWrite = true;
                 logfile.WriteLine("{0} {1} {2}", DateTime.Today.ToShortDateString(), DateTime.Now.ToLongTimeString(), str);
                 if (str2 != "")
                 {
@@ -34,7 +35,7 @@ namespace Solver2
                         logfile.WriteLine("                          " + str3);
                     }
                 }
-                isBusy = false;
+                isBusyWrite = false;
             }
         }
 
@@ -43,15 +44,18 @@ namespace Solver2
         // выход    -
         public static void Store(string modulename, string text)
         {
+            fileidx++;
             if (isReady)
             {
+                while (isBusyStore) { } // ожидание освобождения флага
+                isBusyStore = true;
                 var dt = DateTime.Today;
                 var dn = DateTime.Now;
                 string path = PathToPages + "\\" + modulename + "_" + fileidx.ToString() + "_" +
                     dt.Year.ToString() + dt.Month.ToString() + dt.Day.ToString() +
                     dn.Hour.ToString() + dn.Minute.ToString() + dn.Second.ToString() + ".http";
                 System.IO.File.WriteAllText(path, text, System.Text.Encoding.UTF8);
-                fileidx++;
+                isBusyStore = false;
             }
         }
 

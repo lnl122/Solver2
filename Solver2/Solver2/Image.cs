@@ -70,6 +70,25 @@ namespace Solver2
             return SmallImagePath;
         }
 
-
+        // для списка путей к файлам получает описания картинок с гугля
+        // вход - массив путей к файлам
+        // выход - список коллекций слов
+        public static List<Words> GetAllDescriptions(string[] paths)
+        {
+            // создаем потоки и распознаем в них картинки
+            List<Task<Words>> Tasks2 = new List<Task<Words>>();
+            foreach (string OneSmallPic in paths)
+            {
+                Tasks2.Add(Task<Words>.Factory.StartNew(() => Google.GetImageDescription(OneSmallPic)));
+            }
+            Task.WaitAll(Tasks2.ToArray());
+            List<Words> SolvedPics = new List<Words>();
+            foreach (Task<Words> t8 in Tasks2)
+            {
+                Words r8 = t8.Result;
+                SolvedPics.Add(r8);
+            }
+            return SolvedPics;
+        }
     }
 }
