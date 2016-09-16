@@ -21,6 +21,7 @@ namespace Solver2
             {
                 Words W = TextsFromPics[i];
                 Answer.Add(T, 4, W.all_base10, i);
+                //*** позже добавить более низкие приоритеты
             }
 
             return true;
