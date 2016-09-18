@@ -73,6 +73,7 @@ namespace Solver2
         public ComboBox cbStrs;
         public Label lbProtect;
         public ComboBox cbProtect;
+        public string sProtect;
 
         public Label lbSolve;
         public Button btSolve;
@@ -221,7 +222,9 @@ namespace Solver2
             cbProtect = new ComboBox();
             cbProtect.Items.Add("нет"); cbProtect.Items.Add("1слово"); cbProtect.Items.Add("01слово"); cbProtect.Items.Add("слово1"); cbProtect.Items.Add("слово01");
             cbProtect.SelectedIndex = 0;
+            Event_Change_cbProtect(null, null);
             cbProtect.Visible = false;
+            cbProtect.SelectedIndexChanged += new EventHandler(Event_Change_cbProtect);
             Tab.Controls.Add(cbProtect);
 
             lbSolve = new Label();
@@ -294,6 +297,11 @@ namespace Solver2
 
             Event_ChangeSize(this, null);
             Event_Change_cbType(this, null);
+        }
+
+        private void Event_Change_cbProtect(object sender, EventArgs e)
+        {
+            sProtect = cbProtect.SelectedItem.ToString();
         }
 
         private void Event_Click_btSolve(object sender, EventArgs e)
@@ -514,6 +522,11 @@ namespace Solver2
             tbBonuses.Left = left3;
             tbBonuses.Width = width3;
             tbBonuses.Height = tbSectors.Height;
+        }
+
+        public void UpdateSectors(OneTab OT, string str) // делегат, принимающий возвращенные потоком параметры. взаимодействует с ГУИ
+        {
+            OT.tbSectors.Text = str + "\r\n`r`n" + OT.tbSectors.Text;
         }
     }
 }

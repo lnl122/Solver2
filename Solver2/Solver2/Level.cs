@@ -17,6 +17,7 @@ namespace Solver2
         public List<string> answers_bad;
         public int sectors;
         public int bonuses;
+        public int secbon;
         public string[] sector;
         public string[] bonus;
         public List<string> urls;
@@ -65,6 +66,7 @@ namespace Solver2
             sectors = sector.Length;
             bonus = GetLvlBonuses(page);
             bonuses = bonus.Length;
+            secbon = GetSecBon();
             formlevelid = "";
             formlevelnumber = "";
             if (!isClose)
@@ -78,6 +80,15 @@ namespace Solver2
             urls = GetLvlUrls(page);
             dt = DateTime.Now;
         }
+
+        private int GetSecBon()
+        {
+            int r = 0;
+            foreach (string s1 in sector) { if (s1 != "") { r++; } }
+            foreach (string s1 in bonus) { if (s1 != "") { r++; } }
+            return r;
+        }
+
         // обновляет содержимое уровня полностью принудительно
         public void ForceUpdateLevel()
         {
@@ -89,6 +100,7 @@ namespace Solver2
             sectors = sector.Length;
             bonus = GetLvlBonuses(page);
             bonuses = bonus.Length;
+            secbon = GetSecBon();
             formlevelid = "";
             formlevelnumber = "";
             if (!isClose)
@@ -112,6 +124,7 @@ namespace Solver2
             sectors = sector.Length;
             bonus = GetLvlBonuses(page);
             bonuses = bonus.Length;
+            secbon = GetSecBon();
             dt = DateTime.Now;
         }
         // обновляет содержимое уровня полностью
@@ -124,6 +137,7 @@ namespace Solver2
             sectors = sector.Length;
             bonus = GetLvlBonuses(page);
             bonuses = bonus.Length;
+            secbon = GetSecBon();
             formlevelid = "";
             formlevelnumber = "";
             if (!isClose)
@@ -146,6 +160,7 @@ namespace Solver2
             sectors = sector.Length;
             bonus = GetLvlBonuses(page);
             bonuses = bonus.Length;
+            secbon = GetSecBon();
             dt = DateTime.Now;
         }
         // получает страницу по номеру уровня

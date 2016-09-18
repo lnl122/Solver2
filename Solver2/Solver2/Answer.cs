@@ -10,6 +10,7 @@ namespace Solver2
     {
         public struct Answ
         {
+            public OneTab OT;
             public System.Windows.Forms.TabPage Tab;
             public System.Windows.Forms.TextBox Sec;
             public System.Windows.Forms.TextBox Bon;
@@ -29,9 +30,58 @@ namespace Solver2
         // процесс вбивания. единственный и неповторимый
         public static bool Process()
         {
+            // здесь нужно в бесконечном цикле просматривать очередь, выбирать наиболее приоритетные ответы и вбивать их
+            // после любых вбитий - перечитывать парсенные данные и обновлять ГУИ
+            // после успешных - обновлять все прочее
+            while (1 == 1)
+            {
+                while (Queue.Count < 1) { System.Threading.Thread.Sleep(1000); }
+                // получим следующее
+                Answ q1 = GetNext();
+                // попробуем вбить
+                string p1 = Engine.TryOne(q1.lvlnum, q1.wrd2);
+                Level lvl = q1.OT.level;
+                int oldsecbon = lvl.secbon;
+                lvl.UpdateAnswersLevel(p1);
+                // проверим, наш ответ удачен или нет?
+                bool isYes = false;
+                if (lvl.answers_good.Contains(q1.wrd2)) { isYes = true; }
+                // были изменения секторов и бонусов?
+                if(oldsecbon != lvl.secbon)
+                {
+                    //надо обновить GUI
+                    //нужен делегат в незнаю куда.
+                    //q1.OT.tbSectors.Text = q1.wrd2 + q1.OT.tbSectors.Text;
+                    //OneTab.BeginInvoke(new Action(() => OneTab.UpdateSectors(q1.OT, q1.wrd2)));
+                }
+                //нужно выждать какое-то время
+                //System.Threading.Thread.Sleep(rnd1.Next(rnd_min, rnd_max));
 
+            }
+            
 
             return true;
+        }
+
+        // возвращает наиболее приоритетный ответ
+        private static Answ GetNext()
+        {
+            int prior = 999;
+            int i_prior = -1;
+            int i_level = -1;
+            int i_choice = -1;
+            int cnt = Queue.Count;
+            for(int i=0; i<cnt; i++)
+            {
+                Answ q1 = Queue[i];
+                if (q1.priority < prior) { prior = q1.priority; i_prior = i; i_level = -1; }
+                if ((q1.lvlnum == current_level) && (q1.priority == prior)) { i_level = i; }
+            }
+            if (i_level == -1) { i_choice = i_prior; } else { i_choice = i_level; }
+            Answ q2 = Queue[i_choice];
+            Queue.Remove(q2);
+            if (current_level != q2.lvlnum) { current_level = q2.lvlnum; }
+            return q2;
         }
 
 
@@ -98,8 +148,9 @@ namespace Solver2
         public static void Add(OneTab T, int priority, string wrd, int i1, int i2 = -1, int i3 = -1)
         {
             int lvlnum = T.level.number;
-            string wrd2 = SetProtect(wrd, i1, T.cbProtect.SelectedItem.ToString());
+            string wrd2 = SetProtect(wrd, i1, T.sProtect);
             Answ q1 = new Answ();
+            q1.OT = T;
             q1.Tab = T.Tab;
             q1.Sec = T.tbSectors;
             q1.Bon = T.tbBonuses;

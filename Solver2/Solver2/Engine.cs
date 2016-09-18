@@ -18,10 +18,11 @@ namespace Solver2
         private static int levels = 0;          // колво уровней
         public static bool isReady = false;     // структура готова
 
-        public static int lastlevel;           // последний уровень, к которому было обращение
+        public static int lastlevel;            // последний уровень, к которому было обращение
+        public static string lastpage;          // последняя полученная страница
 
-        public static string cHead;            // куки
-        public static CookieContainer cCont;   // куки
+        public static string cHead;             // куки
+        public static CookieContainer cCont;    // куки
 
         // установить полученные в форме параметры
         public static void SetId(string s1, string s2, string s3, string s4, string s5, int i1)
@@ -100,5 +101,53 @@ namespace Solver2
             return pageSource;
         }
 
+        // пробует вбить один ответ
+        // вход - уровень и слово
+        // выход - страница от движка
+        public static string TryOne(int lvl, string val)
+        {
+            val = val.Replace('ё','е');
+            string url = "http://" + gamedomain + "/gameengines/encounter/play/" + gameid + "/?level=" + lvl.ToString();
+            if (lvl != lastlevel)
+            {
+                lastlevel = lvl;
+                lastpage = GetPage(url);
+            }
+            string t1 = lastpage;
+            
+            string t2 = t1;
+            string tt1 = "name=\"LevelId\" value=\"";
+            t1 = t1.Substring(t1.IndexOf(tt1) + tt1.Length);
+            string LevelId = t1.Substring(0, t1.IndexOf("\""));
+            string tt2 = "name=\"LevelNumber\" value=\"";
+            t2 = t2.Substring(t2.IndexOf(tt2) + tt2.Length);
+            string LevelNumber = t2.Substring(0, t2.IndexOf("\""));
+
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+            req.ServicePoint.Expect100Continue = false;
+            req.Referer = url;
+            req.KeepAlive = true;
+            
+            req.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
+            req.CookieContainer = cCont;
+            req.ContentType = "application/x-www-form-urlencoded";
+            req.Method = "POST";
+            string formParams = string.Format("LevelId={0}&LevelNumber={1}&LevelAction.Answer={2}", LevelId, LevelNumber, val);
+            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(formParams);
+            req.ContentLength = bytes.Length;
+            using (Stream os = req.GetRequestStream())
+            {
+                os.Write(bytes, 0, bytes.Length);
+            }
+            string ps = "";
+            HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
+            using (StreamReader sr = new StreamReader(resp.GetResponseStream()))
+            {
+                ps = sr.ReadToEnd();
+            }
+
+            lastpage = ps;
+            return ps;
+        }
     }
 }
