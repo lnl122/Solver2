@@ -333,6 +333,7 @@ namespace Solver2
         // возвращает перечень бонусов и ответы на них
         private static string[] GetLvlBonuses(string g)
         {
+            g = g.ToLower();
             List<string> res2 = new List<string>();
             string[] res = new string[0];
             g = g.Replace("\r", " ").Replace("\n", " ").Replace("\t", " ").Replace("<i>", " ").Replace("</i>", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");

@@ -113,14 +113,18 @@ namespace Solver2
                 lastlevel = lvl;
                 lastpage = GetPage(url);
             }
+            if(lastpage == null)
+            {
+                lastpage = GetPage(url);
+            }
             string t1 = lastpage;
             
             string t2 = t1;
             string tt1 = "name=\"LevelId\" value=\"";
-            t1 = t1.Substring(t1.IndexOf(tt1) + tt1.Length);
+            t1 = t1.Substring(t1.IndexOf(tt1.ToLower()) + tt1.Length);
             string LevelId = t1.Substring(0, t1.IndexOf("\""));
             string tt2 = "name=\"LevelNumber\" value=\"";
-            t2 = t2.Substring(t2.IndexOf(tt2) + tt2.Length);
+            t2 = t2.Substring(t2.IndexOf(tt2.ToLower()) + tt2.Length);
             string LevelNumber = t2.Substring(0, t2.IndexOf("\""));
 
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);

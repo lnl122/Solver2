@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Solver2
@@ -20,10 +21,14 @@ namespace Solver2
             for(int i=0; i<TextsFromPics.Count; i++)
             {
                 Words W = TextsFromPics[i];
-                Answer.Add(T, 4, W.all_base10, i);
+                if (W != null)
+                {
+                    Answer.Add(T, 4, W.all_base10, i);
+                }
                 //*** позже добавить более низкие приоритеты
             }
-
+            T.tbSectors.Invoke(new Action(() => { T.btSolve.Enabled = true; }));
+            
             return true;
         }
 

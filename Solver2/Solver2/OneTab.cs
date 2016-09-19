@@ -125,6 +125,7 @@ namespace Solver2
             Tab.Controls.Add(tbAnswer);
             btAnswer = new Button();
             btAnswer.Text = "->";
+            btAnswer.Click += new EventHandler(Event_Click_btAnswer);
             Tab.Controls.Add(btAnswer);
             lbAnswerMulti = new Label();
             lbAnswerMulti.Text = "Ответы:";
@@ -133,6 +134,7 @@ namespace Solver2
             tbAnswerMulti.Multiline = true;
             tbAnswerMulti.ScrollBars = ScrollBars.Both;
             tbAnswerMulti.Text = "";
+            tbAnswerMulti.Click += new EventHandler(Event_Click_btAnswer);
             Tab.Controls.Add(tbAnswerMulti);
             btAnswerMulti = new Button();
             btAnswerMulti.Text = "->";
@@ -299,6 +301,27 @@ namespace Solver2
             Event_Change_cbType(this, null);
         }
 
+        private void Event_Click_btAnswer(object sender, EventArgs e)
+        {
+            if(tbAnswer.Text.Trim() != "")
+            {
+                Answer.Add(this, 1, tbAnswer.Text.Trim(), -1);
+                tbAnswer.Text = "";
+            }
+            if (tbAnswerMulti.Text.Trim() != "")
+            {
+                string[] ansm = System.Text.RegularExpressions.Regex.Split(tbAnswerMulti.Text, "\r\n");
+                foreach(string s1 in ansm)
+                {
+                    if(s1.Trim() != "")
+                    {
+                        Answer.Add(this, 2, s1, -1);
+                    }
+                }
+                tbAnswerMulti.Text = "";
+            }
+        }
+
         private void Event_Change_cbProtect(object sender, EventArgs e)
         {
             sProtect = cbProtect.SelectedItem.ToString();
@@ -310,6 +333,7 @@ namespace Solver2
             {
                 var R1 = new Picture(this);
             }
+            btSolve.Enabled = false;
         }
 
         private void Event_Change_cbImageNumber(object sender, EventArgs e)
@@ -523,10 +547,13 @@ namespace Solver2
             tbBonuses.Width = width3;
             tbBonuses.Height = tbSectors.Height;
         }
-
-        public void UpdateSectors(OneTab OT, string str) // делегат, принимающий возвращенные потоком параметры. взаимодействует с ГУИ
+        /*
+        public delegate void dUpdateTb(TextBox tb, string str);
+        public static dUpdateTb fUpdateTb = new OneTab.dUpdateTb(OneTab.UpdateTb);
+        public static void UpdateTb(System.Windows.Forms.TextBox tb, string str) // делегат, принимающий возвращенные потоком параметры. взаимодействует с ГУИ
         {
-            OT.tbSectors.Text = str + "\r\n`r`n" + OT.tbSectors.Text;
+            tb.Text = str + "\r\n`r`n" + tb.Text;
         }
+        */
     }
 }

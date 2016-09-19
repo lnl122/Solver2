@@ -51,18 +51,20 @@ namespace Solver2
                 if((isYes) || (oldsecbon != lvl.secbon))
                 {
                     //надо обновить GUI
-                    //нужен делегат в незнаю куда.
-                    //q1.OT.tbSectors.Text = q1.wrd2 + q1.OT.tbSectors.Text;
-                    //OneTab.BeginInvoke(new Action(() => OneTab.UpdateSectors(q1.OT, q1.wrd2)));
+                    string sec1 = ""; for (int i = 0; i < lvl.sectors; i++) { sec1 = sec1 + (i + 1).ToString() + ": " + lvl.sector[i] + "\r\n"; }
+                    q1.OT.tbSectors.Invoke(new Action(() => { q1.OT.tbSectors.Text = sec1; }));
+                    string bon1 = ""; for (int i = 0; i < lvl.bonuses; i++) { bon1 = bon1 + (i + 1).ToString() + ": " + lvl.bonus[i] + "\r\n"; }
+                    q1.OT.tbBonuses.Invoke(new Action(() => { q1.OT.tbBonuses.Text = bon1; }));
+
                 }
                 //нужно выждать какое-то время
                 //System.Threading.Thread.Sleep(rnd1.Next(rnd_min, rnd_max));
-
             }
-            
-
             return true;
         }
+
+        
+
 
         // возвращает наиболее приоритетный ответ
         private static Answ GetNext()
