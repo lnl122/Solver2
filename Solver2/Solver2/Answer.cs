@@ -33,7 +33,8 @@ namespace Solver2
             // здесь нужно в бесконечном цикле просматривать очередь, выбирать наиболее приоритетные ответы и вбивать их
             // после любых вбитий - перечитывать парсенные данные и обновлять ГУИ
             // после успешных - обновлять все прочее
-            while (1 == 1)
+            bool isTrue = true;
+            while (isTrue == true)
             {
                 while (Queue.Count < 1) { System.Threading.Thread.Sleep(1000); }
                 // получим следующее
@@ -47,7 +48,7 @@ namespace Solver2
                 bool isYes = false;
                 if (lvl.answers_good.Contains(q1.wrd2)) { isYes = true; }
                 // были изменения секторов и бонусов?
-                if(oldsecbon != lvl.secbon)
+                if((isYes) || (oldsecbon != lvl.secbon))
                 {
                     //надо обновить GUI
                     //нужен делегат в незнаю куда.
