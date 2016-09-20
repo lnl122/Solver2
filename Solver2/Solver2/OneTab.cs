@@ -106,6 +106,9 @@ namespace Solver2
         public Label lbBonuses;
         public TextBox tbBonuses;
 
+        // others
+        public bool isPicsSect;
+
         public OneTab(Program.Data D, Level lvl)
         {
             level = lvl;
@@ -146,7 +149,7 @@ namespace Solver2
             Tab.Controls.Add(lbType);
 
             cbType = new ComboBox();
-            foreach(string st1 in TaskTypes)
+            foreach (string st1 in TaskTypes)
             {
                 if ((levelUrlsCount > 0) || (st1.IndexOf("артин") == -1)) { cbType.Items.Add(st1); }
             }
@@ -395,6 +398,7 @@ namespace Solver2
             cbProtect.Visible = false;
             lbSolve.Visible = false;
             btSolve.Visible = false;
+            isPicsSect = false;
 
             if (cbType.SelectedItem.ToString() == "Картинки (только решить)")
             {
@@ -413,6 +417,7 @@ namespace Solver2
                 objs.Add(lbSolve);
                 objs.Add(btSolve);
                 ShowSettingsOnScreen(objs, SettingsPositions);
+                isPicsSect = true;
             }
 
         }

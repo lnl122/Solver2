@@ -39,32 +39,125 @@ namespace Solver2
                 while (Queue.Count < 1) { System.Threading.Thread.Sleep(1000); }
                 // получим следующее
                 Answ q1 = GetNext();
-                // попробуем вбить
-                string p1 = Engine.TryOne(q1.lvlnum, q1.wrd2);
+                // проверим, ранее вбивали или нет
                 Level lvl = q1.OT.level;
                 int oldsecbon = lvl.secbon;
-                lvl.UpdateAnswersLevel(p1);
-                // проверим, наш ответ удачен или нет?
-                bool isYes = false;
-                if (lvl.answers_good.Contains(q1.wrd2)) { isYes = true; }
-                // были изменения секторов и бонусов?
-                if((isYes) || (oldsecbon != lvl.secbon))
+                bool isAlreadyExist = checkAlreadyExist(q1, lvl);
+                if (!isAlreadyExist)
                 {
-                    //надо обновить GUI
-                    string sec1 = ""; for (int i = 0; i < lvl.sectors; i++) { sec1 = sec1 + (i + 1).ToString() + ": " + lvl.sector[i] + "\r\n"; }
-                    q1.OT.tbSectors.Invoke(new Action(() => { q1.OT.tbSectors.Text = sec1; }));
-                    string bon1 = ""; for (int i = 0; i < lvl.bonuses; i++) { bon1 = bon1 + (i + 1).ToString() + ": " + lvl.bonus[i] + "\r\n"; }
-                    q1.OT.tbBonuses.Invoke(new Action(() => { q1.OT.tbBonuses.Text = bon1; }));
+                    // попробуем вбить
+                    string p1 = Engine.TryOne(q1.lvlnum, q1.wrd2);
+                    lvl.UpdateAnswersLevel(p1);
+                    // проверим, наш ответ удачен или нет?
+                    bool isYes = false;
+                    if (lvl.answers_good.Contains(q1.wrd2)) { isYes = true; }
+                    // были изменения секторов и бонусов?
+                    if ((isYes) || (oldsecbon != lvl.secbon))
+                    {
+                        //очистим очередь от а) ответов с тем же ид б) от ответов с ид = номерам решенных секторов для картинок
+                        ClearQueue(q1);
+                        //надо обновить GUI
+                        string sec1 = ""; for (int i = 0; i < lvl.sectors; i++) { sec1 = sec1 + (i + 1).ToString() + ": " + lvl.sector[i] + "\r\n"; }
+                        q1.OT.tbSectors.Invoke(new Action(() => { q1.OT.tbSectors.Text = sec1; }));
+                        string bon1 = ""; for (int i = 0; i < lvl.bonuses; i++) { bon1 = bon1 + (i + 1).ToString() + ": " + lvl.bonus[i] + "\r\n"; }
+                        q1.OT.tbBonuses.Invoke(new Action(() => { q1.OT.tbBonuses.Text = bon1; }));
+                        // подчистить картинки в ГУИ
 
+
+                    }
+                    //нужно выждать какое-то время
+                    //System.Threading.Thread.Sleep(rnd1.Next(rnd_min, rnd_max));
                 }
-                //нужно выждать какое-то время
-                //System.Threading.Thread.Sleep(rnd1.Next(rnd_min, rnd_max));
             }
             return true;
         }
 
-        
+        // очищает очередь от всех ответов, где присутствуют ид из q1
+        // вход - ответ, по ид которого очищается очередь
+        private static void ClearQueue(Answ q1)
+        {
+            int i1 = q1.i1;
+            int i2 = q1.i2;
+            int i3 = q1.i3;
+            int j1, j2, j3;
+            int cnt = Queue.Count;
+            for (int i = cnt-1; i >= 0; i--)
+            {
+                j1 = Queue[i].i1;
+                j2 = Queue[i].i2;
+                j3 = Queue[i].i3;
+                bool fl = false;
+                if ((i1 != -1) && (i1 == j1)) { fl = true; }
+                if ((i1 != -1) && (i1 == j2)) { fl = true; }
+                if ((i1 != -1) && (i1 == j3)) { fl = true; }
+                if ((i2 != -1) && (i2 == j1)) { fl = true; }
+                if ((i2 != -1) && (i2 == j2)) { fl = true; }
+                if ((i2 != -1) && (i2 == j3)) { fl = true; }
+                if ((i3 != -1) && (i3 == j1)) { fl = true; }
+                if ((i3 != -1) && (i3 == j2)) { fl = true; }
+                if ((i3 != -1) && (i3 == j3)) { fl = true; }
+                if (fl) { Queue.RemoveAt(i); }
+            }
+            // почистим по номерам бонусов и секторов, если необходимо
+            if (q1.OT.isPicsSect)
+            {
+                for (int i = 0; i < q1.OT.level.bonuses; i++)
+                {
+                    string s1 = q1.OT.level.bonus[i];
+                    string[] ar1 = s1.Split(' ');
+                    foreach(string s2 in ar1)
+                    {
+                        if((s2 == q1.wrd) || (s2 == q1.wrd2))
+                        {
+                            int cnt2 = Queue.Count;
+                            int jj1, jj2, jj3;
+                            for (int ii = cnt2-1; ii >= 0; ii--)
+                            {
+                                jj1 = Queue[ii].i1;
+                                jj2 = Queue[ii].i2;
+                                jj3 = Queue[ii].i3;
+                                if (i == jj1) { Queue.RemoveAt(ii); }
+                            }
+                        }
+                    }
+                }
+                for (int i = 0; i < q1.OT.level.sectors; i++)
+                {
+                    string s1 = q1.OT.level.sector[i];
+                    string[] ar1 = s1.Split(' ');
+                    foreach (string s2 in ar1)
+                    {
+                        if ((s2 == q1.wrd) || (s2 == q1.wrd2))
+                        {
+                            int cnt2 = Queue.Count;
+                            int jj1, jj2, jj3;
+                            for (int ii = cnt2 - 1; ii >= 0; ii--)
+                            {
+                                jj1 = Queue[ii].i1;
+                                jj2 = Queue[ii].i2;
+                                jj3 = Queue[ii].i3;
+                                if (i == jj1) { Queue.RemoveAt(ii); }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
+        // проверяет, ранее уже вбивали это слово или нет
+        // вход - структура ответа, структура уровня
+        // выход - флаг присутствия ответа в списках
+        private static bool checkAlreadyExist(Answ q1, Level lvl)
+        {
+            List<string> old = new List<string>();
+            old.AddRange(lvl.answers_bad);
+            old.AddRange(lvl.answers_good);
+            foreach (string s in lvl.bonus) { if (s != "") { old.Add(s); } }
+            foreach (string s in lvl.sector) { if (s != "") { old.Add(s); } }
+            bool f1 = old.Contains(q1.wrd);
+            bool f2 = old.Contains(q1.wrd2);
+            return (f1 || f2);
+        }
 
         // возвращает наиболее приоритетный ответ
         private static Answ GetNext()
@@ -86,7 +179,6 @@ namespace Solver2
             if (current_level != q2.lvlnum) { current_level = q2.lvlnum; }
             return q2;
         }
-
 
         // инициализация + старт процесса вбиватора
         public static void Init()

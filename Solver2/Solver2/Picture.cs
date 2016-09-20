@@ -14,6 +14,10 @@ namespace Solver2
             // создаем массив путей из больших картинок
             string[] SmallImagePath = Image.GetSmallImagePathes(T, T.level.urls, T.iRows, T.iCols);
 
+            // отрисуем их в ГУИ
+            // пример делегата -- q1.OT.tbBonuses.Invoke(new Action(() => { q1.OT.tbBonuses.Text = bon1; }));
+
+
             // из путей к картинкам делаем коллекции слов
             List<Words> TextsFromPics = Image.GetAllDescriptions(SmallImagePath);
 
