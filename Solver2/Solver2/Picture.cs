@@ -15,8 +15,13 @@ namespace Solver2
             string[] SmallImagePath = Image.GetSmallImagePathes(T, T.level.urls, T.iRows, T.iCols);
 
             // отрисуем их в ГУИ
-            // пример делегата -- q1.OT.tbBonuses.Invoke(new Action(() => { q1.OT.tbBonuses.Text = bon1; }));
-
+            string html = "<!DOCTYPE HTML><html><head><meta charset=\"utf-8\"></head><body bgcolor=\"#111111\"><br/>";
+            for(int i=0; i<SmallImagePath.Length; i++)
+            {
+                html = html + "<img src=\"" + SmallImagePath[i] + "\" width=\"150\" height=\"150\" alt=\"" + (i+1).ToString() + "\">";
+            }
+            html = html + "<br/></body></html>";
+            T.wbPictures.Invoke(new Action(() => { T.wbPictures.DocumentText = html; }));
 
             // из путей к картинкам делаем коллекции слов
             List<Words> TextsFromPics = Image.GetAllDescriptions(SmallImagePath);
