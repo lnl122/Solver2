@@ -18,8 +18,8 @@ namespace Solver2
         private static int levels = 0;          // колво уровней
         public static bool isReady = false;     // структура готова
 
-        public static int lastlevel;            // последний уровень, к которому было обращение
-        public static string lastpage;          // последняя полученная страница
+        public static int lastlevel = -1;       // последний уровень, к которому было обращение
+        public static string lastpage = "";     // последняя полученная страница
 
         public static string cHead;             // куки
         public static CookieContainer cCont;    // куки
@@ -67,7 +67,9 @@ namespace Solver2
                 Log.Write("en.cx ERROR: Не удалось прочитать страницу ", url);
                 ps = "";
             }
-            return ps.ToLower();
+            // если на странице встретили "<form ID=\"formMain\" method=\"post\" action=\"/Login.aspx?return=%2fgameengines%2fencounter%2fplay%2f24889%2f%3flevel%3d11"
+            // надо переавторизоваться и, если успешно - вернуть страницу
+            return ps;
         }
 
         // выполняем логон в движке
@@ -113,18 +115,19 @@ namespace Solver2
                 lastlevel = lvl;
                 lastpage = GetPage(url);
             }
-            if(lastpage == null)
+            if ((lastpage == null) || (lastpage == ""))
             {
+                lastlevel = lvl;
                 lastpage = GetPage(url);
             }
             string t1 = lastpage;
             
             string t2 = t1;
             string tt1 = "name=\"LevelId\" value=\"";
-            t1 = t1.Substring(t1.IndexOf(tt1.ToLower()) + tt1.Length);
+            t1 = t1.Substring(t1.IndexOf(tt1) + tt1.Length);
             string LevelId = t1.Substring(0, t1.IndexOf("\""));
             string tt2 = "name=\"LevelNumber\" value=\"";
-            t2 = t2.Substring(t2.IndexOf(tt2.ToLower()) + tt2.Length);
+            t2 = t2.Substring(t2.IndexOf(tt2) + tt2.Length);
             string LevelNumber = t2.Substring(0, t2.IndexOf("\""));
 
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);

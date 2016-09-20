@@ -1,21 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Solver2
 {
     class ParsePage
     {
-
         // вырезает между указанными тегами
         public static string ParseTags(string g, string[,] tags)
         {
-            if (g.Length < 1)
-            {
-                return "";
-            }
+            if (g.Length < 1) { return ""; }
             int tags_len = tags.Length / 2;
             bool fl = true;
             for (int i = 0; i < tags_len; i++)

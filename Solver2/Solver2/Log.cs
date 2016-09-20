@@ -9,7 +9,6 @@ namespace Solver2
     //
     class Log
     {
-        //private static string PathToLogs = "";          // путь (без файла) к логам
         private static string PathToPages = "";         // путь (без слеша в конце, к папке для сохраняемых страниц
         private static System.IO.StreamWriter logfile;  // поток лога
         public static bool isReady = false;             // инициализация проведена?

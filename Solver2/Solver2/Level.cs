@@ -1,6 +1,4 @@
-﻿// *** Level            доделать отдельную ветки для линейных МШ
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Solver2
@@ -27,22 +25,6 @@ namespace Solver2
         public GameSelect G;
 
         public static GameSelect Game;
-        /*
-        public static Level[] GetAllLevels(GameSelect GameParams)
-        {
-            Game = GameParams;
-            Level[] L;
-            if (Game.isStorm == true) { L = new Level[Game.gamelevels]; } else { L = new Level[1]; }
-            // *** доделать отдельную ветки для линейных МШ
-            // весь код ниже пока относиться (08.09.16) только к штурмам
-
-            for (int i = 0; i < Game.gamelevels; i++)
-            {
-                L[i] = new Level(Game, i + 1);
-            }
-            return L;
-        }
-        */
 
         // вход - пераметры игры, номер уровня 1..99
         // выход - объект с данными уровня
@@ -81,11 +63,20 @@ namespace Solver2
             dt = DateTime.Now;
         }
 
+        // считает общее количество ответов, необходимо для дальнейшего обпередения необходимости обновления формы
         private int GetSecBon()
         {
             int r = 0;
-            foreach (string s1 in sector) { if (s1 != "") { r++; } }
-            foreach (string s1 in bonus) { if (s1 != "") { r++; } }
+            foreach (string s1 in sector)
+            {
+                string ss = s1.Trim().Replace(" ", "").Replace("\r", "").Replace("\n", "").Replace("\t", "");
+                if (ss != "") { r++; }
+            }
+            foreach (string s1 in bonus)
+            {
+                string ss = s1.Trim().Replace(" ", "").Replace("\r", "").Replace("\n", "").Replace("\t", "");
+                if (ss != "") { r++; }
+            }
             return r;
         }
 
@@ -167,12 +158,15 @@ namespace Solver2
         public static string GetPageLevel(int idx)
         {
             string url = "http://" + Game.gamedomain + "/gameengines/encounter/play/" + Game.gameid + "/?level=" + idx.ToString();
+            string page = Engine.GetPage(url);
             Engine.lastlevel = idx;
-            return Engine.GetPage(url);
+            Engine.lastpage = page;
+            return page;
         }
         // возвращает наименование текущего уровня со страницы
-        private static string GetLvlName(string g)
+        private static string GetLvlName(string g1)
         {
+            string g = g1.ToLower();
             int i1 = g.IndexOf("<ul class=\"section level\">");
             if (i1 == -1) { return "не определен"; }
             g = g.Substring(i1);
@@ -186,8 +180,9 @@ namespace Solver2
             return g;
         }
         // возвращает признак - уровень закрыт или нет
-        private static bool GetLvlClose(string g)
+        private static bool GetLvlClose(string g1)
         {
+            string g = g1.ToLower();
             int i1 = g.IndexOf("<label for=\"answer\">");
             if (i1 == -1)
             {
@@ -199,8 +194,9 @@ namespace Solver2
             }
         }
         // возвращает ид уровня
-        private static string GetLvlFormlevelid(string g)
+        private static string GetLvlFormlevelid(string g1)
         {
+            string g = g1.ToLower();
             int i1 = g.IndexOf("<form method=\"post\">");
             if (i1 == -1) { return ""; }
             else
@@ -222,8 +218,9 @@ namespace Solver2
             return "";
         }
         // возвращает номер уровня для формы
-        private static string GetLvlFormlevelnumber(string g)
+        private static string GetLvlFormlevelnumber(string g1)
         {
+            string g = g1.ToLower();
             int i1 = g.IndexOf("<form method=\"post\">");
             if (i1 == -1) { return ""; }
             else
@@ -245,8 +242,9 @@ namespace Solver2
             return "";
         }
         // возвращает список неудачных ответов
-        private static List<string> GetLvlAnsBad(string g)
+        private static List<string> GetLvlAnsBad(string g1)
         {
+            string g = g1.ToLower();
             List<string> res = new List<string>();
             int i1 = g.IndexOf("<ul class=\"history\">");
             if (i1 == -1) { return res; }
@@ -264,8 +262,9 @@ namespace Solver2
             return res;
         }
         // возвращает список удачных ответов
-        private static List<string> GetLvlAnsGood(string g)
+        private static List<string> GetLvlAnsGood(string g1)
         {
+            string g = g1.ToLower();
             List<string> res = new List<string>();
             int i1 = g.IndexOf("<ul class=\"history\">");
             if (i1 == -1) { return res; }
@@ -289,8 +288,9 @@ namespace Solver2
             return res;
         }
         // возвращает перечень секторов и ответы на них
-        private static string[] GetLvlSectors(string g)
+        private static string[] GetLvlSectors(string g1)
         {
+            string g = g1.ToLower();
             List<string> res2 = new List<string>();
             string[] res = new string[0];
             g = g.Replace("\r", " ").Replace("\n", " ").Replace("\t", " ").Replace("<i>", " ").Replace("</i>", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
@@ -331,9 +331,9 @@ namespace Solver2
             return res;
         }
         // возвращает перечень бонусов и ответы на них
-        private static string[] GetLvlBonuses(string g)
+        private static string[] GetLvlBonuses(string g1)
         {
-            g = g.ToLower();
+            string g = g1.ToLower();
             List<string> res2 = new List<string>();
             string[] res = new string[0];
             g = g.Replace("\r", " ").Replace("\n", " ").Replace("\t", " ").Replace("<i>", " ").Replace("</i>", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
@@ -397,18 +397,18 @@ namespace Solver2
         {
             string res = "";
             g = g.Replace("\t", " ").Replace("&nbsp;", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
-            int i1 = g.IndexOf("<h3>задание</h3>");
+            int i1 = g.ToLower().IndexOf("<h3>задание</h3>");
             if (i1 == -1)
             {
-                i1 = g.IndexOf("<h3>task</h3>");
+                i1 = g.ToLower().IndexOf("<h3>task</h3>");
                 if (i1 == -1)
                 {
                     return res;
                 }
             }
-            g = g.Substring(i1).Replace("<h3>задание</h3>", "").Replace("<h3>task</h3>", "");
-            i1 = g.IndexOf("</h3>"); if (i1 != -1) { g = g.Substring(0, i1); }
-            i1 = g.IndexOf("</div>"); if (i1 != -1) { g = g.Substring(0, i1); }
+            g = g.Substring(i1).Replace("<h3>задание</h3>", "").Replace("<h3>task</h3>", "").Replace("<h3>Задание</h3>", "").Replace("<h3>Task</h3>", "").Replace("<H3>задание</H3>", "").Replace("<H3>task</H3>", "").Replace("<H3>Задание</H3>", "").Replace("<H3>Task</H3>", "");
+            i1 = g.ToLower().IndexOf("</h3>"); if (i1 != -1) { g = g.Substring(0, i1); }
+            i1 = g.ToLower().IndexOf("</div>"); if (i1 != -1) { g = g.Substring(0, i1); }
             g = g.Replace("\n", "\r").Replace("<br/>", "\r").Replace("<p>", " ").Replace("</p>", " ").Replace("\n", "\r").Replace("\n", "\r").Replace("\n", "\r");
             g = g.Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("\r ", "\r").Replace(" \r", "\r").Replace("\r\r", "\r").Replace("\r\r", "\r").Replace("\r\r", "\r").Replace("\r\r", "\r");
             string[] ar1 = System.Text.RegularExpressions.Regex.Split(g, "<div class=\"spacer\">");
@@ -425,9 +425,11 @@ namespace Solver2
             res = res.Replace("\r", "\r\n");
             return res;
         }
+
         // возвращает набор урлов
-        private static List<string> GetLvlUrls(string g)
+        private static List<string> GetLvlUrls(string g1)
         {
+            string g = g1.ToLower();
             List<string> res = new List<string>();
             g = g.Replace("\t", " ").Replace("&nbsp;", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
             int i1 = g.IndexOf("<h3>задание</h3>");

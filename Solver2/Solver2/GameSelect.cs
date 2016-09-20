@@ -10,8 +10,6 @@ using System.Windows.Forms;
 
 namespace Solver2
 {
-    // public static List<List<string>> GetGames(Logon logonData)
-
     class GameSelect
     {
         private int border = 5; // расстояния между элементами форм, константа

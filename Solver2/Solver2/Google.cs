@@ -94,37 +94,13 @@ namespace Solver2
         // выход - текст со страницы после парсинга
         public static string ParsingPage(string g)
         {
-            if (g.Length < 1)
-            {
-                return "";
-            }
+            if (g.Length < 1) { return ""; }
 
             int ihr1 = g.IndexOf("<hr");
             int ihr2 = g.LastIndexOf("<hr");
-            if ((ihr1 < 0) || (ihr2 < 0))
-            {
-                return "";
-            }
+            if ((ihr1 < 0) || (ihr2 < 0)) { return ""; }
             g = g.Substring(ihr1, ihr2 - ihr1);
-            /*
-            int tags_len = tags.Length / 2;
-            bool fl = true;
-            for (int i = 0; i < tags_len; i++)
-            {
-                fl = true;
-                while (fl)
-                {
-                    fl = false;
-                    int i1 = g.IndexOf(tags[0, i]);
-                    if (i1 != -1)
-                    {
-                        string g2 = g.Substring(i1 + tags[0, i].Length);
-                        int i2 = g2.IndexOf(tags[1, i]);
-                        g = g.Substring(0, i1) + g2.Substring(i2 + tags[1, i].Length);
-                        fl = true;
-                    }
-                }
-            }*/
+
             g = ParsePage.ParseTags(g, tags);
 
             g = g.Replace("&nbsp;", " ");
@@ -135,48 +111,11 @@ namespace Solver2
             g = g.Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
             g = g.Replace(" >", ">").Replace("data-hve", " ");
             g = g.Replace("<a></a>", "").Replace("<div></div>", "").Replace("<span></span>", "").Replace("<a></a>", "").Replace("<div></div>", "").Replace("<span></span>", "").Replace("<a></a>", "").Replace("<div></div>", "").Replace("<span></span>", "");
-            /*
-            fl = true;
-            for (int i = 0; i < tags_len; i++)
-            {
-                fl = true;
-                while (fl)
-                {
-                    fl = false;
-                    int i1 = g.IndexOf(tags[0, i]);
-                    if (i1 != -1)
-                    {
-                        string g2 = g.Substring(i1 + tags[0, i].Length);
-                        int i2 = g2.IndexOf(tags[1, i]);
-                        g = g.Substring(0, i1) + g2.Substring(i2 + tags[1, i].Length);
-                        fl = true;
-                    }
-                }
-            }
-            */
+
             g = ParsePage.ParseTags(g, tags);
 
             g = g.Replace("<a>&times;</a>", "");
-            /*
-            bool fl = true;
-            while (fl)
-            {
-                fl = false;
-                int idx = g.IndexOf("&times;");
-                if (idx > 0)
-                {
 
-                    string g1 = g.Substring(0, idx);
-                    string g2 = g.Substring(idx);
-                    int idx1 = g1.LastIndexOf("<span>");
-                    int idx2 = g2.IndexOf("</span>");
-                    if ((idx1 > 0) && (idx2 > 0))
-                    {
-                        g = g.Substring(0, idx1) + g.Substring(idx + idx2 + 7);
-                        fl = true;
-                    }
-                }
-            }*/
             g = ParsePage.ParseTags(g, tags1);
 
             g = g.Replace("страницы с подходящими изображениями", " ");
@@ -203,11 +142,11 @@ namespace Solver2
         public static Words GetImageDescription(string path)
         {
             string a = Upload.UploadFile(path);
-            if (a == "") { return null; }
+            if ((a == "") || (a == null)) { return null; }
             string b = GetPageByImageUrl(a);
-            if (b == "") { return null; }
+            if ((b == "") || (b == null)) { return null; }
             string c = ParsingPage(b);
-            if (c == "") { return null; }
+            if ((c == "") || (c == null)) { return null; }
             Words res = new Words(c);
             return res;
         }

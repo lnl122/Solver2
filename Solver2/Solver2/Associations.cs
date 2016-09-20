@@ -71,7 +71,7 @@ namespace Solver2
                     // переносим в List
                     foreach (string s1 in dict)
                     {
-                        badwords.Add(s1);
+                        badwords.Add(s1.ToLower());
                     }
                     isDicionaryLoadedBad = true;
                     Log.Write("assoc Чтение словаря плохих ассоциаций завершено");
@@ -103,8 +103,8 @@ namespace Solver2
                         int idx = s1.IndexOf(" ");
                         if (idx > 0)
                         {
-                            string w1 = s1.Substring(0, idx);
-                            string w2 = s1.Substring(idx + 1);
+                            string w1 = s1.Substring(0, idx).ToLower();
+                            string w2 = s1.Substring(idx + 1).ToLower();
                             string[] ar2 = w2.Split(' ');
                             List<string> lw = new List<string>();
                             foreach (string w3 in ar2)
@@ -124,13 +124,6 @@ namespace Solver2
                 }
             }
         }
-
-        /*
-        // деструктор
-        public void Close()
-        {
-        }
-        */
 
         // обновление словаря ассоциаций на диске
         public static void SaveDictionary()
@@ -355,7 +348,7 @@ namespace Solver2
             int idxwrd = words.IndexOf(word);
             if (idxwrd >= 0)
             {
-                return Associations.GetFirstItems(assoc[idxwrd], count);
+                return GetFirstItems(assoc[idxwrd], count);
             }
             // поиск в плохих ассоциациях
             int idxwrd2 = badwords.IndexOf(word);

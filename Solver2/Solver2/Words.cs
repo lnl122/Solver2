@@ -46,9 +46,11 @@ namespace Solver2
         public List<string> all_base10;  // топовых 10 слов, из найденных, приведенную в базовую форму, ранжированные по частоте
         public List<string> all_assoc; // ассоциации к найденным словам, все подряд
 
+        // создает объект из текста, где слова разделены пробелами
         public Words(string str)
         {
             // создаем части объектов. пока что пустые.
+            str = str.ToLower();
             src = str;
             ru = new List<string>();
             ru_check = new List<string>();
