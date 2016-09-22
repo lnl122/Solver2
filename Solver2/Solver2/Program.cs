@@ -151,6 +151,25 @@ namespace Solver2
         // код основной программы
         static void Main(string[] args)
         {
+
+            /*
+            int PicsCount = 16;
+            int SizeOlimp = PicsCount * 2;
+            int[] links = new int[SizeOlimp];
+            for (int i = 0; i < SizeOlimp; i++) { links[i] = SizeOlimp - (int)Math.Floor((SizeOlimp - i) / 2.0); }
+            links[0] = -1;
+            links[SizeOlimp - 1] = -1;
+            int num = 31;
+
+            System.Collections.Generic.List<int> res = new System.Collections.Generic.List<int>();
+            if ((num !=0) && (num != links.Length-1)) { res.Add(links[num]); }
+            for(int i = 1; i<links.Length-1; i++)
+            {
+                if(links[i] == num) { res.Add(i); }
+            }
+            int iii = 0;
+            */
+
             // инитим лог
             Log.Init();
             Log.Write("________________________________________________________________________________");

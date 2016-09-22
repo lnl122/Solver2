@@ -15,8 +15,8 @@ namespace Solver2
     // public List<string> Get(List<string>, int = 999)
     // public List<string> Get2(string, string)
     // public List<string> Get2(List<string>, List<string>)
-    // ***public List<string> Get3(string, string, string)
-    // ***public List<string> Get3(List<string>, List<string>, List<string>)
+    // public List<string> Get3(string, string, string)
+    // public List<string> Get3(List<string>, List<string>, List<string>)
     //
     class Associations
     {
@@ -264,6 +264,22 @@ namespace Solver2
             return list.GetRange(0, count);
         }
 
+        // вход - три списка слов
+        // выход - список общих ассоциаций к словам
+        public static List<string> Get3(List<string> list1, List<string> list2, List<string> list3)
+        {
+            return Get2(list1, Get2(list2, list3));
+        }
+
+        // вход - три слова
+        // выход - список общих ассоциаций к словам
+        public static List<string> Get3(string list1, string list2, string list3)
+        {
+            List<string> tmp = new List<string>();
+            tmp.Add(list1);
+            return Get2(tmp, Get2(list2, list3));
+        }
+
         // вход - два списка слов
         // выход - список общих ассоциаций к словам
         public static List<string> Get2(List<string> list1, List<string> list2)
@@ -312,24 +328,6 @@ namespace Solver2
                 List<string> t1 = Get(str, count);
                 result.AddRange(t1);
             }
-            /*
-            // надо убрать дупы
-            bool flag = true;
-            while (flag)
-            {
-                flag = false;
-                foreach (string st in result)
-                {
-                    int idx1 = result.IndexOf(st);
-                    int idx2 = result.LastIndexOf(st);
-                    if (idx1 != idx2)
-                    {
-                        result.RemoveAt(idx2);
-                        flag = true;
-                        break;
-                    }
-                }
-            }*/
             return result;
         }
 

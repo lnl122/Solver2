@@ -82,9 +82,9 @@ namespace Solver2
         private static string UpdateHtmlPics(string html, Level q)
         {
             string page = html;
-            for(int i=0; i<q.bonus.Length; i++) // поменять на сектора
+            for(int i=0; i<q.sector.Length; i++) // поменять на сектора/бонусы/опцианально
             {
-                string s = q.bonus[i];
+                string s = q.sector[i];
                 string comment = "<!-- " + (i+1).ToString() + " -->";
                 int ii1 = page.IndexOf(comment);
                 if (s == "")
