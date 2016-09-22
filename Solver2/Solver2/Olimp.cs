@@ -16,7 +16,7 @@ namespace Solver2
             public List<int> nums;
             public string id;
         }
-        public List<OneOlimp> tasks;
+        private List<OneOlimp> tasks;
 
         // решение олимпиек
         public bool Process(OneTab T)
@@ -46,7 +46,7 @@ namespace Solver2
         // получает ответы из структуры игры по номеру сектора
         // вход - Уровень, номер сектора
         // выход - коллекция слов
-        public List<string> GetSec(Level lvl, int i)
+        private List<string> GetSec(Level lvl, int i)
         {
             string[] ar = lvl.sector[i-1].Split(' ');
             List<string> res = new List<string>();
@@ -56,7 +56,7 @@ namespace Solver2
 
         // решает один сектор
         // вход - Уровень, структура стыковки
-        public void SolveOne(Level lvl, OneOlimp oo)
+        private void SolveOne(Level lvl, OneOlimp oo)
         {
             List<string> wrd3 = new List<string>();
             List<string> wrd2 = new List<string>();
