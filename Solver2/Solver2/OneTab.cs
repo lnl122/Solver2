@@ -9,7 +9,7 @@ namespace Solver2
         // типы заданий
         public string[] TaskTypes = {
             "Картинки (только решить)",
-            "* Олимпийки картинками",
+            "Олимпийки картинками",
             "* Гибриды картинками (буКВАс)",
             "* Логогрифы картинками (сон-слон)",
             "* Метаграммы картинками (кот-кит)",
@@ -332,10 +332,17 @@ namespace Solver2
 
         private void Event_Click_btSolve(object sender, EventArgs e)
         {
-            if (cbType.SelectedItem.ToString() == "Картинки (только решить)")
+            string type = cbType.SelectedItem.ToString();
+            if (type == "Картинки (только решить)")
             {
                 var R1 = new Picture(this);
             }
+            if (type == "Олимпийки картинками")
+            {
+                var R1 = new Picture(this);
+                var R2 = new Olimp(this);
+            }
+            //
             btSolve.Enabled = false;
         }
 
@@ -400,7 +407,9 @@ namespace Solver2
             btSolve.Visible = false;
             isPicsSect = false;
 
-            if (cbType.SelectedItem.ToString() == "Картинки (только решить)")
+            string type = cbType.SelectedItem.ToString();
+
+            if ((type == "Картинки (только решить)") || (type == "Олимпийки картинками"))
             {
                 List<object> objs = new List<object>();
                 objs.Add(lbImageCuttingMethod);
@@ -419,6 +428,7 @@ namespace Solver2
                 ShowSettingsOnScreen(objs, SettingsPositions);
                 isPicsSect = true;
             }
+            //Олимпийки картинками
 
         }
 

@@ -6,8 +6,6 @@ namespace Solver2
 {
     class Picture
     {
-        //private OneTab T;
-        
         // распознание и вбивание картинок
         public bool Process(OneTab T)
         {
@@ -18,7 +16,7 @@ namespace Solver2
             string html = "<!DOCTYPE HTML><html><head><meta charset=\"utf-8\"></head><body bgcolor=\"#111111\"><br/>";
             for(int i=0; i<SmallImagePath.Length; i++)
             {
-                html = html + "<img src=\"" + SmallImagePath[i] + "\" width=\"150\" height=\"150\" alt=\"" + (i+1).ToString() + "\">";
+                html = html + "<img src=\"" + SmallImagePath[i] + "\" width=\"150\" height=\"150\" alt=\"" + (i+1).ToString() + "\"><!-- "+ (i+1).ToString() + " -->";
             }
             html = html + "<br/></body></html>";
             T.wbPictures.Invoke(new Action(() => { T.wbPictures.DocumentText = html; }));

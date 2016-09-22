@@ -48,6 +48,7 @@ namespace Solver2
                     // попробуем вбить
                     string p1 = Engine.TryOne(q1.lvlnum, q1.wrd2);
                     lvl.UpdateAnswersLevel(p1);
+                    q1.OT.level = lvl;
                     // проверим, наш ответ удачен или нет?
                     bool isYes = false;
                     if (lvl.answers_good.Contains(q1.wrd2)) { isYes = true; }
@@ -62,7 +63,13 @@ namespace Solver2
                         string bon1 = ""; for (int i = 0; i < lvl.bonuses; i++) { bon1 = bon1 + (i + 1).ToString() + ": " + lvl.bonus[i] + "\r\n"; }
                         q1.OT.tbBonuses.Invoke(new Action(() => { q1.OT.tbBonuses.Text = bon1; }));
                         // подчистить картинки в ГУИ
-
+                        if (q1.OT.isPicsSect)
+                        {
+                            string html = "";
+                            q1.OT.wbPictures.Invoke(new Action(() => { html = q1.OT.wbPictures.DocumentText; }));
+                            string html2 = UpdateHtmlPics(html, lvl);
+                            q1.OT.wbPictures.Invoke(new Action(() => { q1.OT.wbPictures.DocumentText = html2; }));
+                        }
 
                     }
                     //нужно выждать какое-то время
@@ -70,6 +77,50 @@ namespace Solver2
                 }
             }
             return true;
+        }
+
+        private static string UpdateHtmlPics(string html, Level q)
+        {
+            string page = html;
+            for(int i=0; i<q.bonus.Length; i++) // поменять на сектора
+            {
+                string s = q.bonus[i];
+                string comment = "<!-- " + (i+1).ToString() + " -->";
+                int ii1 = page.IndexOf(comment);
+                if (s == "")
+                { // сектор не решен, надо указать ответы, вбитые и те, которые будем вбивать, если такая картинка есть
+                    if (ii1 != -1)
+                    {/*
+                        string p1 = page.Substring(0, ii1);
+                        int ii2 = p1.LastIndexOf("alt=\"");
+                        p1 = p1.Substring(0, ii2 + 5);
+                        string p2 = page.Substring(p1.Length + 1);
+                        int ii3 = p2.IndexOf("\"");
+                        p2 = p2.Substring(ii3);
+                        string ans = "";
+                        foreach(Answ aa in Queue)
+                        {
+                            if ((aa.lvlnum == q.number) && ((aa.i1 == i) || (aa.i2 == i) || (aa.i3 == i)))
+                            {
+                                ans = ans + aa.wrd + " ";
+                            }
+                        }
+                        page = p1 + ans + p2;*/
+                    }
+                }
+                else
+                { // сектор решен, убрать картинку, если она есть
+                    if (ii1 != -1)
+                    {
+                        string p1 = page.Substring(0, ii1);
+                        int ii2 = p1.LastIndexOf("<img");
+                        p1 = p1.Substring(0, ii2);
+                        string p2 = page.Substring(ii1 + comment.Length);
+                        page = p1 + p2;
+                    }
+                }
+            }
+            return page;
         }
 
         // очищает очередь от всех ответов, где присутствуют ид из q1

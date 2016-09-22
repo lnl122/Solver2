@@ -55,6 +55,7 @@
     <Compile Include="Level.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Logon.cs" />
+    <Compile Include="Olimp.cs" />
     <Compile Include="OneTab.cs" />
     <Compile Include="ParsePage.cs" />
     <Compile Include="Picture.cs" />
