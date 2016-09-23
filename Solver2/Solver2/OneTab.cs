@@ -50,7 +50,8 @@ namespace Solver2
         public Button btAnswer;
         public Label lbAnswerMulti;
         public TextBox tbAnswerMulti;
-        public Button btAnswerMulti;
+        public Button btAnswerSpace;
+        public Button btAnswerDot;
 
         public int SettingsPositions;
         // settings and choice
@@ -124,6 +125,8 @@ namespace Solver2
             Tab.Controls.Add(lbAnswer);
             tbAnswer = new TextBox();
             tbAnswer.Text = "";
+            tbAnswer.KeyDown += new KeyEventHandler(Event_KeyDown_tbAnswer);
+
             Tab.Controls.Add(tbAnswer);
             btAnswer = new Button();
             btAnswer.Text = "->";
@@ -138,9 +141,12 @@ namespace Solver2
             tbAnswerMulti.Text = "";
             tbAnswerMulti.Click += new EventHandler(Event_Click_btAnswer);
             Tab.Controls.Add(tbAnswerMulti);
-            btAnswerMulti = new Button();
-            btAnswerMulti.Text = "->";
-            Tab.Controls.Add(btAnswerMulti);
+            btAnswerSpace = new Button();
+            btAnswerSpace.Text = "x \" \"";
+            Tab.Controls.Add(btAnswerSpace);
+            btAnswerDot = new Button();
+            btAnswerDot.Text = "x \".\"";
+            Tab.Controls.Add(btAnswerDot);
 
             // settings
             lbType = new Label();
@@ -301,6 +307,14 @@ namespace Solver2
 
             Event_ChangeSize(this, null);
             Event_Change_cbType(this, null);
+        }
+
+        private void Event_KeyDown_tbAnswer(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btAnswer.PerformClick();
+            }
         }
 
         private void Event_Click_btAnswer(object sender, EventArgs e)
@@ -474,21 +488,25 @@ namespace Solver2
             lbAnswer.Width = width1;
             tbAnswer.Top = lbAnswer.Bottom + border;
             tbAnswer.Left = left1;
-            tbAnswer.Width = width1 - 10 * border;
-            btAnswer.Top = tbAnswer.Top;
-            btAnswer.Left = tbAnswer.Right + border;
-            btAnswer.Width = 8 * border;
+            tbAnswer.Width = width1;// - 10 * border;
 
             lbAnswerMulti.Top = tbAnswer.Bottom + 2 * border;
             lbAnswerMulti.Left = left1;
             lbAnswerMulti.Width = width1;
             tbAnswerMulti.Top = lbAnswerMulti.Bottom + border;
             tbAnswerMulti.Left = left1;
-            tbAnswerMulti.Width = tbAnswer.Width;
+            tbAnswerMulti.Width = width1 - 10 * border;
             tbAnswerMulti.Height = 10 * border;
-            btAnswerMulti.Top = tbAnswerMulti.Top;
-            btAnswerMulti.Left = tbAnswerMulti.Right + border;
-            btAnswerMulti.Width = btAnswer.Width;
+
+            btAnswer.Top = tbAnswerMulti.Top;
+            btAnswer.Left = tbAnswerMulti.Right + border;
+            btAnswer.Width = 8 * border;
+            btAnswerSpace.Top = btAnswer.Bottom + 2 * border;
+            btAnswerSpace.Left = btAnswer.Left;
+            btAnswerSpace.Width = btAnswer.Width;
+            btAnswerDot.Top = btAnswerSpace.Bottom + border;
+            btAnswerDot.Left = btAnswer.Left;
+            btAnswerDot.Width = btAnswer.Width;
 
             // settings
             lbType.Top = tbAnswerMulti.Bottom + 2 * border;
