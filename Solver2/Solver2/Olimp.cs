@@ -156,11 +156,14 @@ namespace Solver2
                 if (lvl.sector[i].Replace(" ", "") == "") {
                     List<int> nums = GetLinks(i + 1);
                     List<int> bad = new List<int>();
-                    foreach (int j in nums) { if (lvl.sector[j - 1].Replace(" ", "") == "") { bad.Add(j); nums.Remove(j); } }
+                    foreach (int j in nums) { if (lvl.sector[j - 1].Replace(" ", "") == "") { bad.Add(j); } }
+                    foreach (int j in bad) { nums.Remove(j); }
                     if (nums.Count < 2)
                     {
                         foreach (int j in bad) { nums.AddRange(GetLinks(j)); }
-                        foreach (int j in nums) { if (lvl.sector[j - 1].Replace(" ", "") == "") { nums.Remove(j); } }
+                        List<int> bad2 = new List<int>();
+                        foreach (int j in nums) { if (lvl.sector[j - 1].Replace(" ", "") == "") { bad2.Add(j); } }
+                        foreach (int j in bad2) { nums.Remove(j); }
                     }
                     nums.Sort();
                     string id = i.ToString();
