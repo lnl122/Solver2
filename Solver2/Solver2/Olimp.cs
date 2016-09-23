@@ -101,9 +101,13 @@ namespace Solver2
                 wrd1.AddRange(Get1(oo.num, wrds, oo.nums, 0));
             }
             //public static void Add(OneTab T, int priority, List<string> WordsList, int i1, int i2 = -1, int i3 = -1)
+            wrd1 = Words.KillDupesAndRange(wrd1);
+            wrd2 = Words.KillDupesAndRange(wrd2);
+            wrd3 = Words.KillDupesAndRange(wrd3);
             Answer.Add(OT, 3, wrd3, oo.num);
             Answer.Add(OT, 4, wrd2, oo.num);
-            Answer.Add(OT, 5, wrd1, oo.num);
+            Answer.Add(OT, 5, Associations.GetFirstItems(wrd1, 7), oo.num);
+            Answer.Add(OT, 6, wrd1, oo.num);
         }
 
         // решение при трех ассоциациях
@@ -136,14 +140,13 @@ namespace Solver2
         private List<string> Get1(int num, List<List<string>> wrds, List<int> nums, int v)
         {
             List<string> res = new List<string>();
-            return res;
             string id = num.ToString() + "=" + nums[v].ToString();
             if (!sended.Contains(id))
             {
                 sended.Add(id);
                 res.AddRange(Associations.Get(wrds[v]));
             }
-            return Associations.GetFirstItems(res,10);
+            return Associations.GetFirstItems(res, 20);
         }
 
         // для нерешенных секторов ищет решенные стыковки, которые можно решить

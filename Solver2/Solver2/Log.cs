@@ -53,7 +53,14 @@ namespace Solver2
                 string path = PathToPages + "\\" + modulename + "_" + fileidx.ToString() + "_" +
                     dt.Year.ToString() + dt.Month.ToString() + dt.Day.ToString() +
                     dn.Hour.ToString() + dn.Minute.ToString() + dn.Second.ToString() + ".http";
-                System.IO.File.WriteAllText(path, text, System.Text.Encoding.UTF8);
+                try
+                {
+                    System.IO.File.WriteAllText(path, text, System.Text.Encoding.UTF8);
+                }
+                catch
+                {
+                    int i = 0;/// *** возникают коллизии при записи файлов.
+                }
                 isBusyStore = false;
             }
         }

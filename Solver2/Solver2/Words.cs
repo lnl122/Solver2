@@ -45,6 +45,7 @@ namespace Solver2
         public List<string> all_base;  // все слова из найденных, приведенную в базовую форму, ранжированные по частоте
         public List<string> all_base10;  // топовых 10 слов, из найденных, приведенную в базовую форму, ранжированные по частоте
         public List<string> all_assoc; // ассоциации к найденным словам, все подряд
+        public List<string> all_assoc25; // ассоциации к найденным словам, все подряд
 
         // создает объект из текста, где слова разделены пробелами
         public Words(string str)
@@ -60,6 +61,7 @@ namespace Solver2
             all_base = new List<string>();
             all_base10 = new List<string>();
             all_assoc = new List<string>();
+            all_assoc25 = new List<string>();
             f_b_noun = new List<string>();
             f_b_adjective = new List<string>();
             f_b_verb = new List<string>();
@@ -123,7 +125,7 @@ namespace Solver2
             // выберем в базовые только существительные. *** возможно позже будет нужно и прилагательные - надо замерить эффеткивность
             all_base = KillDupesAndRange(f_b_noun);
             all_base10 = KillDupesAndRange(f_b_noun, 10);
-
+            all_assoc25 = FindAssociations25();
             // найдем ассоциации ко всем базовым словам, уберем дупы
             //all_assoc = KillDupesAndRange(Associations.Get(all_base));//вынесено  ниже в отдельный метод
 
@@ -136,11 +138,20 @@ namespace Solver2
             var ss = Associations.Get(all_base);
             all_assoc = KillDupesAndRange(ss);
         }
+        public List<string> FindAssociations25()
+        {
+            List<string> res = new List<string>();
+            foreach(string ss in all_base10)
+            {
+                res.AddRange(Associations.Get(all_base, 5));
+            }
+            return KillDupesAndRange(res);
+        }
 
         // убиваем дупы и ранжирум по частоте
         // вход - список слов
         // выход - базовые слова
-        private static List<string> KillDupesAndRange(List<string> lst, int cnt = 99999)
+        public static List<string> KillDupesAndRange(List<string> lst, int cnt = 99999)
         {
             int mm = 0;
             if (cnt != 99999) { mm = 1; }
