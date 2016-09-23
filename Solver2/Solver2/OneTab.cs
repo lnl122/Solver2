@@ -52,6 +52,7 @@ namespace Solver2
         public TextBox tbAnswerMulti;
         public Button btAnswerSpace;
         public Button btAnswerDot;
+        public Button btAnswerDot2;
 
         public int SettingsPositions;
         // settings and choice
@@ -129,7 +130,7 @@ namespace Solver2
 
             Tab.Controls.Add(tbAnswer);
             btAnswer = new Button();
-            btAnswer.Text = "->";
+            btAnswer.Text = "===>";
             btAnswer.Click += new EventHandler(Event_Click_btAnswer);
             Tab.Controls.Add(btAnswer);
             lbAnswerMulti = new Label();
@@ -139,14 +140,20 @@ namespace Solver2
             tbAnswerMulti.Multiline = true;
             tbAnswerMulti.ScrollBars = ScrollBars.Both;
             tbAnswerMulti.Text = "";
-            tbAnswerMulti.Click += new EventHandler(Event_Click_btAnswer);
+            //tbAnswerMulti.Click += new EventHandler(Event_Click_btAnswer);
             Tab.Controls.Add(tbAnswerMulti);
             btAnswerSpace = new Button();
-            btAnswerSpace.Text = "x \" \"";
+            btAnswerSpace.Text = "\" \" |->";
+            btAnswerSpace.Click += new EventHandler(Event_Click_btAnswerSpace);
             Tab.Controls.Add(btAnswerSpace);
             btAnswerDot = new Button();
-            btAnswerDot.Text = "x \".\"";
+            btAnswerDot.Text = "\".\" |->";
+            btAnswerDot.Click += new EventHandler(Event_Click_btAnswerDot);
             Tab.Controls.Add(btAnswerDot);
+            btAnswerDot2 = new Button();
+            btAnswerDot2.Text = "\":\" |->";
+            btAnswerDot2.Click += new EventHandler(Event_Click_btAnswerDot2);
+            Tab.Controls.Add(btAnswerDot2);
 
             // settings
             lbType = new Label();
@@ -307,6 +314,41 @@ namespace Solver2
 
             Event_ChangeSize(this, null);
             Event_Change_cbType(this, null);
+        }
+
+        private void Event_Click_btAnswerDot2(object sender, EventArgs e)
+        {
+            tbAnswerMulti.Text = RemoveCharsBefore(tbAnswerMulti.Text, ":");
+        }
+
+        private void Event_Click_btAnswerDot(object sender, EventArgs e)
+        {
+            tbAnswerMulti.Text = RemoveCharsBefore(tbAnswerMulti.Text, ".");
+        }
+
+        private void Event_Click_btAnswerSpace(object sender, EventArgs e)
+        {
+            tbAnswerMulti.Text = RemoveCharsBefore(tbAnswerMulti.Text, " ");
+        }
+
+        private string RemoveCharsBefore(string text, string v)
+        {
+            string res = "";
+            string[] ar1 = System.Text.RegularExpressions.Regex.Split(text, "\r\n");
+            foreach(string s in ar1)
+            {
+                string s1 = s.Trim().Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
+                if(s1 != "")
+                {
+                    int ii1 = s1.IndexOf(v);
+                    if(ii1 != -1)
+                    {
+                        s1 = s1.Substring(ii1+1);
+                    }
+                    res = res + s1.Trim() + "\r\n";
+                }
+            }
+            return res;
         }
 
         private void Event_KeyDown_tbAnswer(object sender, KeyEventArgs e)
@@ -492,21 +534,24 @@ namespace Solver2
 
             lbAnswerMulti.Top = tbAnswer.Bottom + 2 * border;
             lbAnswerMulti.Left = left1;
-            lbAnswerMulti.Width = width1;
+            lbAnswerMulti.Width = width1 - 10 * border;
             tbAnswerMulti.Top = lbAnswerMulti.Bottom + border;
             tbAnswerMulti.Left = left1;
             tbAnswerMulti.Width = width1 - 10 * border;
-            tbAnswerMulti.Height = 10 * border;
+            tbAnswerMulti.Height = 15 * border;
 
-            btAnswer.Top = tbAnswerMulti.Top;
+            btAnswer.Top = lbAnswerMulti.Top;
             btAnswer.Left = tbAnswerMulti.Right + border;
             btAnswer.Width = 8 * border;
             btAnswerSpace.Top = btAnswer.Bottom + 2 * border;
             btAnswerSpace.Left = btAnswer.Left;
             btAnswerSpace.Width = btAnswer.Width;
-            btAnswerDot.Top = btAnswerSpace.Bottom + border;
+            btAnswerDot.Top = btAnswerSpace.Bottom + 1;
             btAnswerDot.Left = btAnswer.Left;
             btAnswerDot.Width = btAnswer.Width;
+            btAnswerDot2.Top = btAnswerDot.Bottom + 1;
+            btAnswerDot2.Left = btAnswer.Left;
+            btAnswerDot2.Width = btAnswer.Width;
 
             // settings
             lbType.Top = tbAnswerMulti.Bottom + 2 * border;
