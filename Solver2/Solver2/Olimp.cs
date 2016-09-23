@@ -116,7 +116,7 @@ namespace Solver2
                 sended.Add(id);
                 res.AddRange(Associations.Get3(wrds[v1], wrds[v2], wrds[v3]));
             }
-            return res;
+            return Associations.GetFirstItems(res, 10);
         }
 
         // решение при двух ассоциациях
@@ -129,20 +129,21 @@ namespace Solver2
                 sended.Add(id);
                 res.AddRange(Associations.Get2(wrds[v1], wrds[v2]));
             }
-            return res;
+            return Associations.GetFirstItems(res,10);
         }
 
         // решение при одной ассоциации
         private List<string> Get1(int num, List<List<string>> wrds, List<int> nums, int v)
         {
             List<string> res = new List<string>();
+            return res;
             string id = num.ToString() + "=" + nums[v].ToString();
             if (!sended.Contains(id))
             {
                 sended.Add(id);
                 res.AddRange(Associations.Get(wrds[v]));
             }
-            return res;
+            return Associations.GetFirstItems(res,10);
         }
 
         // для нерешенных секторов ищет решенные стыковки, которые можно решить
@@ -166,12 +167,12 @@ namespace Solver2
                         foreach (int j in bad2) { nums.Remove(j); }
                     }
                     nums.Sort();
-                    string id = i.ToString();
-                    foreach(int j in nums) { id = "," + j.ToString(); }
+                    string id = (i+1).ToString();
+                    foreach(int j in nums) { id = id + "," + j.ToString(); }
                     // i - номер сектора, который будем искать 0..max-1
                     // nums - сектора (1-4), от которых зависит решение
                     // id - строка идентификатор
-                    if (nums.Count > 1)
+                    if (nums.Count > 0)
                     {
                         OneOlimp temp = new OneOlimp();
                         temp.num = i;

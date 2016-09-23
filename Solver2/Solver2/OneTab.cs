@@ -339,7 +339,7 @@ namespace Solver2
             }
             if (type == "Олимпийки картинками")
             {
-                var R1 = new Picture(this);
+                //var R1 = new Picture(this);//только для теста
                 var R2 = new Olimp(this);
             }
             //

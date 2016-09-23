@@ -255,7 +255,7 @@ namespace Solver2
         }
 
         // выбирает из списка первых count значений
-        private static List<string> GetFirstItems(List<string> list, int count)
+        public static List<string> GetFirstItems(List<string> list, int count)
         {
             if (list.Count <= count)
             {
