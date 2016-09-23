@@ -54,6 +54,7 @@
     <Compile Include="GapoifikaBooks.cs" />
     <Compile Include="Google.cs" />
     <Compile Include="Image.cs" />
+    <Compile Include="LedidaBooks.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Logon.cs" />

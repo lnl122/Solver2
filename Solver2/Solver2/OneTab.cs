@@ -23,7 +23,7 @@ namespace Solver2
             "* Расчленёнки",
             "ГаПоИФиКа книжная",
             "* ГаПоИФиКа фильмов",
-            "* ЛеДиДа книжная",
+            "ЛеДиДа книжная",
             "* ЛеДиДа фильмов",
             "* Гибриды текстом (буКВАс)",
             "* Логогрифы текстом (сон-слон)",
@@ -345,7 +345,11 @@ namespace Solver2
             {
                 var R1 = new GapoifikaBooks(this);
             }
-            //
+            if (type == "ЛеДиДа книжная")
+            {
+                var R1 = new LedidaBooks(this);
+            }
+            // 
             btSolve.Enabled = false;
         }
 
@@ -431,7 +435,7 @@ namespace Solver2
                 ShowSettingsOnScreen(objs, SettingsPositions);
                 isPicsSect = true;
             }
-            if ((type == "ГаПоИФиКа книжная"))
+            if ((type == "ГаПоИФиКа книжная") || (type == "Ледида книжная"))
             {
                 List<object> objs = new List<object>();
                 objs.Add(lbSolve);
