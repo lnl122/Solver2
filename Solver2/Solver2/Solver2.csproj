@@ -48,8 +48,10 @@
     <Compile Include="Answer.cs" />
     <Compile Include="AppForm.cs" />
     <Compile Include="Associations.cs" />
+    <Compile Include="Books.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="GameSelect.cs" />
+    <Compile Include="GapoifikaBooks.cs" />
     <Compile Include="Google.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="Level.cs" />

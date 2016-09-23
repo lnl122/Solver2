@@ -21,7 +21,7 @@ namespace Solver2
             "* Ассоциации картинками",
             "* Брутфорс по картинке",
             "* Расчленёнки",
-            "* ГаПоИФиКа книжная",
+            "ГаПоИФиКа книжная",
             "* ГаПоИФиКа фильмов",
             "* ЛеДиДа книжная",
             "* ЛеДиДа фильмов",
@@ -341,6 +341,10 @@ namespace Solver2
                 var R1 = new Picture(this);
                 var R2 = new Olimp(this);
             }
+            if (type == "ГаПоИФиКа книжная")
+            {
+                var R1 = new GapoifikaBooks(this);
+            }
             //
             btSolve.Enabled = false;
         }
@@ -427,7 +431,14 @@ namespace Solver2
                 ShowSettingsOnScreen(objs, SettingsPositions);
                 isPicsSect = true;
             }
-            //Олимпийки картинками
+            if ((type == "ГаПоИФиКа книжная"))
+            {
+                List<object> objs = new List<object>();
+                objs.Add(lbSolve);
+                objs.Add(btSolve);
+                ShowSettingsOnScreen(objs, SettingsPositions);
+            }
+
 
         }
 

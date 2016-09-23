@@ -132,12 +132,19 @@ namespace Solver2
         public static void InitComponents()
         {
             string localpath = Environment.CurrentDirectory + @"\Data\";
+
             SpellChecker.Init();
             SpellChecker.LoadDictionary(localpath + "SpChDict.dat");
+
             Associations.Init();
             Associations.LoadDictionary(localpath + "AssocDict.dat");
             Associations.LoadDictionaryBad(localpath + "AssocDictBad.dat");
+
+            Books.Init();
+            Books.LoadDictionary(localpath + "Books.dat");
+
             Answer.Init();
+
         }
         // завершаем работы наших объектов
         public static void CloseComponents()
