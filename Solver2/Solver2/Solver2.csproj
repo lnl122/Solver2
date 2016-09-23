@@ -50,6 +50,7 @@
     <Compile Include="Associations.cs" />
     <Compile Include="Books.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="Films.cs" />
     <Compile Include="GameSelect.cs" />
     <Compile Include="GapoifikaBooks.cs" />
     <Compile Include="Google.cs" />
