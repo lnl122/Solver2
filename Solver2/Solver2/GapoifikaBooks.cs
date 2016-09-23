@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Solver2
@@ -16,7 +13,22 @@ namespace Solver2
         {
             OT = T;
             task = OT.tbTextTask.Text;
-            
+            string[] ar1 = System.Text.RegularExpressions.Regex.Split(task, "\r\n");
+            foreach(string s1 in ar1)
+            {
+                string s = s1.Replace(" ", "").Replace(".", "").Replace(",", "").Replace("-", "").Replace("\"", "").Replace("!", "").Replace("?", "").Replace("#", "");
+                s = s.Replace(":", "").Replace(";", "").Replace("%", "").Replace("(", "").Replace(")", "").Replace("+", "").Replace("/", "").Replace("\\", "");
+                if (s != "")
+                {
+                    for(int i=0; i<Books.WordsCount; i++)
+                    {
+                        if(s.ToLower() == Books.gapo[i].ToLower())
+                        {
+                            Answer.Add(T, 3, Books.dict[i], -1);
+                        }
+                    }
+                }
+            }
 
             T.tbSectors.Invoke(new Action(() => { T.btSolve.Enabled = true; }));
             return true;

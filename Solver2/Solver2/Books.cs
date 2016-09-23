@@ -8,8 +8,11 @@ namespace Solver2
 {
     class Books
     {
-        // словари - загружаемый и создающийся в процессе работы
+        // словари
         public static List<string> dict;
+        public static List<string> plain;
+        public static List<string> gapo;
+        public static int WordsCount = 0;
         // путь к словарю
         private static string DictionaryPath = "";
         // первое создание объекта уже было?
@@ -17,12 +20,15 @@ namespace Solver2
         // словарь был ли загружен?
         private static bool isDicionaryLoaded = false;
 
+        // инит объекта
         public static void Init()
         {
             Log.Write("books Инициализация объекта Books");
             if (isObjectReady == false)
             {
                 dict = new List<string>();
+                plain = new List<string>();
+                gapo = new List<string>();
                 isObjectReady = true;
             }
         }
@@ -44,8 +50,34 @@ namespace Solver2
                     // переносим в List
                     foreach (string s1 in dict1)
                     {
-                        dict.Add(s1.ToLower().Trim().Replace("  ", "").Replace("  ", "").Replace("  ", ""));
+                        string s = s1.Trim().Replace("  ", "").Replace("  ", "").Replace("  ", "");
+                        s = s.Replace(".", "").Replace(",", "").Replace("-", "").Replace("\"", "").Replace("!", "").Replace("?", "").Replace("#", "");
+                        s = s.Replace(":", "").Replace(";", "").Replace("%", "").Replace("(", "").Replace(")", "").Replace("+", "").Replace("/", "").Replace("\\", "");
+                        s = s.Trim().Replace("  ", "").Replace("  ", "").Replace("  ", "");
+
+                        if (s != "")
+                        {
+                            dict.Add(s);
+                            plain.Add(s.Replace(" ", "").ToLower());
+                            string[] ar1 = s.Split(' ');
+                            string res = "";
+                            foreach (string w in ar1)
+                            {
+                                if (w.Length == 1)
+                                {
+                                    res = res + w.ToUpper();
+                                }
+                                else
+                                {
+                                    res = res + w.Substring(0, 1).ToUpper();
+                                    res = res + w.Substring(1, 1).ToLower();
+                                }
+                            }
+                            gapo.Add(res);
+                        }
                     }
+                    WordsCount = dict.Count;
+
                     isDicionaryLoaded = true;
                     Log.Write("books Чтение внешнего словаря завершено");
                 }
