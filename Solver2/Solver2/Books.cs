@@ -50,10 +50,7 @@ namespace Solver2
                     // переносим в List
                     foreach (string s1 in dict1)
                     {
-                        string s = s1.Trim().Replace("  ", "").Replace("  ", "").Replace("  ", "");
-                        s = s.Replace(".", "").Replace(",", "").Replace("-", "").Replace("\"", "").Replace("!", "").Replace("?", "").Replace("#", "");
-                        s = s.Replace(":", "").Replace(";", "").Replace("%", "").Replace("(", "").Replace(")", "").Replace("+", "").Replace("/", "").Replace("\\", "");
-                        s = s.Trim().Replace("  ", "").Replace("  ", "").Replace("  ", "");
+                        string s = ClearBookName(s1);
 
                         if (s != "")
                         {
@@ -86,6 +83,16 @@ namespace Solver2
                     Log.Write("books ERROR: словаря по указанному пути нет", DictPath);
                 }
             }
+        }
+
+        // убираем лишние лимволы из названия
+        public static string ClearBookName(string s1)
+        {
+            string s = s1.Trim().Replace("  ", "").Replace("  ", "").Replace("  ", "");
+            s = s.Replace(".", "").Replace(",", "").Replace("-", "").Replace("\"", "").Replace("!", "").Replace("?", "").Replace("#", "");
+            s = s.Replace(":", "").Replace(";", "").Replace("%", "").Replace("(", "").Replace(")", "").Replace("+", "").Replace("/", "").Replace("\\", "");
+            s = s.Trim().Replace("  ", "").Replace("  ", "").Replace("  ", "");
+            return s;
         }
 
     }
