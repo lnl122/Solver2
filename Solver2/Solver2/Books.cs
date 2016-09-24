@@ -88,7 +88,7 @@ namespace Solver2
         // убираем лишние лимволы из названия
         public static string ClearBookName(string s1)
         {
-            string s = s1.Trim().Replace("  ", "").Replace("  ", "").Replace("  ", "");
+            string s = s1.Trim().Replace("  ", "").Replace("  ", "").Replace("  ", "").Replace("ё", "е").Replace("Ё", "Е");
             s = s.Replace(".", "").Replace(",", "").Replace("-", "").Replace("\"", "").Replace("!", "").Replace("?", "").Replace("#", "");
             s = s.Replace(":", "").Replace(";", "").Replace("%", "").Replace("(", "").Replace(")", "").Replace("+", "").Replace("/", "").Replace("\\", "");
             s = s.Trim().Replace("  ", "").Replace("  ", "").Replace("  ", "");
