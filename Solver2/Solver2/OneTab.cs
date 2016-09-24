@@ -640,6 +640,10 @@ namespace Solver2
             lbProtect.Width = width1;
             cbProtect.Left = left1;
             cbProtect.Width = width1;
+            lbGybrid.Left = left1;
+            lbGybrid.Width = width1;
+            cbGybrid.Left = left1;
+            cbGybrid.Width = width1;
 
             // for others settings
             SettingsPositions = cbType.Bottom + border;
