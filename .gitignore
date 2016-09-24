@@ -7,6 +7,19 @@
 *.userosscache
 *.sln.docstates
 
+
+*.vshost*
+*.pdb
+*.gif
+*.jpg
+*.jpeg
+*.png
+*.html
+*.http
+*.config
+
+
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -21,17 +34,8 @@
 [Xx]86/
 [Bb]uild/
 bld/
-[Bb]in/
+#[Bb]in/
 [Oo]bj/
-
-*.vshost*
-*.pdb
-*.gif
-*.jpg
-*.jpeg
-*.png
-*.html
-*.http
 
 # Visual Studio 2015 cache/options directory
 .vs/
