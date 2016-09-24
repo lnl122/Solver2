@@ -65,17 +65,24 @@ namespace Solver2
                     // приоритет 3 - для гибридов по базовым словам
                     // приоритет 4 - для остальных
                     // приоритет 5 - для ассоциаций ко всему найденному
-                    FindGybrids(T, w1.all_base, w2.all_base, i, j, min, 3);
-
-                    List<string> ls1 = new List<string>();
-                    List<string> ls2 = new List<string>();
-                    ls1.AddRange(w1.all_base); ls1.AddRange(w1.all_assoc25);
-                    ls2.AddRange(w2.all_base); ls2.AddRange(w2.all_assoc25);
-                    //ls1.AddRange(w1.all_base); ls1.AddRange(w1.all_assoc25); ls1.AddRange(w1.ru_check); ls1.AddRange(w1.en_trans); ls1.AddRange(w1.f_b_noun); ls1.AddRange(w1.f_b_adjective);
-                    //ls2.AddRange(w2.all_base); ls2.AddRange(w2.all_assoc25); ls2.AddRange(w2.ru_check); ls2.AddRange(w2.en_trans); ls2.AddRange(w2.f_b_noun); ls2.AddRange(w2.f_b_adjective);
-                    ls1 = Words.KillDupesAndRange(ls1);
-                    ls2 = Words.KillDupesAndRange(ls2);
-                    FindGybrids(T, ls1, ls2, i, j, min, 4);
+                    if ((w1 != null) && (w2 != null))
+                    {
+                        if ((w1.all_base != null) && (w2.all_base != null))
+                        {
+                            FindGybrids(T, w1.all_base, w2.all_base, i, j, min, 3);
+                            /*
+                            List<string> ls1 = new List<string>();
+                            List<string> ls2 = new List<string>();
+                            ls1.AddRange(w1.all_base); ls1.AddRange(w1.all_assoc25);
+                            ls2.AddRange(w2.all_base); ls2.AddRange(w2.all_assoc25);
+                            //ls1.AddRange(w1.all_base); ls1.AddRange(w1.all_assoc25); ls1.AddRange(w1.ru_check); ls1.AddRange(w1.en_trans); ls1.AddRange(w1.f_b_noun); ls1.AddRange(w1.f_b_adjective);
+                            //ls2.AddRange(w2.all_base); ls2.AddRange(w2.all_assoc25); ls2.AddRange(w2.ru_check); ls2.AddRange(w2.en_trans); ls2.AddRange(w2.f_b_noun); ls2.AddRange(w2.f_b_adjective);
+                            ls1 = Words.KillDupesAndRange(ls1);
+                            ls2 = Words.KillDupesAndRange(ls2);
+                            FindGybrids(T, ls1, ls2, i, j, min, 4);
+                            */
+                        }
+                    }
 
                     //List<string> ass1 = Words.KillDupesAndRange(Associations.Get(ls1));
                     //List<string> ass2 = Words.KillDupesAndRange(Associations.Get(ls2));
