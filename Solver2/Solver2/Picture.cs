@@ -13,6 +13,17 @@ namespace Solver2
             return (res + " | ");
         }*/
 
+        public static string GetPicsHtml(string[] ar)
+        {
+            string html = "<!DOCTYPE HTML><html><head><meta charset=\"utf-8\"></head><body bgcolor=\"#111111\"><br/>";
+            for (int i = 0; i < ar.Length; i++)
+            {
+                html = html + "<img src=\"" + ar[i] + "\" width=\"150\" height=\"150\" alt=\"" + (i + 1).ToString() + "\"><!-- " + (i + 1).ToString() + " -->";
+            }
+            html = html + "<br/></body></html>";
+            return html;
+        }
+
         // распознание и вбивание картинок
         public bool Process(OneTab T)
         {
@@ -20,12 +31,7 @@ namespace Solver2
             string[] SmallImagePath = Image.GetSmallImagePathes(T, T.level.urls, T.iRows, T.iCols);
 
             // отрисуем их в ГУИ
-            string html = "<!DOCTYPE HTML><html><head><meta charset=\"utf-8\"></head><body bgcolor=\"#111111\"><br/>";
-            for(int i=0; i<SmallImagePath.Length; i++)
-            {
-                html = html + "<img src=\"" + SmallImagePath[i] + "\" width=\"150\" height=\"150\" alt=\"" + (i+1).ToString() + "\"><!-- "+ (i+1).ToString() + " -->";
-            }
-            html = html + "<br/></body></html>";
+            string html = GetPicsHtml(SmallImagePath);
             T.wbPictures.Invoke(new Action(() => { T.wbPictures.DocumentText = html; }));
 
             // из путей к картинкам делаем коллекции слов

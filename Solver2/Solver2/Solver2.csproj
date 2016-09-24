@@ -62,6 +62,7 @@
     <Compile Include="Olimp.cs" />
     <Compile Include="OneTab.cs" />
     <Compile Include="ParsePage.cs" />
+    <Compile Include="PicsGybrids.cs" />
     <Compile Include="Picture.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -10,7 +10,7 @@ namespace Solver2
         public string[] TaskTypes = {
             "Картинки (только решить)",
             "Олимпийки картинками",
-            "* Гибриды картинками (буКВАс)",
+            "Гибриды картинками (буКВАс)",
             "* Логогрифы картинками (сон-слон)",
             "* Метаграммы картинками (кот-кит)",
             "* Брюквы картинками (брюква-буква)",
@@ -76,6 +76,11 @@ namespace Solver2
         public ComboBox cbProtect;
         public string sProtect;
 
+        public Label lbGybrid;
+        public ComboBox cbGybrid;
+        public int iGybridMin; // для гибридов/циклоидов
+        //public int iGybridMax;
+
         public Label lbSolve;
         public Button btSolve;
 
@@ -84,8 +89,6 @@ namespace Solver2
         public kubr enKubray;
         public int iLetterInWord1; // для метаграмм/логогрифов/брюкв и прочих
         public int iLetterInWord2;
-        public int iGybridMin; // для гибридов/циклоидов
-        public int iGybridMax;
         */
 
         // 2 column
@@ -231,6 +234,19 @@ namespace Solver2
             cbCols.SelectedIndexChanged += new EventHandler(Event_Change_cbCols);
             Tab.Controls.Add(cbCols);
 
+            lbGybrid = new Label();
+            lbGybrid.Text = "Мин. пересечение, букв:";
+            lbGybrid.Visible = false;
+            Tab.Controls.Add(lbGybrid);
+
+            cbGybrid = new ComboBox();
+            cbGybrid.Items.Add("2"); cbGybrid.Items.Add("3"); cbGybrid.Items.Add("4"); cbGybrid.Items.Add("5");
+            cbGybrid.SelectedIndex = 1;
+            iGybridMin = 3;
+            cbGybrid.Visible = false;
+            cbGybrid.SelectedIndexChanged += new EventHandler(Event_Change_cbGybrid);
+            Tab.Controls.Add(cbGybrid);
+
             lbProtect = new Label();
             lbProtect.Text = "Защита:";
             lbProtect.Visible = false;
@@ -316,6 +332,11 @@ namespace Solver2
             Event_Change_cbType(this, null);
         }
 
+        private void Event_Change_cbGybrid(object sender, EventArgs e)
+        {
+            iGybridMin = cbGybrid.SelectedIndex + 2;
+        }
+
         private void Event_Click_btAnswerDot2(object sender, EventArgs e)
         {
             tbAnswerMulti.Text = RemoveCharsBefore(tbAnswerMulti.Text, ":");
@@ -397,6 +418,10 @@ namespace Solver2
                 var R1 = new Picture(this);
                 var R2 = new Olimp(this);
             }
+            if (type == "Гибриды картинками (буКВАс)")
+            {
+                var R1 = new PicsGybrids(this);
+            }
             if (type == "ГаПоИФиКа книжная")
             {
                 var R1 = new GapoifikaBooks(this);
@@ -469,6 +494,8 @@ namespace Solver2
             lbSolve.Visible = false;
             btSolve.Visible = false;
             isPicsSect = false;
+            lbGybrid.Visible = false;
+            cbGybrid.Visible = false;
 
             string type = cbType.SelectedItem.ToString();
 
@@ -490,6 +517,27 @@ namespace Solver2
                 objs.Add(btSolve);
                 ShowSettingsOnScreen(objs, SettingsPositions);
                 isPicsSect = true;
+            }
+            if (type == "Гибриды картинками (буКВАс)")
+            {
+                List<object> objs = new List<object>();
+                objs.Add(lbImageCuttingMethod);
+                objs.Add(cbImageCuttingMethod);
+                objs.Add(lbProtect);
+                objs.Add(cbProtect);
+                objs.Add(chImageSizeFlag);
+                objs.Add(lbImageNumber);
+                objs.Add(cbImageNumber);
+                objs.Add(lbCols);
+                objs.Add(cbCols);
+                objs.Add(lbStrs);
+                objs.Add(cbStrs);
+                objs.Add(lbGybrid);
+                objs.Add(cbGybrid);
+                objs.Add(lbSolve);
+                objs.Add(btSolve);
+                ShowSettingsOnScreen(objs, SettingsPositions);
+                //isPicsSect = true;
             }
             if ((type == "ГаПоИФиКа книжная") || (type == "Ледида книжная"))
             {
