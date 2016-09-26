@@ -15,7 +15,7 @@ namespace Solver2
         private int border = 5; // расстояния между элементами форм, константа
         public static TextBox tbGname;
 
-        public bool isSuccessful = false;
+        public bool isSuccessful = true;
         public string username = "";
         public string password = "";
         public string userid = "";
@@ -143,6 +143,7 @@ namespace Solver2
             password = logonData.password;
             userid = logonData.userid;
 
+            isSuccessful = true;
             string pageSource = GetUserGames();
             if (isSuccessful == false)
             {
