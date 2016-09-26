@@ -160,7 +160,7 @@ namespace Solver2
         // преобразует ГаПоиФиКу в строку для поиска
         // вход - строка "ГаПоиФиКа"
         // выход - строка "га по и фи ка"
-        private static string PrepareSearchString(string name)
+        public static string PrepareSearchString(string name)
         {
             // пробелы по заглавным буквам
             string res = "";
