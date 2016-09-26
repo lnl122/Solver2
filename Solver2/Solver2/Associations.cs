@@ -138,7 +138,7 @@ namespace Solver2
                 {
                     temp = temp + s1 + ' ';
                 }
-                ar[i] = temp.TrimEnd();
+                ar[i] = temp.TrimEnd(); // встречена проблема с индексами - надо попробовать найти возможную причину
             }
             if (DictionaryPath != "")
             {
