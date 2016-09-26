@@ -140,7 +140,10 @@ namespace Solver2
                 }
                 ar[i] = temp.TrimEnd();
             }
-            System.IO.File.WriteAllLines(DictionaryPath, ar);
+            if (DictionaryPath != "")
+            {
+                System.IO.File.WriteAllLines(DictionaryPath, ar);
+            }
             Log.Write("assoc Запись словаря ассоциаций в файл завершена");
         }
 
@@ -154,7 +157,10 @@ namespace Solver2
             {
                 ar[i] = badwords[i];
             }
-            System.IO.File.WriteAllLines(DictionaryBadPath, ar);
+            if (DictionaryPath != "")
+            {
+                System.IO.File.WriteAllLines(DictionaryBadPath, ar);
+            }
             Log.Write("assoc Запись словаря плохих ассоциаций в файл завершена");
         }
 

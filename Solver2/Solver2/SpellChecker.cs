@@ -108,7 +108,10 @@ namespace Solver2
             {
                 dict_out.Add(s1.ToLower());
             }
-            System.IO.File.WriteAllLines(DictionaryPath, dict_out.ToArray());
+            if (DictionaryPath != "")
+            {
+                System.IO.File.WriteAllLines(DictionaryPath, dict_out.ToArray());
+            }
             Log.Write("words Запись в файл словаря для Spellchecker'а завершена");
         }
 
