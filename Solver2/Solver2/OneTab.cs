@@ -539,7 +539,7 @@ namespace Solver2
                 ShowSettingsOnScreen(objs, SettingsPositions);
                 //isPicsSect = true;
             }
-            if ((type == "ГаПоИФиКа книжная") || (type == "Ледида книжная"))
+            if ((type == "ГаПоИФиКа книжная") || (type == "ЛеДиДа книжная"))
             {
                 List<object> objs = new List<object>();
                 objs.Add(lbSolve);
