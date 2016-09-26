@@ -11,7 +11,6 @@ namespace Solver2
         // и далее только через форму, она не простая
         // надо бы тестировать в отдельном приложении с отдельным браузером в окне
 
-        //private static string baseurl = "http://www.hdkinoteatr.com/index.php?do=search&mode=advanced";
         private static string baseurl = "http://www.hdkinoteatr.com/index.php";
         public static string cHead;             // куки
         public static CookieContainer cCont;    // куки
