@@ -124,7 +124,7 @@ namespace Solver2
             levelUrlsCount = level.urls.Count;
 
             Tab = new TabPage();
-            Tab.Text = level.number.ToString() + " : " + level.name;
+            Tab.Text = level.number.ToString() + ": " + level.name;
             D.F.SizeChanged += new EventHandler(Event_ChangeSize);
             D.Tabs.Controls.Add(Tab);
 
