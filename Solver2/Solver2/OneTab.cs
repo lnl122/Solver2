@@ -10,6 +10,7 @@ namespace Solver2
         public string[] TaskTypes = {
             "Картинки (только решить)",
             "Олимпийки картинками",
+            "Ассоциации для олимпиек",
             "Гибриды картинками (буКВАс)",
             "* Логогрифы картинками (сон-слон)",
             "* Метаграммы картинками (кот-кит)",
@@ -22,7 +23,7 @@ namespace Solver2
             "* Брутфорс по картинке",
             "* Расчленёнки",
             "ГаПоИФиКа книжная",
-            "* ГаПоИФиКа фильмов",
+            "ГаПоИФиКа фильмов",
             "ЛеДиДа книжная",
             "* ЛеДиДа фильмов",
             "* Гибриды текстом (буКВАс)",
@@ -418,6 +419,10 @@ namespace Solver2
                 var R1 = new Picture(this);
                 var R2 = new Olimp(this);
             }
+            if (type == "Ассоциации для олимпиек")
+            {
+                var R2 = new Olimp(this);
+            }
             if (type == "Гибриды картинками (буКВАс)")
             {
                 var R1 = new PicsGybrids(this);
@@ -429,6 +434,10 @@ namespace Solver2
             if (type == "ЛеДиДа книжная")
             {
                 var R1 = new LedidaBooks(this);
+            }
+            if (type == "ГаПоИФиКа фильмов")
+            {
+                var R1 = new GapoifikaFilms(this);
             }
             // 
             btSolve.Enabled = false;
@@ -499,6 +508,19 @@ namespace Solver2
 
             string type = cbType.SelectedItem.ToString();
 
+            //
+            if (type == "Ассоциации для олимпиек")
+            {
+                List<object> objs = new List<object>();
+                objs.Add(lbProtect);
+                objs.Add(cbProtect);
+                objs.Add(lbOlimpSize);
+                objs.Add(cbOlimpSize);
+                objs.Add(lbSolve);
+                objs.Add(btSolve);
+                ShowSettingsOnScreen(objs, SettingsPositions);
+                isPicsSect = true;
+            }
             if ((type == "Картинки (только решить)") || (type == "Олимпийки картинками"))
             {
                 List<object> objs = new List<object>();
@@ -539,7 +561,7 @@ namespace Solver2
                 ShowSettingsOnScreen(objs, SettingsPositions);
                 //isPicsSect = true;
             }
-            if ((type == "ГаПоИФиКа книжная") || (type == "Ледида книжная"))
+            if ((type == "ГаПоИФиКа фильмов") || type == ("ГаПоИФиКа книжная") || (type == "Ледида книжная"))
             {
                 List<object> objs = new List<object>();
                 objs.Add(lbSolve);
