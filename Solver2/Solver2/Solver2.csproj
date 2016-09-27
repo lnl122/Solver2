@@ -53,6 +53,7 @@
     <Compile Include="Films.cs" />
     <Compile Include="GameSelect.cs" />
     <Compile Include="GapoifikaBooks.cs" />
+    <Compile Include="GapoifikaFilms.cs" />
     <Compile Include="Google.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="LedidaBooks.cs" />

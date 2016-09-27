@@ -22,8 +22,15 @@ namespace Solver2
         public bool Process(OneTab T)
         {
             OT = T;
-            int PicsCount = Image.GetSmallImageCount(T.level.urls, T.iRows, T.iCols);
-            CreateLinksTable(PicsCount);
+            if (T.iOlimpSize == 0)
+            {
+                int PicsCount = Image.GetSmallImageCount(T.level.urls, T.iRows, T.iCols);
+                CreateLinksTable(PicsCount);
+            }
+            else
+            {
+                CreateLinksTable(T.iOlimpSize);
+            }
             sended = new List<string>();
 
             int oldsecbon = T.level.secbon;

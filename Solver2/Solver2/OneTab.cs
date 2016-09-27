@@ -10,6 +10,7 @@ namespace Solver2
         public string[] TaskTypes = {
             "Картинки (только решить)",
             "Олимпийки картинками",
+            "Ассоциации для олимпиек",
             "Гибриды картинками (буКВАс)",
             "* Логогрифы картинками (сон-слон)",
             "* Метаграммы картинками (кот-кит)",
@@ -22,7 +23,7 @@ namespace Solver2
             "* Брутфорс по картинке",
             "* Расчленёнки",
             "ГаПоИФиКа книжная",
-            "* ГаПоИФиКа фильмов",
+            "ГаПоИФиКа фильмов",
             "ЛеДиДа книжная",
             "* ЛеДиДа фильмов",
             "* Гибриды текстом (буКВАс)",
@@ -62,6 +63,10 @@ namespace Solver2
         public int[] iRows;
         //public int[] iBeginNum;
         public int levelUrlsCount;
+
+        public Label lbOlimpSize;
+        public ComboBox cbOlimpSize;
+        public int iOlimpSize = 0;
 
         public Label lbImageCuttingMethod;
         public ComboBox cbImageCuttingMethod;
@@ -234,6 +239,19 @@ namespace Solver2
             cbCols.SelectedIndexChanged += new EventHandler(Event_Change_cbCols);
             Tab.Controls.Add(cbCols);
 
+            lbOlimpSize = new Label();
+            lbOlimpSize.Text = "Размер олимпийки:";
+            lbOlimpSize.Visible = false;
+            Tab.Controls.Add(lbOlimpSize);
+
+            cbOlimpSize = new ComboBox();
+            cbOlimpSize.Items.Add("не выбрано"); cbOlimpSize.Items.Add("4 + 3 = 7"); cbOlimpSize.Items.Add("8 + 7 = 15"); cbOlimpSize.Items.Add("16 + 15 = 31"); cbOlimpSize.Items.Add("32 + 31 = 63"); cbOlimpSize.Items.Add("64 + 63 = 127"); cbOlimpSize.Items.Add("128 + 127 = 511");
+            cbOlimpSize.SelectedIndex = 0;
+            iOlimpSize = 0;
+            cbOlimpSize.Visible = false;
+            cbOlimpSize.SelectedIndexChanged += new EventHandler(Event_Change_cbOlimpSize);
+            Tab.Controls.Add(cbOlimpSize);
+
             lbGybrid = new Label();
             lbGybrid.Text = "Мин. пересечение, букв:";
             lbGybrid.Visible = false;
@@ -332,6 +350,19 @@ namespace Solver2
             Event_Change_cbType(this, null);
         }
 
+        private void Event_Change_cbOlimpSize(object sender, EventArgs e)
+        {
+            int i = cbOlimpSize.SelectedIndex;
+            if (i == 0) { iOlimpSize = 0; }
+            if (i == 1) { iOlimpSize = 4; }
+            if (i == 2) { iOlimpSize = 8; }
+            if (i == 3) { iOlimpSize = 16; }
+            if (i == 4) { iOlimpSize = 32; }
+            if (i == 5) { iOlimpSize = 64; }
+            if (i == 6) { iOlimpSize = 128; }
+            if (i == 7) { iOlimpSize = 256; }
+        }
+
         private void Event_Change_cbGybrid(object sender, EventArgs e)
         {
             iGybridMin = cbGybrid.SelectedIndex + 2;
@@ -418,6 +449,10 @@ namespace Solver2
                 var R1 = new Picture(this);
                 var R2 = new Olimp(this);
             }
+            if (type == "Ассоциации для олимпиек")
+            {
+                var R2 = new Olimp(this);
+            }
             if (type == "Гибриды картинками (буКВАс)")
             {
                 var R1 = new PicsGybrids(this);
@@ -429,6 +464,10 @@ namespace Solver2
             if (type == "ЛеДиДа книжная")
             {
                 var R1 = new LedidaBooks(this);
+            }
+            if (type == "ГаПоИФиКа фильмов")
+            {
+                var R1 = new GapoifikaFilms(this);
             }
             // 
             btSolve.Enabled = false;
@@ -496,9 +535,24 @@ namespace Solver2
             isPicsSect = false;
             lbGybrid.Visible = false;
             cbGybrid.Visible = false;
+            lbOlimpSize.Visible = false;
+            cbOlimpSize.Visible = false;
 
             string type = cbType.SelectedItem.ToString();
 
+            //
+            if (type == "Ассоциации для олимпиек")
+            {
+                List<object> objs = new List<object>();
+                objs.Add(lbProtect);
+                objs.Add(cbProtect);
+                objs.Add(lbOlimpSize);
+                objs.Add(cbOlimpSize);
+                objs.Add(lbSolve);
+                objs.Add(btSolve);
+                ShowSettingsOnScreen(objs, SettingsPositions);
+                isPicsSect = true;
+            }
             if ((type == "Картинки (только решить)") || (type == "Олимпийки картинками"))
             {
                 List<object> objs = new List<object>();
@@ -539,7 +593,7 @@ namespace Solver2
                 ShowSettingsOnScreen(objs, SettingsPositions);
                 //isPicsSect = true;
             }
-            if ((type == "ГаПоИФиКа книжная") || (type == "Ледида книжная"))
+            if ((type == "ГаПоИФиКа фильмов") || type == ("ГаПоИФиКа книжная") || (type == "Ледида книжная"))
             {
                 List<object> objs = new List<object>();
                 objs.Add(lbSolve);
@@ -644,6 +698,10 @@ namespace Solver2
             lbGybrid.Width = width1;
             cbGybrid.Left = left1;
             cbGybrid.Width = width1;
+            lbOlimpSize.Left = left1;
+            lbOlimpSize.Width = width1;
+            cbOlimpSize.Left = left1;
+            cbOlimpSize.Width = width1;
 
             // for others settings
             SettingsPositions = cbType.Bottom + border;
