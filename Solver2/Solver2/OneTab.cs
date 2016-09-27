@@ -64,6 +64,10 @@ namespace Solver2
         //public int[] iBeginNum;
         public int levelUrlsCount;
 
+        public Label lbOlimpSize;
+        public ComboBox cbOlimpSize;
+        public int iOlimpSize = 0;
+
         public Label lbImageCuttingMethod;
         public ComboBox cbImageCuttingMethod;
         public CheckBox chImageSizeFlag;
@@ -235,6 +239,19 @@ namespace Solver2
             cbCols.SelectedIndexChanged += new EventHandler(Event_Change_cbCols);
             Tab.Controls.Add(cbCols);
 
+            lbOlimpSize = new Label();
+            lbOlimpSize.Text = "Размер олимпийки:";
+            lbOlimpSize.Visible = false;
+            Tab.Controls.Add(lbOlimpSize);
+
+            cbOlimpSize = new ComboBox();
+            cbOlimpSize.Items.Add("не выбрано"); cbOlimpSize.Items.Add("4 + 3 = 7"); cbOlimpSize.Items.Add("8 + 7 = 15"); cbOlimpSize.Items.Add("16 + 15 = 31"); cbOlimpSize.Items.Add("32 + 31 = 63"); cbOlimpSize.Items.Add("64 + 63 = 127"); cbOlimpSize.Items.Add("128 + 127 = 511");
+            cbOlimpSize.SelectedIndex = 0;
+            iOlimpSize = 0;
+            cbOlimpSize.Visible = false;
+            cbOlimpSize.SelectedIndexChanged += new EventHandler(Event_Change_cbOlimpSize);
+            Tab.Controls.Add(cbOlimpSize);
+
             lbGybrid = new Label();
             lbGybrid.Text = "Мин. пересечение, букв:";
             lbGybrid.Visible = false;
@@ -331,6 +348,19 @@ namespace Solver2
 
             Event_ChangeSize(this, null);
             Event_Change_cbType(this, null);
+        }
+
+        private void Event_Change_cbOlimpSize(object sender, EventArgs e)
+        {
+            int i = cbOlimpSize.SelectedIndex;
+            if (i == 0) { iOlimpSize = 0; }
+            if (i == 1) { iOlimpSize = 4; }
+            if (i == 2) { iOlimpSize = 8; }
+            if (i == 3) { iOlimpSize = 16; }
+            if (i == 4) { iOlimpSize = 32; }
+            if (i == 5) { iOlimpSize = 64; }
+            if (i == 6) { iOlimpSize = 128; }
+            if (i == 7) { iOlimpSize = 256; }
         }
 
         private void Event_Change_cbGybrid(object sender, EventArgs e)
@@ -505,6 +535,8 @@ namespace Solver2
             isPicsSect = false;
             lbGybrid.Visible = false;
             cbGybrid.Visible = false;
+            lbOlimpSize.Visible = false;
+            cbOlimpSize.Visible = false;
 
             string type = cbType.SelectedItem.ToString();
 
@@ -666,6 +698,10 @@ namespace Solver2
             lbGybrid.Width = width1;
             cbGybrid.Left = left1;
             cbGybrid.Width = width1;
+            lbOlimpSize.Left = left1;
+            lbOlimpSize.Width = width1;
+            cbOlimpSize.Left = left1;
+            cbOlimpSize.Width = width1;
 
             // for others settings
             SettingsPositions = cbType.Bottom + border;
