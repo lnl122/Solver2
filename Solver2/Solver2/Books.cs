@@ -50,6 +50,7 @@ namespace Solver2
 
                         if (s != "")
                         {
+                            if (dict.Contains(s)) { continue; } // дубликаты названий книг не включаются в словарь
                             dict.Add(s);
                             plain.Add(s.Replace(" ", "").ToLower());
                             string[] ar1 = s.Split(' ');
