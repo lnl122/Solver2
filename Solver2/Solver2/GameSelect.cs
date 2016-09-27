@@ -15,7 +15,7 @@ namespace Solver2
         private int border = 5; // расстояния между элементами форм, константа
         public static TextBox tbGname;
 
-        public bool isSuccessful = false;
+        public bool isSuccessful = true;
         public string username = "";
         public string password = "";
         public string userid = "";
@@ -27,18 +27,13 @@ namespace Solver2
         private static string[] g_names;
         private static string[] g_urls;
 
-        private static string urlbeg = "http://game.en.cx/UserDetails.aspx?zone=1&tab=1&uid=";
-        private static string urlend = "&page=1";
+        private string urlbeg = "http://game.en.cx/UserDetails.aspx?zone=1&tab=1&uid=";
+        private string urlend = "&page=1";
 
-
-        // получаем список игр МШ текущего игрока
-        // вход - ид
-        // выход - список спиков из урл, номера, названия игр
-        public GameSelect(Logon logonData)
+        // получает перечень игр
+        // выход - текст страницы
+        private string GetUserGames()
         {
-            username = logonData.username;
-            password = logonData.password;
-            userid = logonData.userid;
             string url1 = urlbeg + userid + urlend;
             string cookieHeader = "";
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url1);
@@ -56,33 +51,40 @@ namespace Solver2
             {
                 Log.Write("en.cx ERROR: не удалось получить перечень игр");
                 isSuccessful = false;
-                return;
+                return "";
             }
             int it1 = pageSource.IndexOf("VirtualGamesDescription");
             if (it1 == -1)
             {
                 Log.Write("en.cx ERROR: не удалось выполнить парсинг страницы с играми пользвоателя, не нашли текст 'VirtualGamesDescription'");
                 isSuccessful = false;
-                return;
+                return "";
             }
-            string ps1 = pageSource.Substring(it1);
-            it1 = ps1.IndexOf("QuizDescription");
+            pageSource = pageSource.Substring(it1);
+            it1 = pageSource.IndexOf("QuizDescription");
             if (it1 == -1)
             {
                 Log.Write("en.cx ERROR: не удалось выполнить парсинг страницы с играми пользвоателя, не нашли текст 'QuizDescription'");
                 isSuccessful = false;
-                return;
+                return "";
             }
-            ps1 = ps1.Substring(0, it1);
-            ps1 = RemoveTags(ps1);
-            if (ps1.Length < 1)
+            pageSource = pageSource.Substring(0, it1);
+            pageSource = RemoveTags(pageSource);
+            if (pageSource.Length < 1)
             {
                 Log.Write("en.cx ERROR: не удалось выполнить парсинг страницы с играми пользвоателя");
                 isSuccessful = false;
-                return;
+                return "";
             }
+            return pageSource;
+        }
 
-            string[] ar1 = System.Text.RegularExpressions.Regex.Split(ps1.Replace(" bg>", "").Replace("\r\n", " ").Replace("</tr> ", "").Replace("</td> ", ""), "<tr");
+        // из страницы получает необработанный перечень игр
+        // вход - текст страницы
+        // выход - список строк, по одной на игру
+        private static List<string> GetDirtyListGames(string pageSource)
+        {
+            string[] ar1 = System.Text.RegularExpressions.Regex.Split(pageSource.Replace(" bg>", "").Replace("\r\n", " ").Replace("</tr> ", "").Replace("</td> ", ""), "<tr");
             List<string> l1 = new List<string>();
 
             foreach (string s1 in ar1)
@@ -92,9 +94,16 @@ namespace Solver2
                     l1.Add(s1.Replace(" >", ">").Replace("<span>", " ").Replace("</span>", " ").Replace("<br />", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " "));
                 }
             }
+            return l1;
+        }
 
+        // из строк со страницы с перечнем игр (грязный список) делает чистый список только неигранных игр
+        // вход - список грязных строк
+        // выход - список списков строк, описывающих отдельные неигранные игры
+        private List<List<string>> GetCleanListGames(List<string> DirtyList)
+        {
             List<List<string>> res = new List<List<string>>();
-            foreach (string s2 in l1)
+            foreach (string s2 in DirtyList)
             {
                 string r_url = "";
                 string r_name = "";
@@ -122,9 +131,30 @@ namespace Solver2
                     res.Add(l2);
                 }
             }
+            return res;
+        }
+
+        // получаем список игр МШ текущего игрока
+        // вход - ид
+        // выход - список спиков из урл, номера, названия игр
+        public GameSelect(Logon logonData)
+        {
+            username = logonData.username;
+            password = logonData.password;
+            userid = logonData.userid;
+
+            isSuccessful = true;
+            string pageSource = GetUserGames();
+            if (isSuccessful == false)
+            {
+                MessageBox.Show("Не удалось прочитать список игр, подробная причина указана в логе..");
+                return;
+            }
+            List<string> DirtyList = GetDirtyListGames(pageSource);
+            List<List<string>> res = GetCleanListGames(DirtyList);
             // в res сейчас перечень игр или пусто. Необходимо пользователю сделать выбор.
 
-            // форма для ввода данных
+            // форма для ввода данных, создаем
             Form SelectGame = new Form();
             SelectGame.Text = "Выбор игры..";
             SelectGame.StartPosition = FormStartPosition.CenterScreen;

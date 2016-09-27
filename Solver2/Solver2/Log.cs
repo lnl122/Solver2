@@ -9,11 +9,12 @@ namespace Solver2
     //
     class Log
     {
+        private static object threadLockWrite = new object();
+        private static object threadLockStore = new object();
+
         private static string PathToPages = "";         // путь (без слеша в конце, к папке для сохраняемых страниц
         private static System.IO.StreamWriter logfile;  // поток лога
         public static bool isReady = false;             // инициализация проведена?
-        private static bool isBusyWrite = false;             // счас заняты? чтоб подождать если необходимо. для устранения коллизий при активном логгировании
-        private static bool isBusyStore = false;             // счас заняты? чтоб подождать если необходимо. для устранения коллизий при активном логгировании
         private static int fileidx = 1;                 // индекс/номер сохраняемого файла
 
         // записывает строку текста в лог-файл
@@ -23,18 +24,18 @@ namespace Solver2
         {
             if (isReady)
             {
-                while (isBusyWrite) { } // ожидание освобождения флага
-                isBusyWrite = true;
-                logfile.WriteLine("{0} {1} {2}", DateTime.Today.ToShortDateString(), DateTime.Now.ToLongTimeString(), str);
-                if (str2 != "")
+                lock (threadLockWrite)
                 {
-                    logfile.WriteLine("                          " + str2);
-                    if (str3 != "")
+                    logfile.WriteLine("{0} {1} {2}", DateTime.Today.ToShortDateString(), DateTime.Now.ToLongTimeString(), str);
+                    if (str2 != "")
                     {
-                        logfile.WriteLine("                          " + str3);
+                        logfile.WriteLine("                          " + str2);
+                        if (str3 != "")
+                        {
+                            logfile.WriteLine("                          " + str3);
+                        }
                     }
                 }
-                isBusyWrite = false;
             }
         }
 
@@ -43,25 +44,19 @@ namespace Solver2
         // выход    -
         public static void Store(string modulename, string text)
         {
-            fileidx++;
             if (isReady)
             {
-                while (isBusyStore) { } // ожидание освобождения флага
-                isBusyStore = true;
-                var dt = DateTime.Today;
-                var dn = DateTime.Now;
-                string path = PathToPages + "\\" + modulename + "_" + fileidx.ToString() + "_" +
-                    dt.Year.ToString() + dt.Month.ToString() + dt.Day.ToString() +
-                    dn.Hour.ToString() + dn.Minute.ToString() + dn.Second.ToString() + ".http";
-                try
+                lock (threadLockStore)
                 {
+                    fileidx++;
+                    var dt = DateTime.Today;
+                    var dn = DateTime.Now;
+                    string path = PathToPages + "\\" + modulename + "_" + fileidx.ToString() + "_" +
+                        dt.Year.ToString() + dt.Month.ToString() + dt.Day.ToString() +
+                        dn.Hour.ToString() + dn.Minute.ToString() + dn.Second.ToString() + ".http";
                     System.IO.File.WriteAllText(path, text, System.Text.Encoding.UTF8);
+
                 }
-                catch
-                {
-                    int i = 0;/// *** возникают коллизии при записи файлов.
-                }
-                isBusyStore = false;
             }
         }
 

@@ -131,21 +131,42 @@ namespace Solver2
         // инициализируем наши объекты
         public static void InitComponents()
         {
-            string localpath = Environment.CurrentDirectory + @"\Data\";
+            string DataLocalPath = Environment.CurrentDirectory + @"\Data\";
+            string PageLocalPath = Environment.CurrentDirectory + @"\Pages\";
+            System.Threading.Tasks.Task<bool> t1 = System.Threading.Tasks.Task<bool>.Factory.StartNew(() => DeleteOldPages(Directory.GetFiles(PageLocalPath, "*.http")));
 
             SpellChecker.Init();
-            SpellChecker.LoadDictionary(localpath + "SpChDict.dat");
+            SpellChecker.LoadDictionary(DataLocalPath + "SpChDict.dat");
 
             Associations.Init();
-            Associations.LoadDictionary(localpath + "AssocDict.dat");
-            Associations.LoadDictionaryBad(localpath + "AssocDictBad.dat");
+            Associations.LoadDictionary(DataLocalPath + "AssocDict.dat");
+            Associations.LoadDictionaryBad(DataLocalPath + "AssocDictBad.dat");
 
             Books.Init();
-            Books.LoadDictionary(localpath + "Books.dat");
+            Books.LoadDictionary(DataLocalPath + "Books.dat");
 
             Answer.Init();
 
+
         }
+
+        // удаляет файлы http из папки
+        private static bool DeleteOldPages(string[] files)
+        {
+            try
+            {
+                foreach (string f in files)
+                {
+                    File.Delete(f);
+                }
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
         // завершаем работы наших объектов
         public static void CloseComponents()
         {
