@@ -1,6 +1,7 @@
 ﻿// *** при необходимости проверки более 1000 слов за один прием - разбивать на несколько процессов по 1000 слов.
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Solver2
 {
@@ -25,6 +26,8 @@ namespace Solver2
         private static string DictionaryPath = "";
         // первое создание объекта уже было?
         private static bool isObjectReady = false;
+        // ограничение для создания нескольких потоков
+        private static int maxCntWords = 1000;
         // словарь был ли загружен?
         private static bool isDicionaryLoaded = false;
         // тестовая строка для проверки работоспособности
@@ -135,14 +138,63 @@ namespace Solver2
             }
         }
 
-        // вход - список слов
+        // вход - список слов, количество не важно, если необходимо - разбивается на блоки
         // выход - список слов, по которым орфография пройдена успешно
         public List<string> Check(List<string> InnerWordList)
         {
             //результат
             List<string> res = new List<string>();
             if (isObjectReady == false) { return res; }
-            // для всех слов
+
+            if (InnerWordList.Count <= maxCntWords)
+            {
+                // если слов меньше 1000
+                res = CheckBlock(InnerWordList);
+            }
+            else
+            {
+                // для слов, если их более тысячи
+
+                // разбиваем список на кусочки по 1000 слов
+                List<List<string>> wrd1000 = new List<List<string>>();
+                List<string> wl = InnerWordList;
+                while (wl.Count > maxCntWords)
+                {
+                    List<string> qq = new List<string>();
+                    for (int i = 0; i < maxCntWords; i++) { qq.Add(wl[i]); }
+                    wl.RemoveRange(0, maxCntWords);
+                    wrd1000.Add(qq);
+                }
+                if (wl.Count != 0)
+                {
+                    wrd1000.Add(wl);
+                }
+                // формируем таски, передаём им управление
+                var Tasks2 = new List<Task<List<string>>>();
+                foreach (List<string> t2 in wrd1000)
+                {
+                    Tasks2.Add(Task<List<string>>.Factory.StartNew(() => CheckBlock(t2)));
+                }
+                // дождаться выполнения потоков, собрать результаты вместе
+                Task.WaitAll(Tasks2.ToArray());
+                List<string> r2 = new List<string>();
+                foreach (Task<List<string>> t8 in Tasks2)
+                {
+                    res.AddRange(t8.Result);
+                }
+            }
+            return res;
+        }
+
+        // вход - список слов
+        // выход - список слов, по которым орфография пройдена успешно
+        private List<string> CheckBlock(List<string> InnerWordList)
+        {
+            //результат
+            List<string> res = new List<string>();
+            if (isObjectReady == false) { return res; }
+
+            // для всех слов, если их меньше тысячи
             foreach (string SingleWord in InnerWordList)
             {
                 // нормализуем входящее слово
