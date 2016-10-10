@@ -69,6 +69,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpellChecker.cs" />
     <Compile Include="Upload.cs" />
+    <Compile Include="WordCompare.cs" />
     <Compile Include="Words.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
