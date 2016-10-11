@@ -39,8 +39,6 @@ namespace Solver2
                         n = n.Replace("«", " ").Replace("»", " ");
                         n = n.Replace("…", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Trim();
                         // составим из очередного найденного названия маску в стиле "га по и фи ка"
-                        //		n	"«Три тополя» на Плющихе"	string
-
                         string[] ar2 = n.Split(' ');
                         string nn = "";
                         foreach (string s in ar2)
