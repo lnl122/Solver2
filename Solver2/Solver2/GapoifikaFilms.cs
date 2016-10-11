@@ -36,6 +36,7 @@ namespace Solver2
                         n = n.Replace("*", " ").Replace("(", " ").Replace(")", " ").Replace("-", " ").Replace("_", " ").Replace("=", " ").Replace("+", " ");
                         n = n.Replace("{", " ").Replace("}", " ").Replace("[", " ").Replace("]", " ").Replace("/", " ").Replace("|", " ").Replace("\\", " ");
                         n = n.Replace(";", " ").Replace(":", " ").Replace("'", " ").Replace(",", " ").Replace(".", " ").Replace("<", " ").Replace(">", " ");
+                        n = n.Replace("«", " ").Replace("»", " ");
                         n = n.Replace("…", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Trim();
                         // составим из очередного найденного названия маску в стиле "га по и фи ка"
                         string[] ar2 = n.Split(' ');
