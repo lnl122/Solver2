@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright © 2016 Antony S. Ovsyannikov aka lnl122
+// License: http://opensource.org/licenses/MIT
+
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
@@ -21,7 +24,7 @@ namespace Solver2
             "* Анаграмматрицы картинками",
             "* Ассоциации картинками",
             "* Брутфорс по картинке",
-            "* Расчленёнки",
+            "Расчленёнки",
             "ГаПоИФиКа книжная",
             "ГаПоИФиКа фильмов",
             "ЛеДиДа книжная",
@@ -81,6 +84,9 @@ namespace Solver2
         public ComboBox cbProtect;
         public string sProtect;
 
+        public Label lbRaschl;
+        public ComboBox cbRaschl;
+        public int iRaschl; // для расчлененок
         public Label lbGybrid;
         public ComboBox cbGybrid;
         public int iGybridMin; // для гибридов/циклоидов
@@ -252,11 +258,22 @@ namespace Solver2
             cbOlimpSize.SelectedIndexChanged += new EventHandler(Event_Change_cbOlimpSize);
             Tab.Controls.Add(cbOlimpSize);
 
+            lbRaschl = new Label();
+            lbRaschl.Text = "Количество слов:";
+            lbRaschl.Visible = false;
+            Tab.Controls.Add(lbRaschl);
+            cbRaschl = new ComboBox();
+            cbRaschl.Items.Add("1"); cbRaschl.Items.Add("2"); cbRaschl.Items.Add("3");
+            cbRaschl.SelectedIndex = 0;
+            iRaschl = 3;
+            cbRaschl.Visible = false;
+            cbRaschl.SelectedIndexChanged += new EventHandler(Event_Change_cbRaschl);
+            Tab.Controls.Add(cbRaschl);
+
             lbGybrid = new Label();
             lbGybrid.Text = "Мин. пересечение, букв:";
             lbGybrid.Visible = false;
             Tab.Controls.Add(lbGybrid);
-
             cbGybrid = new ComboBox();
             cbGybrid.Items.Add("2"); cbGybrid.Items.Add("3"); cbGybrid.Items.Add("4"); cbGybrid.Items.Add("5");
             cbGybrid.SelectedIndex = 1;
@@ -348,6 +365,11 @@ namespace Solver2
 
             Event_ChangeSize(this, null);
             Event_Change_cbType(this, null);
+        }
+
+        private void Event_Change_cbRaschl(object sender, EventArgs e)
+        {
+            iRaschl = cbRaschl.SelectedIndex + 1;
         }
 
         private void Event_Change_cbOlimpSize(object sender, EventArgs e)
@@ -469,6 +491,10 @@ namespace Solver2
             {
                 var R1 = new GapoifikaFilms(this);
             }
+            if (type == "Расчленёнки")
+            {
+                var R1 = new Raschl(this);
+            }
             // 
             btSolve.Enabled = false;
         }
@@ -537,6 +563,9 @@ namespace Solver2
             cbGybrid.Visible = false;
             lbOlimpSize.Visible = false;
             cbOlimpSize.Visible = false;
+            lbRaschl.Visible = false;
+            cbRaschl.Visible = false;
+            //
 
             string type = cbType.SelectedItem.ToString();
 
@@ -600,6 +629,16 @@ namespace Solver2
                 objs.Add(btSolve);
                 ShowSettingsOnScreen(objs, SettingsPositions);
             }
+            if (type == "Расчленёнки")
+            {
+                List<object> objs = new List<object>();
+                objs.Add(lbRaschl);
+                objs.Add(cbRaschl);
+                objs.Add(lbSolve);
+                objs.Add(btSolve);
+                ShowSettingsOnScreen(objs, SettingsPositions);
+            }
+            //
 
 
         }
@@ -698,6 +737,10 @@ namespace Solver2
             lbGybrid.Width = width1;
             cbGybrid.Left = left1;
             cbGybrid.Width = width1;
+            lbRaschl.Left = left1;
+            lbRaschl.Width = width1;
+            cbRaschl.Left = left1;
+            cbRaschl.Width = width1;
             lbOlimpSize.Left = left1;
             lbOlimpSize.Width = width1;
             cbOlimpSize.Left = left1;
