@@ -3,8 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -18,7 +16,6 @@ namespace Solver2
 
         struct OneStr
         {
-            public int slov;
             public string[] str;
             public int[] num;
         }                                             // струкрура данных для одной строчки расчлененок
