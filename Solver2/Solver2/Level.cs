@@ -166,7 +166,7 @@ namespace Solver2
         // возвращает наименование текущего уровня со страницы
         private static string GetLvlName(string g1)
         {
-            string g = g1.ToLower();
+            string g = g1;//.ToLower();
             int i1 = g.IndexOf("<ul class=\"section level\">");
             if (i1 == -1) { return "не определен"; }
             g = g.Substring(i1);
