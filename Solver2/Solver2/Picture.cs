@@ -33,6 +33,7 @@ namespace Solver2
             // отрисуем их в ГУИ
             string html = GetPicsHtml(SmallImagePath);
             T.wbPictures.Invoke(new Action(() => { T.wbPictures.DocumentText = html; }));
+            T.wbPictures.Invoke(new Action(() => { T.tcTabWeb.SelectedIndex = 1; }));
 
             // из путей к картинкам делаем коллекции слов
             List<Words> TextsFromPics = Image.GetAllDescriptions(SmallImagePath);
@@ -82,7 +83,7 @@ namespace Solver2
                 Words W = TextsFromPics[i];
                 if (W != null)
                 {
-                    Answer.Add(T, 4, W.all_base10, i);
+                    Answer.Add(T, 4, Words.KillDupesAndRange(W.all_base10, 5), i);
                 }
                 //*** позже добавить более низкие приоритеты
             }
