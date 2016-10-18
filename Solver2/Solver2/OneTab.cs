@@ -116,9 +116,12 @@ namespace Solver2
         public TextBox tbTextHints;
 
         //3 column
-        public Label lbSectors;
+        public TabControl tcTabSecBon;
+        public TabPage tpSectors;
+        public TabPage tpBonuses;
+        //public Label lbSectors;
         public TextBox tbSectors;
-        public Label lbBonuses;
+        //public Label lbBonuses;
         public TextBox tbBonuses;
 
         // others
@@ -342,26 +345,28 @@ namespace Solver2
             tpTextHints.Controls.Add(tbTextHints);
 
             // 3 column
-            lbSectors = new Label();
-            lbSectors.Text = "Сектора:";
-            Tab.Controls.Add(lbSectors);
+            tcTabSecBon = new TabControl();
+            Tab.Controls.Add(tcTabSecBon);
+            tpSectors = new TabPage();
+            tpSectors.Text = "Сектора";
+            tcTabSecBon.Controls.Add(tpSectors);
+            tpBonuses = new TabPage();
+            tpBonuses.Text = "Бонусы";
+            tcTabSecBon.Controls.Add(tpBonuses);
             tbSectors = new TextBox();
             tbSectors.Multiline = true;
             tbSectors.ScrollBars = ScrollBars.Both;
             string sec1 = "";
             for(int i = 0; i < level.sectors; i++) { sec1 = sec1 + (i+1).ToString() + ": " + level.sector[i] + "\r\n"; }
             tbSectors.Text = sec1;
-            Tab.Controls.Add(tbSectors);
-            lbBonuses = new Label();
-            lbBonuses.Text = "Бонусы:";
-            Tab.Controls.Add(lbBonuses);
+            tpSectors.Controls.Add(tbSectors);
             tbBonuses = new TextBox();
             tbBonuses.Multiline = true;
             tbBonuses.ScrollBars = ScrollBars.Both;
             string bon1 = "";
             for (int i = 0; i < level.bonuses; i++) { bon1 = bon1 + (i+1).ToString() + ": " + level.bonus[i] + "\r\n"; }
             tbBonuses.Text = bon1;
-            Tab.Controls.Add(tbBonuses);
+            tpBonuses.Controls.Add(tbBonuses);
 
             Event_ChangeSize(this, null);
             Event_Change_cbType(this, null);
@@ -777,20 +782,18 @@ namespace Solver2
             tbTextHints.Height = tbTextTask.Height;
 
             // 3
-            lbSectors.Top = top;
-            lbSectors.Left = left3;
-            lbSectors.Width = width3;
-            tbSectors.Top = lbSectors.Bottom + border;
-            tbSectors.Left = left3;
-            tbSectors.Width = width3;
-            tbSectors.Height = (height / 2) - (8 * border);
-            lbBonuses.Top = tbSectors.Bottom + border;
-            lbBonuses.Left = left3;
-            lbBonuses.Width = width3;
-            tbBonuses.Top = lbBonuses.Bottom + border;
-            tbBonuses.Left = left3;
-            tbBonuses.Width = width3;
-            tbBonuses.Height = tbSectors.Height;
+            tcTabSecBon.Top = top;
+            tcTabSecBon.Left = left3;
+            tcTabSecBon.Width = width3;
+            tcTabSecBon.Height = height - (3 * border);
+            tbSectors.Top = border;
+            tbSectors.Left = border;
+            tbSectors.Width = tcTabText.Width - 3 * border;
+            tbSectors.Height = tcTabText.Width - 3 * border;
+            tbBonuses.Top = border;
+            tbBonuses.Left = border;
+            tbBonuses.Width = tcTabText.Width - 3 * border;
+            tbBonuses.Height = tcTabText.Width - 3 * border;
         }
         /*
         public delegate void dUpdateTb(TextBox tb, string str);
