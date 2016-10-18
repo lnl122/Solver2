@@ -82,7 +82,7 @@ namespace Solver2
                 Words W = TextsFromPics[i];
                 if (W != null)
                 {
-                    Answer.Add(T, 4, W.all_base10, i);
+                    Answer.Add(T, 4, Words.KillDupesAndRange(W.all_base10, 5), i);
                 }
                 //*** позже добавить более низкие приоритеты
             }
