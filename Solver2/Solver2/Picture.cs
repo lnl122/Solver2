@@ -33,6 +33,7 @@ namespace Solver2
             // отрисуем их в ГУИ
             string html = GetPicsHtml(SmallImagePath);
             T.wbPictures.Invoke(new Action(() => { T.wbPictures.DocumentText = html; }));
+            T.wbPictures.Invoke(new Action(() => { T.tcTabWeb.SelectedIndex = 1; }));
 
             // из путей к картинкам делаем коллекции слов
             List<Words> TextsFromPics = Image.GetAllDescriptions(SmallImagePath);
