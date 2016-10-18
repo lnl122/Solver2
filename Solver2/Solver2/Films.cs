@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright © 2016 Antony S. Ovsyannikov aka lnl122
+// License: http://opensource.org/licenses/MIT
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -8,8 +11,11 @@ namespace Solver2
     class Films
     {
         // http://www.hdkinoteatr.com/
-        // и далее только через форму, она не простая
-        // надо бы тестировать в отдельном приложении с отдельным браузером в окне
+        //
+        // public static string PrepareSearchString(string name)    - преобразует ГаПоиФиКу в строку для поиска "га по и фи ка"
+        // public static List<string> GetNameList(string name)      - названия фильмов, соответствующих гапоифике
+        //
+        //
 
         private static string baseurl = "http://www.hdkinoteatr.com/index.php";
         public static string cHead;             // куки

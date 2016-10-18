@@ -1,18 +1,23 @@
-﻿using System;
+﻿// Copyright © 2016 Antony S. Ovsyannikov aka lnl122
+// License: http://opensource.org/licenses/MIT
+
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Solver2
 {
+    //
+    // public static string GetPicsHtml(string[] ar)    - создаёт вэб-страницу из списка локальных путей к картинкам
+    // public Picture(OneTab T)                         - конструктор
+    // public bool Process(OneTab T)                    - поток
+    //
+
     class Picture
     {
-        /*private string qq(List<string> ww)
-        {
-            string res = "";
-            foreach(string ss in ww) { res = res + ss + " "; }
-            return (res + " | ");
-        }*/
-
+        // создаёт вэб-страницу из списка локальных путей к картинкам
+        // вход - массив путей к локальным картинкам
+        // выход - текст html
         public static string GetPicsHtml(string[] ar)
         {
             string html = "<!DOCTYPE HTML><html><head><meta charset=\"utf-8\"></head><body bgcolor=\"#111111\"><br/>";

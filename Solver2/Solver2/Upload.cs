@@ -1,9 +1,16 @@
-﻿using System.IO;
+﻿// Copyright © 2016 Antony S. Ovsyannikov aka lnl122
+// License: http://opensource.org/licenses/MIT
+
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Solver2
 {
+    //
+    // public static string UploadFile(string fp) - из локального пути к картинке получаем внешний урл 
+    //
+
     class Upload
     {
         // аплоад картинки по пути, получени внешней ссылки - заглушка для возможности выбора сервиса аплоада

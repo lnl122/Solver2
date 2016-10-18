@@ -1,11 +1,17 @@
-﻿using System;
+﻿// Copyright © 2016 Antony S. Ovsyannikov aka lnl122
+// License: http://opensource.org/licenses/MIT
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Solver2
 {
+    //
+    // public bool Process(OneTab T)        - процесс
+    // public PicsGybrids(OneTab T)         - конструктор
+    //
+
     class PicsGybrids
     {
         public OneTab OT;

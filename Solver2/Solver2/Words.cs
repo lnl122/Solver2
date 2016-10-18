@@ -1,10 +1,16 @@
-﻿using System;
+﻿// Copyright © 2016 Antony S. Ovsyannikov aka lnl122
+// License: http://opensource.org/licenses/MIT
+
+using System;
 using System.Collections.Generic;
 
 namespace Solver2
 {
     //
-    // public Words Words(string) - construct
+    // public Words Words(string)                                                       - construct
+    // public static List<string> KillDupesAndRange(List<string> lst, int cnt = 99999)  - убивает дупы и ранжирует слова по частоте
+    // public void FindAssociations()                                                   - находит ассоциации ко всем найденным словам
+    // public List<string> FindAssociations25()                                         - находит по 5 ассоциаций к 10 базовым словам
     //
     class Words
     {
@@ -48,6 +54,8 @@ namespace Solver2
         public List<string> all_assoc25; // ассоциации к найденным словам, все подряд
 
         // создает объект из текста, где слова разделены пробелами
+        // вход - строка текста
+        // выход - сам объект
         public Words(string str)
         {
             // создаем части объектов. пока что пустые.
@@ -133,11 +141,15 @@ namespace Solver2
         }
 
         // для объекта находит ассоциации, если они необходимы пользователю. с внешнего сервиса - 10 минут/0% проца, локально - 2 мин/одно ядро
+        // вход и выход - сам объект
         public void FindAssociations()
         {
             var ss = Associations.Get(all_base);
             all_assoc = KillDupesAndRange(ss);
         }
+
+        // для объекта находит ассоциации, по 5 шт на 10 базовых слов
+        // вход и выход - сам объект
         public List<string> FindAssociations25()
         {
             List<string> res = new List<string>();

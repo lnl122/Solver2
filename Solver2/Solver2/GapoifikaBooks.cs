@@ -1,10 +1,18 @@
-﻿using System;
+﻿// Copyright © 2016 Antony S. Ovsyannikov aka lnl122
+// License: http://opensource.org/licenses/MIT
+
+using System;
 using System.Threading.Tasks;
 
 namespace Solver2
 {
     class GapoifikaBooks
     {
+        //
+        // public bool Process(OneTab T)    - поток
+        // public GapoifikaBooks(OneTab T)  - конструктор
+        //
+
         OneTab OT;
         string task;
 

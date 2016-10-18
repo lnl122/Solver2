@@ -1,5 +1,8 @@
-﻿using System;
-//using System.Collections.Generic;
+﻿// Copyright © 2016 Antony S. Ovsyannikov aka lnl122
+// License: http://opensource.org/licenses/MIT
+
+using System;
+using System.Collections.Generic;
 using Lstr = System.Collections.Generic.List<string>;
 using System.Linq;
 using System.Text;
