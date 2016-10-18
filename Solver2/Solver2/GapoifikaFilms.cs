@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright © 2016 Antony S. Ovsyannikov aka lnl122
+// License: http://opensource.org/licenses/MIT
+
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,6 +9,11 @@ namespace Solver2
 {
     class GapoifikaFilms
     {
+        //
+        // public GapoifikaFilms(OneTab T)  - конструктор
+        // public bool Process(OneTab T)    - поток
+        //
+
         OneTab OT;
         string task;
 

@@ -1,8 +1,20 @@
-﻿using System;
+﻿// Copyright © 2016 Antony S. Ovsyannikov aka lnl122
+// License: http://opensource.org/licenses/MIT
+
+using System;
 using System.Collections.Generic;
 
 namespace Solver2
 {
+    //
+    // public Level(GameSelect GameParams, int lvl_number)  - создает объект с данными об уровне
+    // public static string GetPageLevel(int idx)           - получает текст уровня по номеру
+    // public void ForceUpdateLevel()                       - обновляет содержимое уровня полностью принудительно
+    // public void ForceUpdateAnswersLevel()                - обновляет только ответы и статус уровня принудительно
+    // public void UpdateLevel(string page)                 - обновляет содержимое уровня полностью
+    // public void UpdateAnswersLevel(string page)          - обновляет только ответы и статус уровня
+    //
+
     class Level
     {
         public int number;
@@ -26,7 +38,7 @@ namespace Solver2
 
         public static GameSelect Game;
 
-        // вход - пераметры игры, номер уровня 1..99
+        // вход - параметры игры, номер уровня 1..99
         // выход - объект с данными уровня
         // получает сведения об уровне, парсит его код.
         public Level(GameSelect GameParams, int lvl_number)
@@ -64,6 +76,7 @@ namespace Solver2
         }
 
         // считает общее количество ответов, необходимо для дальнейшего обпередения необходимости обновления формы
+        // выход - количество
         private int GetSecBon()
         {
             int r = 0;
@@ -163,6 +176,7 @@ namespace Solver2
             Engine.lastpage = page;
             return page;
         }
+
         // возвращает наименование текущего уровня со страницы
         private static string GetLvlName(string g1)
         {
@@ -467,5 +481,6 @@ namespace Solver2
                 { "<h3 class=\"color_", "<div class=\"pane\"", "<div class=\"aside\">", "<div class=\"header\">", "<script"  , "<h3>"   },
                 { "</h3>"             , "</div>"             , "</div>"               , "</div>"                , "</script>", "</h3>"  }
             };
+
     }
 }

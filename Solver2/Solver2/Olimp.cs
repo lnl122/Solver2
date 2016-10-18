@@ -7,12 +7,18 @@ using System.Threading.Tasks;
 
 namespace Solver2
 {
+    //
+    // public bool Process(OneTab T)    - поток
+    // public Olimp(OneTab T)           - конструктор
+    //
+
     class Olimp
     {
         OneTab OT;
         private int[] links;
         private List<string> sended;
 
+        // структура олимпийки
         public struct OneOlimp
         {
             public int num;
@@ -110,7 +116,6 @@ namespace Solver2
             {
                 wrd1.AddRange(Get1(oo.num, wrds, oo.nums, 0));
             }
-            //public static void Add(OneTab T, int priority, List<string> WordsList, int i1, int i2 = -1, int i3 = -1)
             wrd1 = Words.KillDupesAndRange(wrd1);
             wrd2 = Words.KillDupesAndRange(wrd2);
             wrd3 = Words.KillDupesAndRange(wrd3);
@@ -240,5 +245,6 @@ namespace Solver2
             Log.Write("Oli Начали решать олимпийки\r\n.\r\n");
             Task<bool> t1 = Task<bool>.Factory.StartNew(() => Process(T));
         }
+
     }
 }

@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright © 2016 Antony S. Ovsyannikov aka lnl122
+// License: http://opensource.org/licenses/MIT
+
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -6,6 +9,10 @@ namespace Solver2
 {
     class AppForm
     {
+        //
+        // public AppForm(GameSelect G) - конструктор формы по данным выбранной игры
+        //
+
         public static string mainform_caption = "Solver2";
         private int border = 5;
 

@@ -1,8 +1,12 @@
-﻿using Microsoft.Win32;
+﻿// Copyright © 2016 Antony S. Ovsyannikov aka lnl122
+// License: http://opensource.org/licenses/MIT
+
+using Microsoft.Win32;
 using System.Windows.Forms;
 
 namespace Solver2
 {
+    //
     // public Logon() - форма + авторизация. выход - структура класса
     //
 
@@ -16,6 +20,7 @@ namespace Solver2
         public string password = "";
         public string userid = "";
 
+        // конструктор
         public Logon()
         {
             // нужная ветка реестра д.б. в HKCU - //[HKEY_CURRENT_USER\Software\lnl122\solver] //"user"="username" //"pass"="userpassword"

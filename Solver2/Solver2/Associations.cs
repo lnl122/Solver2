@@ -1,4 +1,5 @@
-﻿// *** добавить поиск ассоциаций по трем словам
+﻿// Copyright © 2016 Antony S. Ovsyannikov aka lnl122
+// License: http://opensource.org/licenses/MIT
 
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -6,11 +7,13 @@ using System.Threading;
 
 namespace Solver2
 {
-    // need COM Reference "Microsoft.Word.14.Object.Library"
     //
     // public void Init()
     // public void LoadDictionary(string DictPath)
     // public void SaveDictionary()
+    // public void LoadBadDictionary(string DictPath)
+    // public void SaveBadDictionary()
+    // public static List<string> GetFirstItems(List<string> list, int count)
     // public List<string> Get(string, int = 999)
     // public List<string> Get(List<string>, int = 999)
     // public List<string> Get2(string, string)

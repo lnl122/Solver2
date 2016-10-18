@@ -1,4 +1,5 @@
-﻿// *** при необходимости проверки более 1000 слов за один прием - разбивать на несколько процессов по 1000 слов.
+﻿// Copyright © 2016 Antony S. Ovsyannikov aka lnl122
+// License: http://opensource.org/licenses/MIT
 
 using System.Collections.Generic;
 using System.Threading.Tasks;

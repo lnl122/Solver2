@@ -1,10 +1,9 @@
-﻿// *** GameSelect       нарушен принцип атомарности, код надо разбить на более мелкие куски
-// *** GameSelect       потом убрать. заглушка для потенциальных линейных игр МШ
+﻿// Copyright © 2016 Antony S. Ovsyannikov aka lnl122
+// License: http://opensource.org/licenses/MIT
 
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Windows.Forms;
 
@@ -12,6 +11,10 @@ namespace Solver2
 {
     class GameSelect
     {
+        //
+        // public GameSelect(Logon logonData)   - форма + получение и выбор игры из списка
+        //
+
         private int border = 5; // расстояния между элементами форм, константа
         public static TextBox tbGname;
 

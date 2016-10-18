@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright © 2016 Antony S. Ovsyannikov aka lnl122
+// License: http://opensource.org/licenses/MIT
+
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Drawing;
@@ -7,6 +10,12 @@ namespace Solver2
 {
     class Image
     {
+        //
+        // public static int GetSmallImageCount(List<string> urls, int[] Rows, int[] Cols)                  - считает количество мелких картинок
+        // public static string[] GetSmallImagePathes(OneTab T, List<string> urls, int[] Rows, int[] Cols)  - нарезка, возврат путей
+        // public static List<Words> GetAllDescriptions(string[] paths)                                     - получает описания картинок
+        //
+
         private static int image_border_width = 5;          // отступ от краев нарезанных картинок
 
         // считает количество мелких картинок из больших, и, их параметров. только для нарезки равными долями

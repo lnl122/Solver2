@@ -1,9 +1,18 @@
-﻿using System.Collections.Generic;
+﻿// Copyright © 2016 Antony S. Ovsyannikov aka lnl122
+// License: http://opensource.org/licenses/MIT
+
+using System.Collections.Generic;
 
 namespace Solver2
 {
     class Books
     {
+        //
+        // public static void Init()
+        // public static void LoadDictionary(string DictPath)
+        // public static string ClearBookName(string s1)
+        //
+
         // словари
         public static List<string> dict;
         public static List<string> plain;
@@ -82,12 +91,13 @@ namespace Solver2
             }
         }
 
-        // убираем лишние лимволы из названия
+        // убираем лишние символы из названия
         public static string ClearBookName(string s1)
         {
             string s = s1.Trim().Replace("  ", "").Replace("  ", "").Replace("  ", "").Replace("ё", "е").Replace("Ё", "Е");
             s = s.Replace(".", "").Replace(",", "").Replace("-", "").Replace("\"", "").Replace("!", "").Replace("?", "").Replace("#", "");
             s = s.Replace(":", "").Replace(";", "").Replace("%", "").Replace("(", "").Replace(")", "").Replace("+", "").Replace("/", "").Replace("\\", "");
+            s = s.Replace("«", "").Replace("»", "");
             s = s.Trim().Replace("  ", "").Replace("  ", "").Replace("  ", "");
             return s;
         }

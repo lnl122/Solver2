@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿// Copyright © 2016 Antony S. Ovsyannikov aka lnl122
+// License: http://opensource.org/licenses/MIT
+
 using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Solver2
 {
-    // public static Words GetImageDescription(string filepath)
-    // public static string ParsingPage(string g)
-    // public static string GetPageByImageUrl(string imgurl)
-    //
     class Google
     {
+        //
+        // public static Words GetImageDescription(string filepath)     - получение объекта Words из локального пути картинки
+        // public static string ParsingPage(string g)                   - парсинг страницы гугля
+        // public static string GetPageByImageUrl(string imgurl)        - получение страницы по урлу
+        //
+
         // пути
         private static string googleRU = "https://www.google.ru/searchbyimage?&hl=ru-ru&lr=lang_ru&image_url=";
         // максимальное количество попыток чтения

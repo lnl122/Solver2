@@ -1,15 +1,20 @@
-﻿using System.IO;
+﻿// Copyright © 2016 Antony S. Ovsyannikov aka lnl122
+// License: http://opensource.org/licenses/MIT
+
+using System.IO;
 using System.Net;
 
 namespace Solver2
 {
-    // public static void SetId(string s1, string s2, string s3, string s4, string s5, int i1)
-    // public static string GetPage(string url) - получает текст страницы по урлу
-    // public static string Logon(string url1, string name, string pass) - выход - страница после попытки авторизации
-    //
-
     class Engine
     {
+        //
+        // public static void SetId(string s1, string s2, string s3, string s4, string s5, int i1)  - устанавливаем параметры извне к себе
+        // public static string GetPage(string url)                                                 - получает текст страницы по урлу
+        // public static string Logon(string url1, string name, string pass)                        - выход - страница после попытки авторизации
+        // public static string TryOne(int lvl, string val)                                         - пробуем вбить один ответ
+        //
+
         private static string username = "";    // логин пользователя
         private static string password = "";    // пасс пользвоателя
         private static string userid = "";      // ид пользователя

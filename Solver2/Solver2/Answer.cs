@@ -1,13 +1,22 @@
-﻿using System;
+﻿// Copyright © 2016 Antony S. Ovsyannikov aka lnl122
+// License: http://opensource.org/licenses/MIT
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Solver2
 {
     class Answer
     {
+        //
+        // public static bool Process()                                                                             - поток
+        // public static void Init()                                                                                - инит потока
+        // public static string SetProtect(string wrd, int i1, string protect)                                      - устанавливаем защиту
+        // public static void Add(OneTab T, int priority, string wrd, int i1, int i2 = -1, int i3 = -1)             - добавляем в очередь
+        // public static void Add(OneTab T, int priority, List<string> WordsList, int i1, int i2 = -1, int i3 = -1) - добавляем в очередь список
+        //
+
         public struct Answ
         {
             public OneTab OT;
@@ -79,6 +88,7 @@ namespace Solver2
             return true;
         }
 
+        // обновляет html на экране
         private static string UpdateHtmlPics(string html, Level q)
         {
             string page = html;

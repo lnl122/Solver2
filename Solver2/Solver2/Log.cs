@@ -1,7 +1,11 @@
-﻿using System;
+﻿// Copyright © 2016 Antony S. Ovsyannikov aka lnl122
+// License: http://opensource.org/licenses/MIT
+
+using System;
 
 namespace Solver2
 {
+    //
     // public void Init()
     // public void Close()
     // public void Write(string text, string text2="", string text3 = "")

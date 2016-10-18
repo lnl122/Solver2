@@ -64,7 +64,6 @@ namespace Solver2
         public ComboBox cbType;
         public int[] iCols;
         public int[] iRows;
-        //public int[] iBeginNum;
         public int levelUrlsCount;
 
         public Label lbOlimpSize;
@@ -119,9 +118,7 @@ namespace Solver2
         public TabControl tcTabSecBon;
         public TabPage tpSectors;
         public TabPage tpBonuses;
-        //public Label lbSectors;
         public TextBox tbSectors;
-        //public Label lbBonuses;
         public TextBox tbBonuses;
 
         // others
@@ -410,26 +407,6 @@ namespace Solver2
             tbAnswerMulti.Text = RemoveCharsBefore(tbAnswerMulti.Text, " ");
         }
 
-        private string RemoveCharsBefore(string text, string v)
-        {
-            string res = "";
-            string[] ar1 = System.Text.RegularExpressions.Regex.Split(text, "\r\n");
-            foreach(string s in ar1)
-            {
-                string s1 = s.Trim().Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
-                if(s1 != "")
-                {
-                    int ii1 = s1.IndexOf(v);
-                    if(ii1 != -1)
-                    {
-                        s1 = s1.Substring(ii1+1);
-                    }
-                    res = res + s1.Trim() + "\r\n";
-                }
-            }
-            return res;
-        }
-
         private void Event_KeyDown_tbAnswer(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -648,6 +625,7 @@ namespace Solver2
 
         }
 
+        // определение верней границы положения объектов ГУИ
         private void ShowSettingsOnScreen(List<object> objs, int sp2)
         {
             int sp = sp2;
@@ -663,6 +641,7 @@ namespace Solver2
             }
         }
 
+        // изменение размера всех объектов ГУИ
         public void Event_ChangeSize(object sender, EventArgs e)
         {
             int width = Program.D.Tabs.Width - 2 * border;
@@ -795,13 +774,28 @@ namespace Solver2
             tbBonuses.Width = tcTabText.Width - 3 * border;
             tbBonuses.Height = tcTabText.Width - 3 * border;
         }
-        /*
-        public delegate void dUpdateTb(TextBox tb, string str);
-        public static dUpdateTb fUpdateTb = new OneTab.dUpdateTb(OneTab.UpdateTb);
-        public static void UpdateTb(System.Windows.Forms.TextBox tb, string str) // делегат, принимающий возвращенные потоком параметры. взаимодействует с ГУИ
+
+        // подготовка мульти-ответа -- убираем все символы до указанного ( ":" / "." / " ")
+        private string RemoveCharsBefore(string text, string v)
         {
-            tb.Text = str + "\r\n`r`n" + tb.Text;
+            string res = "";
+            string[] ar1 = System.Text.RegularExpressions.Regex.Split(text, "\r\n");
+            foreach (string s in ar1)
+            {
+                string s1 = s.Trim().Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
+                if (s1 != "")
+                {
+                    int ii1 = s1.IndexOf(v);
+                    if (ii1 != -1)
+                    {
+                        s1 = s1.Substring(ii1 + 1);
+                    }
+                    res = res + s1.Trim() + "\r\n";
+                }
+            }
+            return res;
         }
-        */
+
+
     }
 }
