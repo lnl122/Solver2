@@ -16,6 +16,8 @@
 
 Для возможности проведения тестирования необходим дубликат логина-пароля в домене demo.en.cx (не отменяет необходимость регистрации в одном из "боевых" доменов проета encounter)
 
+Ознакомиться с большей частью [форматов заданий](http://stavropol.en.cx/addons.aspx?aid=14755)
+
 ## ФО, ТЗ, Описания
 - [Общее, проета в целом](https://github.com/lnl122/Solver2/blob/master/docs/common.md)
 - [Взаимодействия с пользователем, GUI](https://github.com/lnl122/Solver2/blob/master/docs/gui.md)
