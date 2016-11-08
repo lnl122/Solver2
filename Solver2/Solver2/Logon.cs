@@ -25,7 +25,7 @@ namespace Solver2
         {
             // нужная ветка реестра д.б. в HKCU - //[HKEY_CURRENT_USER\Software\lnl122\solver] //"user"="username" //"pass"="userpassword"
             // обратимся к реестру, есть ли там записи о последнем юзере, если есть - прочтем их
-            RegistryKey rk = Registry.CurrentUser;
+            RegistryKey rk = Microsoft.Win32.Registry.CurrentUser;
             RegistryKey rks = rk.OpenSubKey("Software", true); rk.Close();
             RegistryKey rksl = rks.OpenSubKey("lnl122", true); if (rksl == null) { rksl = rks.CreateSubKey("lnl122"); }
             rks.Close();
@@ -95,7 +95,7 @@ namespace Solver2
                     if (pageSource.IndexOf("action=logout") != -1)
                     {
                         // обновить в реестре 
-                        RegistryKey rk2 = Registry.CurrentUser.OpenSubKey("Software\\lnl122\\Solver", true);
+                        RegistryKey rk2 = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\\lnl122\\Solver", true);
                         rk2.SetValue("user", user);
                         rk2.SetValue("pass", pass);
                         rk2.Close();

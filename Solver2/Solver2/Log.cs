@@ -21,9 +21,12 @@ namespace Solver2
         public static bool isReady = false;             // инициализация проведена?
         private static int fileidx = 1;                 // индекс/номер сохраняемого файла
 
-        // записывает строку текста в лог-файл
-        // вход     строка для лог файла
-        // выход    -
+        /// <summary>
+        /// записывает строку текста в лог-файл
+        /// </summary>
+        /// <param name="str">строка для лог файла</param>
+        /// <param name="str2">вторая строка для лог файла</param>
+        /// <param name="str3">третья строка для лог файла</param>
         public static void Write(string str, string str2 = "", string str3 = "")
         {
             if (isReady)
@@ -43,9 +46,11 @@ namespace Solver2
             }
         }
 
-        // записывает текст в отдельный файл
-        // вход     имя модуля, строка текста
-        // выход    -
+        /// <summary>
+        /// записывает текст в отдельный файл
+        /// </summary>
+        /// <param name="modulename">имя модуля</param>
+        /// <param name="text">строка текста</param>
         public static void Store(string modulename, string text)
         {
             if (isReady)
@@ -64,9 +69,9 @@ namespace Solver2
             }
         }
 
-        // выполняет принудительную запись лога на диск
-        // вход     -
-        // выход    -
+        /// <summary>
+        /// выполняет принудительную запись лога на диск
+        /// </summary>
         public static void Close()
         {
             if (isReady)
@@ -78,9 +83,12 @@ namespace Solver2
             }
         }
 
-        // если папка есть, или если не было, но удалось создать - возвращает путь к ней, иначе - базовый путь
-        // вход     базовый путь, имя папки
-        // выход    путь к папке
+        /// <summary>
+        /// если папка есть, или если не было, но удалось создать - возвращает путь к ней, иначе - базовый путь
+        /// </summary>
+        /// <param name="basepath">базовый путь</param>
+        /// <param name="folder">имя папки</param>
+        /// <returns>путь к папке</returns>
         private static string CheckCreateFolder(string basepath, string folder)
         {
             string path = basepath + @"\" + folder;
@@ -98,9 +106,9 @@ namespace Solver2
             return path;
         }
 
-        // инициализирует лог файл, если нету его - создает. в т.ч. необходимые папки
-        // вход     -
-        // выход    -
+        /// <summary>
+        /// инициализирует лог файл, если нету его - создает. в т.ч. необходимые папки
+        /// </summary>
         public static void Init()
         {
             string local_path = Environment.CurrentDirectory;
