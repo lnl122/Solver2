@@ -34,6 +34,7 @@ namespace Solver2
             Program.D.F.Text = mainform_caption;// + " / " + G.username + " / " + G.gameid;
             Program.D.F.StartPosition = FormStartPosition.CenterScreen;
             Program.D.F.AutoSizeMode = AutoSizeMode.GrowOnly;
+            Program.D.F.Icon = Properties.Resources.icon2;
             Program.D.F.SizeChanged += new EventHandler(Event_MainFormChangeSize);
             Program.D.Tabs = new TabControl();
             Program.D.F.Controls.Add(Program.D.Tabs);

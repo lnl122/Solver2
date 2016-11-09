@@ -5,7 +5,12 @@ namespace Solver2
 {
     class ParsePage
     {
-        // вырезает между указанными тегами
+        /// <summary>
+        /// вырезает между указанными тегами
+        /// </summary>
+        /// <param name="g">текст страницы</param>
+        /// <param name="tags">массив тегов</param>
+        /// <returns></returns>
         public static string ParseTags(string g, string[,] tags)
         {
             if (g.Length < 1) { return ""; }

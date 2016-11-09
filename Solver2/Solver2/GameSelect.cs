@@ -33,8 +33,10 @@ namespace Solver2
         private string urlbeg = "http://game.en.cx/UserDetails.aspx?zone=1&tab=1&uid=";
         private string urlend = "&page=1";
 
-        // получает перечень игр
-        // выход - текст страницы
+        /// <summary>
+        /// получает перечень игр
+        /// </summary>
+        /// <returns>текст страницы</returns>
         private string GetUserGames()
         {
             string url1 = urlbeg + userid + urlend;
@@ -82,9 +84,11 @@ namespace Solver2
             return pageSource;
         }
 
-        // из страницы получает необработанный перечень игр
-        // вход - текст страницы
-        // выход - список строк, по одной на игру
+        /// <summary>
+        /// из страницы получает необработанный перечень игр
+        /// </summary>
+        /// <param name="pageSource">текст страницы</param>
+        /// <returns>список строк, по одной на игру</returns>
         private static List<string> GetDirtyListGames(string pageSource)
         {
             string[] ar1 = System.Text.RegularExpressions.Regex.Split(pageSource.Replace(" bg>", "").Replace("\r\n", " ").Replace("</tr> ", "").Replace("</td> ", ""), "<tr");
@@ -100,9 +104,11 @@ namespace Solver2
             return l1;
         }
 
-        // из строк со страницы с перечнем игр (грязный список) делает чистый список только неигранных игр
-        // вход - список грязных строк
-        // выход - список списков строк, описывающих отдельные неигранные игры
+        /// <summary>
+        /// из строк со страницы с перечнем игр (грязный список) делает чистый список только неигранных игр
+        /// </summary>
+        /// <param name="DirtyList">список грязных строк</param>
+        /// <returns>список списков строк, описывающих отдельные неигранные игры</returns>
         private List<List<string>> GetCleanListGames(List<string> DirtyList)
         {
             List<List<string>> res = new List<List<string>>();
@@ -137,9 +143,11 @@ namespace Solver2
             return res;
         }
 
-        // получаем список игр МШ текущего игрока
-        // вход - ид
-        // выход - список спиков из урл, номера, названия игр
+        /// <summary>
+        /// получаем список игр МШ текущего игрока
+        /// выход - список спиков из урл, номера, названия игр
+        /// </summary>
+        /// <param name="logonData">ид логона</param>
         public GameSelect(Logon logonData)
         {
             username = logonData.username;
@@ -157,6 +165,7 @@ namespace Solver2
             List<List<string>> res = GetCleanListGames(DirtyList);
             // в res сейчас перечень игр или пусто. Необходимо пользователю сделать выбор.
 
+
             // форма для ввода данных, создаем
             Form SelectGame = new Form();
             SelectGame.Text = "Выбор игры..";
@@ -165,6 +174,7 @@ namespace Solver2
             SelectGame.Height = 25 * border;
             SelectGame.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             SelectGame.AutoSize = true;
+            SelectGame.Icon = Properties.Resources.icon2;
             Label la = new Label();
             la.Text = "Необходимо двойным кликом выбрать игру из списка\r\nили же ввести ссылку на игру в нижнем поле ввода\r\nи нажать 'Открыть игру'";
             la.Top = 2 * border;
@@ -191,7 +201,7 @@ namespace Solver2
             SelectGame.Controls.Add(lb);
             tbGname = new TextBox();
             tbGname.Text = "";
-            if (Environment.MachineName == "NBIT01") { tbGname.Text = "http://demo.en.cx/gameengines/encounter/play/24889"; } // for TEST
+            if ((Environment.MachineName == "NBIT01")|| (Environment.MachineName == "WS12")) { tbGname.Text = "http://demo.en.cx/gameengines/encounter/play/24889"; } // for TEST
             tbGname.Top = lb.Bottom + 2 * border;
             tbGname.Left = border;
             tbGname.Width = lb.Width - 24 * border;
@@ -307,7 +317,11 @@ namespace Solver2
             
         }
 
-        // парсинг страницы со списком игр
+        /// <summary>
+        /// парсинг страницы со списком игр
+        /// </summary>
+        /// <param name="g">текст страницы</param>
+        /// <returns>текст страницы</returns>
         private static string RemoveTags(string g)
         {
             g = ParsePage.ParseTags(g, tags4list);
@@ -320,7 +334,9 @@ namespace Solver2
                 { "</script>", "</noscript>", "</style>", "-->" , "\""        , "\""      , "\""       , "\""      , "\""      , "'"      , "\""         , "\""   , "\""        }
             };
 
-        // ивент - по кнопке выбора игры
+        /// <summary>
+        /// ивент по кнопке выбора игры
+        /// </summary>
         public static void Event_SelectGameFromList(object sender, EventArgs e)
         {
             ListBox l4 = (ListBox)sender;

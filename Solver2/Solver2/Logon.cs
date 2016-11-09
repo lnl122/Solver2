@@ -6,10 +6,6 @@ using System.Windows.Forms;
 
 namespace Solver2
 {
-    //
-    // public Logon() - форма + авторизация. выход - структура класса
-    //
-
     class Logon
     {
         private int border = 5; // расстояния между элементами форм, константа
@@ -20,7 +16,9 @@ namespace Solver2
         public string password = "";
         public string userid = "";
 
-        // конструктор
+        /// <summary>
+        /// выполняет логон
+        /// </summary>
         public Logon()
         {
             // нужная ветка реестра д.б. в HKCU - //[HKEY_CURRENT_USER\Software\lnl122\solver] //"user"="username" //"pass"="userpassword"
@@ -47,6 +45,7 @@ namespace Solver2
             Login.Height = 25 * border;
             Login.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             Login.AutoSize = true;
+            Login.Icon = Properties.Resources.icon2;
             Label lu = new Label();
             lu.Text = "ник:";
             lu.Top = 2 * border;
