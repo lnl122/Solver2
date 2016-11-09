@@ -113,6 +113,10 @@ namespace Solver2
         // выход - страница от движка
         public static string TryOne(int lvl, string val)
         {
+            if (lvl == 0)
+            {
+                return "";
+            }
             val = val.Replace('ё','е');
             string url = "http://" + gamedomain + "/gameengines/encounter/play/" + gameid + "/?level=" + lvl.ToString();
             if (lvl != lastlevel)

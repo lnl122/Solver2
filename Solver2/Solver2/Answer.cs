@@ -303,23 +303,25 @@ namespace Solver2
         // выход - нет, слово ставиться в очередь
         public static void Add(OneTab T, int priority, string wrd, int i1, int i2 = -1, int i3 = -1)
         {
-            int lvlnum = T.level.number;
-            string wrd2 = SetProtect(wrd, i1, T.sProtect);
-            Answ q1 = new Answ();
-            q1.OT = T;
-            q1.Tab = T.Tab;
-            q1.Sec = T.tbSectors;
-            q1.Bon = T.tbBonuses;
-            q1.Web = T.wbPictures;
-            q1.Txt = T.tbTextHints;
-            q1.wrd = wrd;
-            q1.wrd2 = wrd2;
-            q1.lvlnum = T.level.number;
-            q1.i1 = i1;
-            q1.i2 = i2;
-            q1.i3 = i3;
-            q1.priority = priority;
-            Queue.Add(q1);
+            if ((i1 != 0)&&(i2 != 0)&&(i3 != 0)) {
+                int lvlnum = T.level.number;
+                string wrd2 = SetProtect(wrd, i1, T.sProtect);
+                Answ q1 = new Answ();
+                q1.OT = T;
+                q1.Tab = T.Tab;
+                q1.Sec = T.tbSectors;
+                q1.Bon = T.tbBonuses;
+                q1.Web = T.wbPictures;
+                q1.Txt = T.tbTextHints;
+                q1.wrd = wrd;
+                q1.wrd2 = wrd2;
+                q1.lvlnum = T.level.number;
+                q1.i1 = i1;
+                q1.i2 = i2;
+                q1.i3 = i3;
+                q1.priority = priority;
+                Queue.Add(q1);
+            }
     }
 
         // заглушка для получения списка

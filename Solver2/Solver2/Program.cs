@@ -9,16 +9,18 @@ namespace Solver2
 {
     static class Program
     {
+        // 
+        public static Splash spl;
+
         // структыра основных данных
         public struct Data
         {
-            public AppForm AF;
             public System.Windows.Forms.Form F;
             public System.Windows.Forms.TabControl Tabs;
-            public System.Windows.Forms.TabPage[] Tab;
-            public OneTab[] OneTab;
+            //public System.Windows.Forms.TabPage[] Tab;
+            public System.Collections.Generic.List<OneTab> OneTab;
+            public System.Collections.Generic.List<Level> Lvl;
             public GameSelect Game;
-            public Level[] Lvl;
         }
 
         // основные данные программы
@@ -36,8 +38,8 @@ namespace Solver2
             Log.Write("      ПК: " + Environment.MachineName);
             Log.Write("      " + System.Environment.OSVersion.VersionString + ", " + Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE") + ", ver:" + Environment.Version.ToString() + ", CPU: " + Environment.ProcessorCount.ToString() + ", 64bit:" + Environment.Is64BitOperatingSystem.ToString());
 
-            var q1 = new Splash("1.2.3");
-            q1.ChangeProgress(30, "делаем раз!");
+            //создаём сплеш
+            spl = new Splash(Properties.Resources.version);
 
             // выполняем проверки окружения
             if (!Components.Check())
@@ -45,13 +47,27 @@ namespace Solver2
                 System.Windows.Forms.MessageBox.Show("Не все необхдимые компоненты установлены на ПК.\r\nПроверьте лог-файл.");
                 return;
             }
-            q1.ChangeProgress(60, "делаем два!!!!!!!!!!!!!!");
 
             // инициализируем наши собственные компоненты
             Components.Init();
-            q1.ChangeProgress(100, "все");
 
-            System.Windows.Forms.MessageBox.Show("Типа мы запустились и работаем.");
+            // создаем основную форму
+            spl.ChangeProgress(70, "Создаём форму приложения");
+            AppForm AF = new AppForm();
+
+
+            // создаём пользовательский таб
+            spl.ChangeProgress(70, "Создаём пользовательский уровень");
+            Level userlevel = new Level(D.Game, 0);
+            D.Lvl.Add(userlevel);
+            OneTab OT = new OneTab(D, userlevel);
+            D.OneTab.Add(OT);
+
+            // закрываем сплеш
+            spl.ChangeProgress(100, "Готово!");
+            System.Windows.Forms.Application.Run(D.F);
+
+            //System.Windows.Forms.MessageBox.Show("Типа мы запустились и работаем.");
             /*
             // выполняем логон в системе
             Logon logonData = new Logon();

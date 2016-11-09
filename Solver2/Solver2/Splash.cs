@@ -7,6 +7,9 @@ namespace Solver2
 {
     class Splash
     {
+        // public Splash(string vv)                         - конструктор, на входе - номер версии текстом
+        // public void ChangeProgress(int v, string t = "") - меняет прогресс выполнения и текст
+
         private int border = 5;
 
         private int value = 0;
@@ -30,19 +33,16 @@ namespace Solver2
             F.FormBorderStyle = FormBorderStyle.None;
             F.Size = new System.Drawing.Size(SystemInformation.PrimaryMonitorSize.Width / 4, SystemInformation.PrimaryMonitorSize.Height / 4);
             F.BackgroundImageLayout = ImageLayout.Stretch;
-
-            System.Windows.Forms.PictureBox PictBox = new System.Windows.Forms.PictureBox();
-            PictBox.Load(@"\\alm-dc-02\users\ovsyannikov.anton\Desktop\ENS2.png");
-            System.Drawing.Bitmap Bmp = new System.Drawing.Bitmap(PictBox.Image);
-
-            F.BackgroundImage = Bmp;
+            F.BackgroundImage = Properties.Resources.ENS2;
             L = new Label();
+            L.BackColor = System.Drawing.Color.Green;
             L.Text = text;
             L.Left = border;
             L.Top = F.Height - 5 * border;
             L.Width = F.Width - 2 * border;
             F.Controls.Add(L);
             ver = new Label();
+            ver.BackColor = System.Drawing.Color.Green;
             ver.Text = "ver " + vv;
             ver.Left = border;
             ver.Top = border;

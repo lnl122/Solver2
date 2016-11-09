@@ -64,6 +64,7 @@ namespace Solver2
         public static bool Check()
         {
             // .NET
+            Program.spl.ChangeProgress(5, "Определяем версии .net");
             string DotNetVersions = Registry.GetVersionDotNet();
             Log.Write("check Найденные версии .NET: " + DotNetVersions);
             if (DotNetVersions.IndexOf("v2.0") == -1) { Log.Write("check ERROR: Отсутствует .NET v2.0"); return false; }
@@ -72,6 +73,7 @@ namespace Solver2
             if ((DotNetVersions.IndexOf("v4.5") == -1) && (DotNetVersions.IndexOf("v4.6") == -1)) { Log.Write("check ERROR: Отсутствует .NET v4.5 или v4.6"); return false; }
 
             // MS Word
+            Program.spl.ChangeProgress(10, "Определяем версию Microsoft Word");
             string WordVersion = GetVersionMicrosoftWord();
             if (WordVersion == "") { Log.Write("check ERROR: Отсутствует установленный Microsoft Word"); return false; }
             int ii1 = 0;
@@ -98,6 +100,7 @@ namespace Solver2
             }
 
             // проверка открытия web-ресурсов
+            Program.spl.ChangeProgress(15, "Проверяем возможность открытия веб-ресурсов");
             System.Net.WebClient wc1 = null;
             try { wc1 = new System.Net.WebClient(); } catch { Log.Write("check ERROR: Не удалось создать объект WebClient"); return false; }
             string re1 = "";
@@ -111,6 +114,7 @@ namespace Solver2
             Log.Write("check Все необходимые web-ресурсы открываются успешно");
 
             // все проверки пройдены
+            Program.spl.ChangeProgress(20, "Проверки завершены");
             return true;
         }
 
@@ -119,20 +123,25 @@ namespace Solver2
         /// </summary>
         public static void Init()
         {
+            Program.spl.ChangeProgress(30, "Удаляем старые файлы");
             string DataLocalPath = Environment.CurrentDirectory + @"\Data\";
             string PageLocalPath = Environment.CurrentDirectory + @"\Pages\";
             System.Threading.Tasks.Task<bool> t1 = System.Threading.Tasks.Task<bool>.Factory.StartNew(() => DeleteOldPages(System.IO.Directory.GetFiles(PageLocalPath, "*.http")));
 
+            Program.spl.ChangeProgress(35, "Инициализируем словарь орфографии");
             SpellChecker.Init();
             SpellChecker.LoadDictionary(DataLocalPath + "SpChDict.dat");
 
+            Program.spl.ChangeProgress(40, "Инициализируем словарь ассоциаций");
             Associations.Init();
             Associations.LoadDictionary(DataLocalPath + "AssocDict.dat");
             Associations.LoadDictionaryBad(DataLocalPath + "AssocDictBad.dat");
 
+            Program.spl.ChangeProgress(45, "Загружаем книги");
             Books.Init();
             Books.LoadDictionary(DataLocalPath + "Books.dat");
 
+            Program.spl.ChangeProgress(50, "Запускаем компонент вбиватора");
             Answer.Init();
         }
     }

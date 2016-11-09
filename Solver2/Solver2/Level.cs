@@ -41,7 +41,7 @@ namespace Solver2
         // вход - параметры игры, номер уровня 1..99
         // выход - объект с данными уровня
         // получает сведения об уровне, парсит его код.
-        public Level(GameSelect GameParams, int lvl_number)
+        public Level(GameSelect GameParams = null, int lvl_number = 0)
         {
             Game = GameParams;
             G = GameParams;
@@ -50,7 +50,11 @@ namespace Solver2
             // весь код ниже пока относиться (08.09.16) только к штурмам
 
             number = lvl_number;
-            page = GetPageLevel(lvl_number);
+            page = "";
+            if (GameParams != null)
+            {
+                page = GetPageLevel(lvl_number);
+            } 
             Log.Store("level_clean_" + lvl_number.ToString(), page);
             name = GetLvlName(page);
             isClose = GetLvlClose(page);
