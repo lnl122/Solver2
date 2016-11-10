@@ -190,6 +190,7 @@ namespace Solver2
             }
             cbType.SelectedIndex = 0;
             cbType.SelectedIndexChanged += new EventHandler(Event_Change_cbType);
+            cbType.MaxDropDownItems = 30;
             Tab.Controls.Add(cbType);
 
             iCols = new int[levelUrlsCount];
