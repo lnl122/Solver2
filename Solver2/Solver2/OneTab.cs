@@ -191,6 +191,7 @@ namespace Solver2
             cbType.SelectedIndex = 0;
             cbType.SelectedIndexChanged += new EventHandler(Event_Change_cbType);
             cbType.MaxDropDownItems = 30;
+            cbType.DropDownStyle = ComboBoxStyle.DropDownList;
             Tab.Controls.Add(cbType);
 
             iCols = new int[levelUrlsCount];
@@ -207,6 +208,7 @@ namespace Solver2
             cbImageCuttingMethod.Items.Add("Указан в ручную, равные доли");
             cbImageCuttingMethod.SelectedIndex = 0;
             cbImageCuttingMethod.Visible = false;
+            cbImageCuttingMethod.DropDownStyle = ComboBoxStyle.DropDownList;
             Tab.Controls.Add(cbImageCuttingMethod);
 
             chImageSizeFlag = new CheckBox();
@@ -228,6 +230,7 @@ namespace Solver2
                 for (int i = 1; i <= levelUrlsCount; i++) { cbImageNumber.Items.Add(i.ToString()); }
                 cbImageNumber.SelectedIndex = 0;
             }
+            cbImageNumber.DropDownStyle = ComboBoxStyle.DropDownList;
             cbImageNumber.SelectedIndexChanged += new EventHandler(Event_Change_cbImageNumber);
             Tab.Controls.Add(cbImageNumber);
 
@@ -240,6 +243,7 @@ namespace Solver2
             for(int i=1; i<=10; i++) { cbStrs.Items.Add(i.ToString()); }
             cbStrs.SelectedIndex = 3;
             cbStrs.Visible = false;
+            cbStrs.DropDownStyle = ComboBoxStyle.DropDownList;
             cbStrs.SelectedIndexChanged += new EventHandler(Event_Change_cbStrs);
             Tab.Controls.Add(cbStrs);
 
@@ -252,6 +256,7 @@ namespace Solver2
             for (int i = 1; i <= 10; i++) { cbCols.Items.Add(i.ToString()); }
             cbCols.SelectedIndex = 3;
             cbCols.Visible = false;
+            cbCols.DropDownStyle = ComboBoxStyle.DropDownList;
             cbCols.SelectedIndexChanged += new EventHandler(Event_Change_cbCols);
             Tab.Controls.Add(cbCols);
 
@@ -265,6 +270,7 @@ namespace Solver2
             cbOlimpSize.SelectedIndex = 0;
             iOlimpSize = 0;
             cbOlimpSize.Visible = false;
+            cbOlimpSize.DropDownStyle = ComboBoxStyle.DropDownList;
             cbOlimpSize.SelectedIndexChanged += new EventHandler(Event_Change_cbOlimpSize);
             Tab.Controls.Add(cbOlimpSize);
 
@@ -277,6 +283,7 @@ namespace Solver2
             cbRaschl.SelectedIndex = 0;
             iRaschl = 3;
             cbRaschl.Visible = false;
+            cbRaschl.DropDownStyle = ComboBoxStyle.DropDownList;
             cbRaschl.SelectedIndexChanged += new EventHandler(Event_Change_cbRaschl);
             Tab.Controls.Add(cbRaschl);
 
@@ -289,6 +296,7 @@ namespace Solver2
             cbGybrid.SelectedIndex = 1;
             iGybridMin = 3;
             cbGybrid.Visible = false;
+            cbGybrid.DropDownStyle = ComboBoxStyle.DropDownList;
             cbGybrid.SelectedIndexChanged += new EventHandler(Event_Change_cbGybrid);
             Tab.Controls.Add(cbGybrid);
 
@@ -302,6 +310,7 @@ namespace Solver2
             cbProtect.SelectedIndex = 0;
             Event_Change_cbProtect(null, null);
             cbProtect.Visible = false;
+            cbProtect.DropDownStyle = ComboBoxStyle.DropDownList;
             cbProtect.SelectedIndexChanged += new EventHandler(Event_Change_cbProtect);
             Tab.Controls.Add(cbProtect);
 
