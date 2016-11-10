@@ -9,33 +9,37 @@ namespace Solver2
 {
     class OneTab
     {
+        private static string s_picture_only            = "Картинки(только решить)";
+        private static string s_picture_olimp           = "Олимпийки картинками";
+        private static string s_olimp_only              = "Ассоциации для олимпиек";
+        private static string s_picture_gybrid          = "Гибриды картинками (буКВАс)";
+        private static string s_picture_logogrif        = "* Логогрифы картинками (сон-слон)";
+        private static string s_picture_metagram        = "* Метаграммы картинками (кот-кит)";
+        private static string s_picture_brukva          = "* Брюквы картинками (брюква-буква)";
+        private static string s_picture_matrix          = "* Матрицы картинками";
+        private static string s_picture_slova_ss        = "* Словосочетания сущ+сущ картинками";
+        private static string s_picture_slova_sp        = "* Словосочетания сущ+прил картинками";
+        private static string s_picture_anagram_matrix  = "* Анаграмматрицы картинками";
+        private static string s_picture_association     = "* Ассоциации картинками";
+        private static string s_picture_bruteforce      = "* Брутфорс по картинке";
+        private static string s_raschlenenki            = "Расчленёнки";
+        private static string s_gapoifaka_books         = "ГаПоИФиКа книжная";
+        private static string s_gapoifaka_films         = "ГаПоИФиКа фильмов";
+        private static string s_ledida_books            = "ЛеДиДа книжная";
+        private static string s_ledida_films            = "* ЛеДиДа фильмов";
+        private static string s_text_gybrid             = "* Гибриды текстом (буКВАс)";
+        private static string s_text_logogrif           = "* Логогрифы текстом (сон-слон)";
+        private static string s_text_metagram           = "* Метаграммы текстом (кот-кит)";
+        private static string s_kubray                  = "* Кубрая / Букаря / Яарбук";
+        private static string s_kubray_olimp            = "* Куброолимпийки";
+        private static string s_kubray_gybrid           = "* Куброгибриды (кубрая + гибриды)";
+        private static string s_kubray_3gybrid          = "* Трикуброгибриды (кубрая + тригибрид)";
+
         // типы заданий
-        public string[] TaskTypes = {
-            "Картинки (только решить)",
-            "Олимпийки картинками",
-            "Ассоциации для олимпиек",
-            "Гибриды картинками (буКВАс)",
-            "* Логогрифы картинками (сон-слон)",
-            "* Метаграммы картинками (кот-кит)",
-            "* Брюквы картинками (брюква-буква)",
-            "* Матрицы картинками",
-            "* Словосочетания сущ+сущ картинками",
-            "* Словосочетания сущ+прил картинками",
-            "* Анаграмматрицы картинками",
-            "* Ассоциации картинками",
-            "* Брутфорс по картинке",
-            "Расчленёнки",
-            "ГаПоИФиКа книжная",
-            "ГаПоИФиКа фильмов",
-            "ЛеДиДа книжная",
-            "* ЛеДиДа фильмов",
-            "* Гибриды текстом (буКВАс)",
-            "* Логогрифы текстом (сон-слон)",
-            "* Метаграммы текстом (кот-кит)",
-            "* Кубрая / Букаря / Яарбук",
-            "* Куброолимпийки",
-            "* Куброгибриды (кубрая + гибриды)",
-            "* Трикуброгибриды (кубрая + тригибрид)"
+        public string[] TaskTypes = {s_picture_only, s_picture_olimp, s_olimp_only, s_picture_gybrid, s_picture_logogrif, s_picture_metagram,
+            s_picture_brukva, s_picture_matrix, s_picture_slova_ss, s_picture_slova_sp, s_picture_anagram_matrix, s_picture_association,
+            s_picture_bruteforce, s_raschlenenki, s_gapoifaka_books, s_gapoifaka_films, s_ledida_books, s_ledida_films, s_text_gybrid,
+            s_text_logogrif, s_text_metagram, s_kubray, s_kubray_olimp, s_kubray_gybrid, s_kubray_3gybrid
         };
 
         // constants
@@ -124,6 +128,11 @@ namespace Solver2
         // others
         public bool isPicsSect;
 
+        /// <summary>
+        /// создаёт объект закладки с элементами управления. располагает задания
+        /// </summary>
+        /// <param name="D">глобальная инфа о игре</param>
+        /// <param name="lvl">объект уровня</param>
         public OneTab(Program.Data D, Level lvl)
         {
             level = lvl;
@@ -154,7 +163,7 @@ namespace Solver2
             tbAnswerMulti.Multiline = true;
             tbAnswerMulti.ScrollBars = ScrollBars.Both;
             tbAnswerMulti.Text = "";
-            //tbAnswerMulti.Click += new EventHandler(Event_Click_btAnswer);
+
             Tab.Controls.Add(tbAnswerMulti);
             btAnswerSpace = new Button();
             btAnswerSpace.Text = "\" \" |->";
@@ -441,46 +450,6 @@ namespace Solver2
             sProtect = cbProtect.SelectedItem.ToString();
         }
 
-        private void Event_Click_btSolve(object sender, EventArgs e)
-        {
-            string type = cbType.SelectedItem.ToString();
-            if (type == "Картинки (только решить)")
-            {
-                var R1 = new Picture(this);
-            }
-            if (type == "Олимпийки картинками")
-            {
-                var R1 = new Picture(this);
-                var R2 = new Olimp(this);
-            }
-            if (type == "Ассоциации для олимпиек")
-            {
-                var R2 = new Olimp(this);
-            }
-            if (type == "Гибриды картинками (буКВАс)")
-            {
-                var R1 = new PicsGybrids(this);
-            }
-            if (type == "ГаПоИФиКа книжная")
-            {
-                var R1 = new GapoifikaBooks(this);
-            }
-            if (type == "ЛеДиДа книжная")
-            {
-                var R1 = new LedidaBooks(this);
-            }
-            if (type == "ГаПоИФиКа фильмов")
-            {
-                var R1 = new GapoifikaFilms(this);
-            }
-            if (type == "Расчленёнки")
-            {
-                var R1 = new Raschl(this);
-            }
-            // 
-            btSolve.Enabled = false;
-        }
-
         private void Event_Change_cbImageNumber(object sender, EventArgs e)
         {
             cbCols.SelectedIndex = iCols[cbImageNumber.SelectedIndex] - 1;
@@ -495,7 +464,8 @@ namespace Solver2
                 for (int i = 0; i < iRows.Length; i++) { iRows[i] = cbStrs.SelectedIndex + 1; }
                 lbImageNumber.Enabled = false;
                 cbImageNumber.Enabled = false;
-            } else
+            }
+            else
             {
                 lbImageNumber.Enabled = true;
                 cbImageNumber.Enabled = true;
@@ -507,7 +477,8 @@ namespace Solver2
             if (chImageSizeFlag.Checked == false)
             {
                 iCols[cbImageNumber.SelectedIndex] = cbCols.SelectedIndex + 1;
-            } else
+            }
+            else
             {
                 for (int i = 0; i < iCols.Length; i++) { iCols[i] = cbCols.SelectedIndex + 1; }
             }
@@ -524,7 +495,53 @@ namespace Solver2
                 for (int i = 0; i < iRows.Length; i++) { iRows[i] = cbStrs.SelectedIndex + 1; }
             }
         }
+        
+        /// <summary>
+                 /// ивент по кнопке "начать решение"
+                 /// </summary>
+        private void Event_Click_btSolve(object sender, EventArgs e)
+        {
+            string type = cbType.SelectedItem.ToString();
+            if (type == s_picture_only)
+            {
+                var R1 = new Picture(this);
+            }
+            if (type == s_picture_olimp)
+            {
+                var R1 = new Picture(this);
+                var R2 = new Olimp(this);
+            }
+            if (type == s_olimp_only)
+            {
+                var R2 = new Olimp(this);
+            }
+            if (type == s_picture_gybrid)
+            {
+                var R1 = new PicsGybrids(this);
+            }
+            if (type == s_gapoifaka_books)
+            {
+                var R1 = new GapoifikaBooks(this);
+            }
+            if (type == s_ledida_books)
+            {
+                var R1 = new LedidaBooks(this);
+            }
+            if (type == s_gapoifaka_films)
+            {
+                var R1 = new GapoifikaFilms(this);
+            }
+            if (type == s_raschlenenki)
+            {
+                var R1 = new Raschl(this);
+            }
+            // 
+            btSolve.Enabled = false;
+        }
 
+        /// <summary>
+        /// ивент при изменении типа задания. перерисовывает элементы управления
+        /// </summary>
         private void Event_Change_cbType(object sender, EventArgs e)
         {
             lbImageCuttingMethod.Visible = false;
@@ -552,7 +569,7 @@ namespace Solver2
             string type = cbType.SelectedItem.ToString();
 
             //
-            if (type == "Ассоциации для олимпиек")
+            if (type == s_olimp_only)
             {
                 List<object> objs = new List<object>();
                 objs.Add(lbProtect);
@@ -564,7 +581,7 @@ namespace Solver2
                 ShowSettingsOnScreen(objs, SettingsPositions);
                 isPicsSect = true;
             }
-            if ((type == "Картинки (только решить)") || (type == "Олимпийки картинками"))
+            if ((type == s_picture_only) || (type == s_picture_olimp))
             {
                 List<object> objs = new List<object>();
                 objs.Add(lbImageCuttingMethod);
@@ -583,7 +600,7 @@ namespace Solver2
                 ShowSettingsOnScreen(objs, SettingsPositions);
                 isPicsSect = true;
             }
-            if (type == "Гибриды картинками (буКВАс)")
+            if (type == s_picture_gybrid)
             {
                 List<object> objs = new List<object>();
                 objs.Add(lbImageCuttingMethod);
@@ -604,14 +621,14 @@ namespace Solver2
                 ShowSettingsOnScreen(objs, SettingsPositions);
                 //isPicsSect = true;
             }
-            if ((type == "ГаПоИФиКа фильмов") || type == ("ГаПоИФиКа книжная") || (type == "ЛеДиДа книжная"))
+            if ((type == s_gapoifaka_books) || type == (s_gapoifaka_films) || (type == s_ledida_books))
             {
                 List<object> objs = new List<object>();
                 objs.Add(lbSolve);
                 objs.Add(btSolve);
                 ShowSettingsOnScreen(objs, SettingsPositions);
             }
-            if (type == "Расчленёнки")
+            if (type == s_raschlenenki)
             {
                 List<object> objs = new List<object>();
                 objs.Add(lbRaschl);
@@ -625,7 +642,11 @@ namespace Solver2
 
         }
 
-        // определение верней границы положения объектов ГУИ
+        /// <summary>
+        /// установка видимости набора объектов управления, расположение их последовательно по вертикали
+        /// </summary>
+        /// <param name="objs">список элементов управления</param>
+        /// <param name="sp2">начальная координата по высоте</param>
         private void ShowSettingsOnScreen(List<object> objs, int sp2)
         {
             int sp = sp2;
@@ -641,7 +662,9 @@ namespace Solver2
             }
         }
 
-        // изменение размера всех объектов ГУИ
+        /// <summary>
+        /// ивент - изменение размера всех объектов ГУИ
+        /// </summary>
         public void Event_ChangeSize(object sender, EventArgs e)
         {
             int width = Program.D.Tabs.Width - 2 * border;
@@ -775,7 +798,12 @@ namespace Solver2
             tbBonuses.Height = tcTabText.Width - 3 * border;
         }
 
-        // подготовка мульти-ответа -- убираем все символы до указанного ( ":" / "." / " ")
+        /// <summary>
+        /// ивент на кнопки - подготовка мульти-ответа -- убираем все символы до указанного ( ":" / "." / " ")
+        /// </summary>
+        /// <param name="text">текст мультиответа</param>
+        /// <param name="v">символ, до которого всё убирается ( ":" / "." / " ")</param>
+        /// <returns>текст с разделителем \r\n</returns>
         private string RemoveCharsBefore(string text, string v)
         {
             string res = "";
