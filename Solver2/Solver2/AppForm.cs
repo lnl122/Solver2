@@ -30,8 +30,8 @@ namespace Solver2
         public AppForm()
         {
             Program.D.F = new Form();
-            Program.D.F.Size = new Size(SystemInformation.PrimaryMonitorSize.Width / 2, SystemInformation.PrimaryMonitorSize.Height / 2);
-            Program.D.F.Text = mainform_caption;// + " / " + G.username + " / " + G.gameid;
+            Program.D.F.Size = new Size(SystemInformation.PrimaryMonitorSize.Width / 4 * 3, SystemInformation.PrimaryMonitorSize.Height / 4 * 3);
+            Program.D.F.Text = mainform_caption;
             Program.D.F.StartPosition = FormStartPosition.CenterScreen;
             Program.D.F.AutoSizeMode = AutoSizeMode.GrowOnly;
             Program.D.F.Icon = Properties.Resources.icon2;
@@ -140,7 +140,7 @@ namespace Solver2
             Program.D.Tabs.Left = border;
             Program.D.Tabs.Top = border;
             Program.D.Tabs.Width= Program.D.F.Width - 5 * border;
-            Program.D.Tabs.Height = Program.D.F.Height - 9 * border;
+            Program.D.Tabs.Height = Program.D.F.Height - 13 * border;
         }
 
     }

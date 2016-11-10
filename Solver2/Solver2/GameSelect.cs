@@ -25,6 +25,7 @@ namespace Solver2
         public string gamedomain = "";
         public string gameid = "";
         public bool isStorm = false;
+        public bool isBrain = false;
         public int gamelevels = 0;
 
         private static string[] g_names;
@@ -32,6 +33,12 @@ namespace Solver2
 
         private string urlbeg = "http://game.en.cx/UserDetails.aspx?zone=1&tab=1&uid=";
         private string urlend = "&page=1";
+
+        private static string[,] tags4list = {
+                { "<script"  , "<noscript>" , "<style>" , "<!--", "bgcolor=\"", "align=\"", "nowrap=\"", "style=\"", "class=\"", "class='", "onclick=\"" , "id=\"", "height=\"" },
+                { "</script>", "</noscript>", "</style>", "-->" , "\""        , "\""      , "\""       , "\""      , "\""      , "'"      , "\""         , "\""   , "\""        }
+            };
+
 
         /// <summary>
         /// получает перечень игр
@@ -144,28 +151,12 @@ namespace Solver2
         }
 
         /// <summary>
-        /// получаем список игр МШ текущего игрока
-        /// выход - список спиков из урл, номера, названия игр
+        /// создаём форму для выбора игры
         /// </summary>
-        /// <param name="logonData">ид логона</param>
-        public GameSelect(Logon logonData)
+        /// <param name="res">список списков строк с играми</param>
+        /// <returns></returns>
+        private Form CreateForm(List<List<string>> res)
         {
-            username = logonData.username;
-            password = logonData.password;
-            userid = logonData.userid;
-
-            isSuccessful = true;
-            string pageSource = GetUserGames();
-            if (isSuccessful == false)
-            {
-                MessageBox.Show("Не удалось прочитать список игр, подробная причина указана в логе..");
-                return;
-            }
-            List<string> DirtyList = GetDirtyListGames(pageSource);
-            List<List<string>> res = GetCleanListGames(DirtyList);
-            // в res сейчас перечень игр или пусто. Необходимо пользователю сделать выбор.
-
-
             // форма для ввода данных, создаем
             Form SelectGame = new Form();
             SelectGame.Text = "Выбор игры..";
@@ -201,7 +192,7 @@ namespace Solver2
             SelectGame.Controls.Add(lb);
             tbGname = new TextBox();
             tbGname.Text = "";
-            if ((Environment.MachineName == "NBIT01")|| (Environment.MachineName == "WS12")) { tbGname.Text = "http://demo.en.cx/gameengines/encounter/play/24889"; } // for TEST
+            if ((Environment.MachineName == "NBIT01") || (Environment.MachineName == "WS12")) { tbGname.Text = "http://demo.en.cx/gameengines/encounter/play/24889"; } // for TEST
             tbGname.Top = lb.Bottom + 2 * border;
             tbGname.Left = border;
             tbGname.Width = lb.Width - 24 * border;
@@ -214,6 +205,76 @@ namespace Solver2
             blok.DialogResult = DialogResult.OK;
             SelectGame.AcceptButton = blok;
             SelectGame.Controls.Add(blok);
+            return SelectGame;
+        }
+
+        /// <summary>
+        /// получение ид игры и её домена из ссылки
+        /// </summary>
+        /// <param name="url">урл, указанный пользвоателем при выборе игры</param>
+        private void GetDomainAndIdGame(string url)
+        {
+            // попробуем авторизоваться в игре - сначала разберем полученную строку
+            if (url == "") { isSuccessful = false; MessageBox.Show("Не выбрана игра вообще.."); return; }
+            string url2 = url;
+            if (url2.Substring(0, 7) != "http://") { isSuccessful = false; MessageBox.Show("Указана не ссылка.."); return; }
+            url2 = url.Replace("http://", "");
+            int ii1 = url2.IndexOf("/"); if (ii1 == -1) { isSuccessful = false; MessageBox.Show("указан только хост.."); return; }
+            gamedomain = url2.Substring(0, ii1);
+            url2 = url2.Substring(ii1 + 1);
+            if (url2.IndexOf("gameengines/encounter/play/") != -1)
+            {
+                ii1 = url2.IndexOf("/?level="); if (ii1 != -1) { url2 = url2.Substring(0, ii1); }
+                gameid = url2.Substring(url2.LastIndexOf("/") + 1);
+            }
+            else
+            {
+                if (url2.IndexOf("GameDetails.aspx?gid=") != -1) { gameid = url2.Substring(url2.LastIndexOf("=") + 1); }
+                else { isSuccessful = false; MessageBox.Show("Ссылку на игру не удалось понять.."); return; } // ни один из форматов ссылок не подошел
+            }
+        }
+
+        /// <summary>
+        /// получает игру по домену и ид, выполняет базовый парсинг страницы
+        /// </summary>
+        /// <param name="gamedomain">домен</param>
+        /// <param name="gameid">ид игры</param>
+        /// <returns>код страницы</returns>
+        private string GetAndParseGamePage(string gamedomain, string gameid)
+        {
+            string ps3 = Engine.GetPage("http://" + gamedomain + "/GameDetails.aspx?gid=" + gameid);
+            string ps4 = RemoveTags(ps3).ToLower().Replace("\r\n", "");
+            ps4 = ps4.Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
+            ps4 = ps4.Replace(" >", ">").Replace(" <", "<").Replace("< ", "<").Replace("> ", ">");
+            string ps5 = ps4.Replace("<span>", "").Replace("</span>", "");
+            return ps5;
+        }
+
+        /// <summary>
+        /// получаем список игр МШ текущего игрока
+        /// выход - список спиков из урл, номера, названия игр
+        /// </summary>
+        /// <param name="logonData">ид логона</param>
+        public GameSelect(Logon logonData)
+        {
+            // перенесем авторизацию
+            username = logonData.username;
+            password = logonData.password;
+            userid = logonData.userid;
+
+            isSuccessful = true;
+            string pageSource = GetUserGames();
+            if (isSuccessful == false)
+            {
+                MessageBox.Show("Не удалось прочитать список игр, подробная причина указана в логе..");
+                return;
+            }
+            List<string> DirtyList = GetDirtyListGames(pageSource);
+            List<List<string>> res = GetCleanListGames(DirtyList);
+            // в res сейчас перечень игр или пусто. Необходимо пользователю сделать выбор.
+
+            // форма для ввода данных, создаем
+            Form SelectGame = CreateForm(res);
 
             // выберем игру
             string page = "";
@@ -222,48 +283,26 @@ namespace Solver2
             {
                 if (SelectGame.ShowDialog() == DialogResult.OK)
                 {
-                    string url = tbGname.Text;
-                    // попробуем авторизоваться в игре - сначала разберем полученную строку
-                    if (url == "") { isSuccessful = false; MessageBox.Show("Не выбрана игра вообще.."); continue; }
-                    string url2 = url;
-                    if (url2.Substring(0, 7) != "http://") { isSuccessful = false; MessageBox.Show("Указана не ссылка.."); continue; }
-                    url2 = url.Replace("http://", "");
-                    int ii1 = url2.IndexOf("/"); if (ii1 == -1) { isSuccessful = false; MessageBox.Show("указан только хост.."); continue; }
-                    gamedomain = url2.Substring(0, ii1);
-                    url2 = url2.Substring(ii1 + 1);
-                    if (url2.IndexOf("gameengines/encounter/play/") != -1)
-                    {
-                        ii1 = url2.IndexOf("/?level="); if (ii1 != -1) { url2 = url2.Substring(0, ii1); }
-                        gameid = url2.Substring(url2.LastIndexOf("/") + 1);
-                    }
-                    else
-                    {
-                        if (url2.IndexOf("GameDetails.aspx?gid=") != -1) { gameid = url2.Substring(url2.LastIndexOf("=") + 1); }
-                        else { isSuccessful = false; MessageBox.Show("Ссылку на игру не удалось понять.."); continue; } // ни один из форматов ссылок не подошел
-                    }
-                    //MessageBox.Show(url + "\r\n" + dGame.game_domain + "\r\n" + dGame.game_id);
+                    isSuccessful = true;
+                    GetDomainAndIdGame(tbGname.Text);
+                    if (isSuccessful == false) { continue; }
+
                     // если авторизовались успешно - запоминаем игру
                     string ps2 = Engine.Logon("http://" + gamedomain + "/Login.aspx", username, password);
                     if (ps2.IndexOf("action=logout") != -1)
                     {
                         // прочесть игру и узнать её параметры
-                        string ps3 = Engine.GetPage("http://" + gamedomain + "/GameDetails.aspx?gid=" + gameid);
-                        string ps4 = RemoveTags(ps3).ToLower().Replace("\r\n", "");
-                        ps4 = ps4.Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
-                        ps4 = ps4.Replace(" >", ">").Replace(" <", "<").Replace("< ", "<").Replace("> ", ">");
-                        string ps5 = ps4.Replace("<span>", "").Replace("</span>", "");
-                        int fr = ps5.IndexOf("игра:мозговой штурм");
-                        int fe = ps5.IndexOf("covering zone:brainstorm");
-                        if (fr + fe < 0) { isSuccessful = false; MessageBox.Show("Это не МШ.."); continue; }
-                        isStorm = true;
-                        fr = ps5.IndexOf("<td>последовательность прохождения:штурмовая</td>");
-                        fe = ps5.IndexOf("<td>the levels passing sequence:storm</td>");
-                        if (fr + fe < 0) { isStorm = false; }
+                        string ps5 = GetAndParseGamePage(gamedomain, gameid);
+                        GetGameType(ps5);
+                        if (!isBrain) { isSuccessful = false; MessageBox.Show("Это не МШ.."); continue; }
 
                         // *** потом убрать. заглушка для потенциальных линейных игр МШ
                         if (!isStorm) { isSuccessful = false; MessageBox.Show("Последовательность не штурмовая.."); continue; }
 
-                        page = Engine.GetPage("http://" + gamedomain + "/gameengines/encounter/play/" + gameid);
+                        // прочитаем игру
+                        string game_url = "http://" + gamedomain + "/gameengines/encounter/play/" + gameid;
+                        page = Engine.GetPage(game_url);
+                        page = page.ToLower();
                         if (page.IndexOf("class=\"gamecongratulation\"") != -1) { isSuccessful = false; MessageBox.Show("Эта игра уже закончилась.."); continue; }
                         if (page.IndexOf("<span id=\"animate\">поздравляем!!!</span>") != -1) { isSuccessful = false; MessageBox.Show("Эта игра уже закончилась.."); continue; }
                         if (page.IndexOf("капитан команды не включил вас в состав для участия в этой игре.") != -1) { isSuccessful = false; MessageBox.Show("Капитан команды не включил вас в состав для участия в этой игре.."); continue; }
@@ -272,26 +311,19 @@ namespace Solver2
                         if (page.IndexOf("ошибка. состав вашей команды превышает") != -1) { isSuccessful = false; MessageBox.Show("Состав вашей команды превышает установленный максимум.."); continue; }
 
                         //определим количтсво уровней
-                        gamelevels = 0;
-                        string q_lvl = page.Substring(page.IndexOf("<body")).Replace("\r", "").Replace("\n", "").Replace("\t", "");
-                        string t1 = "<ul class=\"section level\">";
-                        string t2 = "</ul>";
-                        int i2 = q_lvl.IndexOf(t1);
-                        if (i2 != -1)
+                        gamelevels = GetLevelsCount(page);
+                        if ((isStorm == true) && (gamelevels == 0))
                         {
-                            q_lvl = q_lvl.Substring(i2 + t1.Length);
-                            q_lvl = q_lvl.Substring(0, q_lvl.IndexOf(t2));
-                            i2 = q_lvl.LastIndexOf("<i>");
-                            q_lvl = q_lvl.Substring(i2 + 3);
-                            q_lvl = q_lvl.Substring(0, q_lvl.IndexOf("</i>"));
-                            if (Int32.TryParse(q_lvl, out i2)) { gamelevels = i2; }
-                            if (gamelevels == 0) { isSuccessful = false; MessageBox.Show("Не удалось определить количество уровней.."); continue; }
+                            isSuccessful = false; MessageBox.Show("Выходит что штурмовая последовательность с 0 уровнями, фигня.."); continue;
                         }
-                        if ((isStorm == true) && (gamelevels == 0)) { isSuccessful = false; MessageBox.Show("Выходит что штурмовая последовательность с 0 уровнями, фигня.."); continue; }
+
                         // поставим флаг выхода
                         fl = false;
+
                         // в лог
                         Log.Write("en.cx Открыта игра " + gameid);
+                        // отобразим на форме
+                        Program.D.F.Text = Program.D.F.Text + " / " + game_url;
                         isSuccessful = true;
                     }
                     else
@@ -309,12 +341,60 @@ namespace Solver2
                     isSuccessful = false;
                 }
             } // выход только если fl = false -- это или отказ польователя в диалоге, или если нажато ОК - проверка пройдена
+
             // смотрим на page - если не пусто - то подключились
             if (isSuccessful)
             {
                 Engine.SetId(userid, username, password, gameid, gamedomain, gamelevels);
             }
             
+        }
+
+        /// <summary>
+        /// определяем количество уровней
+        /// </summary>
+        /// <param name="page">код страницы</param>
+        /// <returns>количество уровней</returns>
+        private int GetLevelsCount(string page)
+        {
+            int res = 0;
+            if (isStorm)
+            {
+                string q_lvl = page.Substring(page.IndexOf("<body")).Replace("\r", "").Replace("\n", "").Replace("\t", "");
+                string t1 = "<ul class=\"section level\">";
+                string t2 = "</ul>";
+                int i2 = q_lvl.IndexOf(t1);
+                if (i2 != -1)
+                {
+                    q_lvl = q_lvl.Substring(i2 + t1.Length);
+                    q_lvl = q_lvl.Substring(0, q_lvl.IndexOf(t2));
+                    i2 = q_lvl.LastIndexOf("<i>");
+                    q_lvl = q_lvl.Substring(i2 + 3);
+                    q_lvl = q_lvl.Substring(0, q_lvl.IndexOf("</i>"));
+                    if (Int32.TryParse(q_lvl, out i2)) { res = i2; }
+                }
+            }
+            else
+            {
+                res = 0;
+            }
+            return res;
+        }
+
+        /// <summary>
+        /// определяем тип игры и последовательность
+        /// </summary>
+        /// <param name="ps5">текст страницы</param>
+        private void GetGameType(string ps5)
+        {
+            isBrain = true;
+            int fr = ps5.IndexOf("игра:мозговой штурм");
+            int fe = ps5.IndexOf("covering zone:brainstorm");
+            if (fr + fe < 0) { isBrain = false; }
+            isStorm = true;
+            fr = ps5.IndexOf("<td>последовательность прохождения:штурмовая</td>");
+            fe = ps5.IndexOf("<td>the levels passing sequence:storm</td>");
+            if (fr + fe < 0) { isStorm = false; }
         }
 
         /// <summary>
@@ -328,11 +408,6 @@ namespace Solver2
             g = g.Replace("&nbsp;", " ").Replace("&quot;", "\"").Replace("\t", " ").Replace("\n", " ").Replace("\r", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
             return g;
         }
-
-        private static string[,] tags4list = {
-                { "<script"  , "<noscript>" , "<style>" , "<!--", "bgcolor=\"", "align=\"", "nowrap=\"", "style=\"", "class=\"", "class='", "onclick=\"" , "id=\"", "height=\"" },
-                { "</script>", "</noscript>", "</style>", "-->" , "\""        , "\""      , "\""       , "\""      , "\""      , "'"      , "\""         , "\""   , "\""        }
-            };
 
         /// <summary>
         /// ивент по кнопке выбора игры
