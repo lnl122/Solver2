@@ -20,9 +20,12 @@ namespace Solver2
             public int[] num;
         }                                             // струкрура данных для одной строчки расчлененок
 
-        // решает одну расчлененку, это уже отдельный поток
-        // вход - строка в формате "строитель(3)блеф(2)картон(2)
-        // выход фиктивный
+        /// <summary>
+        /// решает одну расчлененку, это уже отдельный поток
+        /// </summary>
+        /// <param name="s1">строка в формате "строитель(3)блеф(2)картон(2)</param>
+        /// <param name="slov">количество слов</param>
+        /// <returns></returns>
         private List<string> ProcessOne(string s1, int slov)
         {
             List<string> res = new List<string>();
@@ -36,9 +39,12 @@ namespace Solver2
             return res;
         }
 
-        // добавляет необходимое число пробелов в получившиеся слова
-        // вход - массив слов
-        // выход - список слов с пробелами, если они нужны
+        /// <summary>
+        /// добавляет необходимое число пробелов в получившиеся слова
+        /// </summary>
+        /// <param name="w">массив слов</param>
+        /// <param name="s">кол-во слов (для пробелов)</param>
+        /// <returns>список слов с пробелами, если они нужны</returns>
         private List<string> Spaces(string[] w, int s)
         {
             List<string> res = new List<string>();
@@ -90,9 +96,11 @@ namespace Solver2
             return res;
         }
 
-        // готовит набор вероятных слов
-        // вход - структура расчлененки
-        // выход - массив слов
+        /// <summary>
+        /// готовит набор вероятных слов
+        /// </summary>
+        /// <param name="d">структура расчлененки</param>
+        /// <returns>массив слов</returns>
         private string[] Transposition(OneStr d)
         {
             if (d.num.Length == 0) { return new string[0]; }
@@ -134,9 +142,11 @@ namespace Solver2
             return allwrds;
         }
 
-        // готовит структуру слов в массива для решения
-        // вход - строка, число слов
-        // выход - структура из двух массивов
+        /// <summary>
+        /// готовит структуру слов в массива для решения
+        /// </summary>
+        /// <param name="s1">строка, число слов</param>
+        /// <returns>структура из двух массивов</returns>
         private OneStr Prepare(string s1)
         {
             OneStr res = new OneStr();
@@ -159,9 +169,12 @@ namespace Solver2
             return res;
         }
 
-        // нормализует входные данные в формат "строитель(3)блеф(2)картон(2)#жироприказ(4)слюда(2)чемодан(2)гарнир(2)лезвие(1)#житель(3)тепло(2)рогожа(3)мрак(2)мозг(1)карман(2)##"
-        // вход - строка
-        // выход - нормализованная строка или пустая - если некорректный формат
+        /// <summary>
+        /// нормализует входные данные в формат
+        /// "строитель(3)блеф(2)картон(2)#жироприказ(4)слюда(2)чемодан(2)гарнир(2)лезвие(1)#житель(3)тепло(2)рогожа(3)мрак(2)мозг(1)карман(2)##"
+        /// </summary>
+        /// <param name="d">строка</param>
+        /// <returns>нормализованная строка или пустая - если некорректный формат</returns>
         private string Normalize(string d)
         {
             string t0 = d.ToLower().Replace(" ", "").Replace(",", "").Replace("\r\n", "#").Replace("###", "##").Replace("###", "##").Replace("###", "##").Replace("###", "##");
@@ -195,13 +208,17 @@ namespace Solver2
             return t0; // or "" above by text
         }                   // нормализация вида задачи
 
-        // решение расчлененок
+        /// <summary>
+        /// решение расчлененок
+        /// </summary>
+        /// <param name="T">таб</param>
+        /// <returns>true</returns>
         public bool Process(OneTab T)
         {
             OT = T;
             task = OT.tbTextTask.Text;
             slov = OT.iRaschl;
-
+            string resout = "";
             string norm = Normalize(task);
             string[] ar1 = norm.Split('#');
 
@@ -216,11 +233,29 @@ namespace Solver2
             // дождаться выполнения потоков
             Task.WaitAll(Tasks2.ToArray());
 
+            // собираем результаты
+            List<string> SolvedWords = new List<string>();
+            foreach (Task<List<string>> t8 in Tasks2)
+            {
+                List<string> r8 = t8.Result;
+                SolvedWords.AddRange(r8);
+                SolvedWords.Add("");
+            }
+            foreach (string s1 in SolvedWords)
+            {
+                resout = resout + s1 + "\r\n";
+            }
+
             T.tbSectors.Invoke(new Action(() => { T.btSolve.Enabled = true; }));
+            T.tbTextHints.Invoke(new Action(() => { T.tbTextHints.Text = resout; }));
+            T.tcTabText.Invoke(new Action(() => { T.tcTabText.SelectTab(1); }));
             return true;
         }
 
-        // создание потока для расчлененок
+        /// <summary>
+        /// создание потока для расчлененок
+        /// </summary>
+        /// <param name="T">таб</param>
         public Raschl(OneTab T)
         {
             Log.Write("Rasch Начали решать расчленки\r\n.\r\n");

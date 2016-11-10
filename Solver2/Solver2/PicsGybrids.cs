@@ -15,11 +15,21 @@ namespace Solver2
     class PicsGybrids
     {
         public OneTab OT;
-        // ищем ответ по двум спискам слов
-        // вход - список, список, номер, номер, минимальная длина пересечения, приоритет
-        // выхода нет - передаются во вбиватор
-        private static void FindGybrids(OneTab OT, List<string> w1, List<string> w2, int i, int j, int min, int prior)
+
+        /// <summary>
+        /// ищем гибриды по двум спискам слов
+        /// </summary>
+        /// <param name="OT">таб</param>
+        /// <param name="w1">список1</param>
+        /// <param name="w2">список2</param>
+        /// <param name="i">номер первого слова</param>
+        /// <param name="j">номер второго слова</param>
+        /// <param name="min">минимальное пересечение, букв</param>
+        /// <param name="prior">приоритет</param>
+        /// <returns>строка ответов с разделителем \r\n</returns>
+        private static string FindGybrids(OneTab OT, List<string> w1, List<string> w2, int i, int j, int min, int prior)
         {
+            string r2 = "";
             foreach (string s1 in w1)
             {
                 foreach (string s2 in w2)
@@ -35,16 +45,23 @@ namespace Solver2
                         {
                             string ans = s2.Substring(0, s2.Length - k) + s1;
                             Answer.Add(OT, prior, ans, i, j);
+                            r2 = r2 + ans + "\r\n";
                         }
                     }
                 }
             }
+            return r2;
         }
 
-        // распознание и решение гибридов картинок
+        /// <summary>
+        /// распознание и решение гибридов картинок
+        /// </summary>
+        /// <param name="T">таб</param>
+        /// <returns>true</returns>
         public bool Process(OneTab T)
         {
             OT = T;
+            string resout = "";
 
             // создаем массив путей из больших картинок
             string[] SmallImagePath = Image.GetSmallImagePathes(T, T.level.urls, T.iRows, T.iCols);
@@ -75,7 +92,8 @@ namespace Solver2
                     {
                         if ((w1.all_base != null) && (w2.all_base != null))
                         {
-                            FindGybrids(T, w1.all_base, w2.all_base, i, j, min, 3);
+                            string resout2 = FindGybrids(T, w1.all_base, w2.all_base, i, j, min, 3);
+                            resout = resout + resout2 + "\r\n";
                             /*
                             List<string> ls1 = new List<string>();
                             List<string> ls2 = new List<string>();
@@ -86,23 +104,30 @@ namespace Solver2
                             ls1 = Words.KillDupesAndRange(ls1);
                             ls2 = Words.KillDupesAndRange(ls2);
                             FindGybrids(T, ls1, ls2, i, j, min, 4);
+
+                            иначе получаем чрезмерно много вариантов
                             */
                         }
                     }
-
                     //List<string> ass1 = Words.KillDupesAndRange(Associations.Get(ls1));
                     //List<string> ass2 = Words.KillDupesAndRange(Associations.Get(ls2));
                     //FindGybrids(T, ass1, ass2, i, j, min, 5);
+                    //иначе получаем чрезмерно много вариантов
 
                 }
             }
 
             T.tbSectors.Invoke(new Action(() => { T.btSolve.Enabled = true; }));
+            T.tbTextHints.Invoke(new Action(() => { T.tbTextHints.Text = resout; }));
+            T.tcTabText.Invoke(new Action(() => { T.tcTabText.SelectTab(1); }));
 
             return true;
         }
 
-        // создание потока
+        /// <summary>
+        /// создание потока
+        /// </summary>
+        /// <param name="T">таб</param>
         public PicsGybrids(OneTab T)
         {
             if (T.cbImageCuttingMethod.SelectedItem.ToString() == "Указан в ручную, равные доли")

@@ -17,11 +17,16 @@ namespace Solver2
         OneTab OT;
         string task;
 
-        // решение гапоифики фильмов
+        /// <summary>
+        /// решение гапоифики
+        /// </summary>
+        /// <param name="T">таб</param>
+        /// <returns>true</returns>
         public bool Process(OneTab T)
         {
             OT = T;
             task = OT.tbTextTask.Text;
+            string resout = "";
             string[] ar1 = System.Text.RegularExpressions.Regex.Split(task, "\r\n");
             foreach (string s1 in ar1)
             {
@@ -66,17 +71,25 @@ namespace Solver2
                         if (nn == mask)
                         {
                             Answer.Add(T, 3, n, -1);
+                            resout = resout + n + "\r\n";
                         }
                     }
                 }
+                resout = resout + "\r\n";
             }
 
             T.tbSectors.Invoke(new Action(() => { T.btSolve.Enabled = true; }));
+            T.tbTextHints.Invoke(new Action(() => { T.tbTextHints.Text = resout; }));
+            T.tcTabText.Invoke(new Action(() => { T.tcTabText.SelectTab(1); }));
             return true;
         }
 
-        // убирает цифры в скобках из строки
-        // например: Название(2016)Текст -> НазваниеТекст
+        /// <summary>
+        /// убирает цифры в скобках из строки
+        /// например: Название(2016)Текст -> НазваниеТекст
+        /// </summary>
+        /// <param name="t2">название фильма</param>
+        /// <returns>название фильма без скобок</returns>
         private string RemoveYearBrackets(string t2)
         {
             string t = "  " + t2 + "  ";
@@ -98,7 +111,10 @@ namespace Solver2
             return res;
         }
 
-        // создание потока для гапоифики фильмов
+        /// <summary>
+        /// создание потока для гапоифики фильмов
+        /// </summary>
+        /// <param name="T">таб</param>
         public GapoifikaFilms(OneTab T)
         {
             Log.Write("gaF Начали решать гапоифику по фильмам\r\n.\r\n");
