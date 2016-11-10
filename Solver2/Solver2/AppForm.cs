@@ -23,6 +23,10 @@ namespace Solver2
         private string mtGameLogon = "Логон в движке";
         private string mtGameSelect = "Выбор и подключение к игре";
         private string mtGameExit = "Выход";
+        private string mtAbout = "О программе";
+        private string mtAboutPage = "Перейти на страницу проекта";
+        private string mtAboutNewBug = "Я нашел баг! У меня новая идея! хочу сообщить!";
+        private string mtAboutManual = "Документация";
 
         /// <summary>
         /// конструктор основной формы
@@ -58,7 +62,43 @@ namespace Solver2
             mGameExit.Click += new EventHandler(mGameExitClick);
             mGame.MenuItems.Add(mGameExit);
 
+            MenuItem mAbout = new MenuItem(mtAbout);
+            Program.D.F.Menu.MenuItems.Add(mAbout);
+            MenuItem mAboutPage = new MenuItem(mtAboutPage);
+            mAboutPage.Click += new EventHandler(mAboutPageClick);
+            mAbout.MenuItems.Add(mAboutPage);
+            MenuItem mAboutNewBug = new MenuItem(mtAboutNewBug);
+            mAboutNewBug.Click += new EventHandler(mAboutNewBugClick);
+            mAbout.MenuItems.Add(mAboutNewBug);
+            MenuItem mAboutManual = new MenuItem(mtAboutManual);
+            mAboutManual.Click += new EventHandler(mAboutManualClick);
+            mAbout.MenuItems.Add(mAboutManual);
+
             Event_MainFormChangeSize(null, null);
+        }
+
+        /// <summary>
+        /// ивент - клик меню - Документация
+        /// </summary>
+        private void mAboutManualClick(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/lnl122/Solver2/blob/master/docs/index.md");
+        }
+
+        /// <summary>
+        /// ивент - клик меню - Новый баг/жалоба
+        /// </summary>
+        private void mAboutNewBugClick(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/lnl122/Solver2/issues/new");
+        }
+
+        /// <summary>
+        /// ивент - клик меню - О программе
+        /// </summary>
+        private void mAboutPageClick(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/lnl122/Solver2/blob/master/README.md");
         }
 
         /// <summary>
