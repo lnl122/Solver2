@@ -92,7 +92,11 @@ namespace Solver2
                     {
                         if ((w1.all_base != null) && (w2.all_base != null))
                         {
-                            string resout2 = FindGybrids(T, w1.all_base, w2.all_base, i, j, min, 3);
+                            List<string> wru1 = Words.KillDupesAndRange(w1.ru, 10);
+                            List<string> wru2 = Words.KillDupesAndRange(w2.ru, 10);
+                            wru1.AddRange(w1.all_base);
+                            wru2.AddRange(w2.all_base);
+                            string resout2 = FindGybrids(T, wru1, wru2, i, j, min, 3);
                             resout = resout + resout2 + "\r\n";
                             /*
                             List<string> ls1 = new List<string>();
