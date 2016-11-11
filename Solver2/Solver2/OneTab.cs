@@ -281,7 +281,7 @@ namespace Solver2
             cbRaschl = new ComboBox();
             cbRaschl.Items.Add("1"); cbRaschl.Items.Add("2"); cbRaschl.Items.Add("3");
             cbRaschl.SelectedIndex = 0;
-            iRaschl = 3;
+            iRaschl = 1;
             cbRaschl.Visible = false;
             cbRaschl.DropDownStyle = ComboBoxStyle.DropDownList;
             cbRaschl.SelectedIndexChanged += new EventHandler(Event_Change_cbRaschl);
@@ -589,7 +589,7 @@ namespace Solver2
                 objs.Add(lbSolve);
                 objs.Add(btSolve);
                 ShowSettingsOnScreen(objs, SettingsPositions);
-                isPicsSect = true;
+                //isPicsSect = true;
             }
             if ((type == s_picture_only) || (type == s_picture_olimp))
             {
