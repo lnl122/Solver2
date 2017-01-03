@@ -1,0 +1,59 @@
+                    //https://wikivox.ru/word/украина
+                    //http://sociation.org/word/грудь
+                    //http://goldlit.ru/component/slog?words=%D0%B1%D1%8E%D1%81%D1%82%D0%B0
+
+
+
+
+        public static string upload_file(string filepath)
+        {
+            string filename = filepath.Substring(filepath.LastIndexOf("\\") + 1);
+            string uri = "http://jpegshare.net";
+            string uriaction = uri + "/upload.php";
+            string parse_b = "[img]" + uri + "/images";
+            string parse_e = "[/img]";
+            HttpClient httpClient = new HttpClient();
+            System.Net.ServicePointManager.Expect100Continue = false;
+            MultipartFormDataContent form = new MultipartFormDataContent();
+            byte[] img_bytes = System.IO.File.ReadAllBytes(filepath);
+            form.Add(new ByteArrayContent(img_bytes, 0, img_bytes.Count()), "imgfile", filename);
+            Task<HttpResponseMessage> response = httpClient.PostAsync(uriaction, form);
+            HttpResponseMessage res2 = response.Result;
+            res2.EnsureSuccessStatusCode();
+            HttpContent Cont = res2.Content;
+            httpClient.Dispose();
+            string sd = res2.Content.ReadAsStringAsync().Result;
+            sd = sd.Substring(sd.IndexOf(parse_b) + 5); // 5 = [img]
+            sd = sd.Substring(0, sd.IndexOf(parse_e));
+            return sd;
+        }
+
+
+
+
+        private static string translate_en_ru_words(string[] ar)
+        {
+            List<string> L1 = new List<string>();
+            foreach (string s1 in ar)
+            {
+                if(s1 == "") { continue; }
+                char c1 = s1.ToLower()[0];
+                if ((c1 >= 'a') && (c1 <='z'))
+                {
+                    WebClient wc1 = new WebClient();
+                    string re1 = wc1.DownloadString(String.Format("http://www.google.com/translate_t?hl=en&ie=UTF8&text={0}&langpair=en|ru", s1.ToLower()));
+                    re1 = re1.Substring(re1.IndexOf("<span title=\"") + "<span title=\"".Length);
+                    re1 = re1.Substring(re1.IndexOf(">") + 1);
+                    re1 = re1.Substring(0, re1.IndexOf("</span>"));
+                    L1.Add(re1.Trim());
+                } else
+                {
+                    L1.Add(s1);
+                }
+            }
+            //https://translate.google.kz/?um=1&ie=UTF-8&hl=ru&client=tw-ob#auto/ru/dog
+            //url = String.Format("http://www.google.com/translate_t?hl=en&ie=UTF8&text={0}&langpair=en|ru", temp[_5], "en|ru");
+            // надо сложить все переведенные слова в список L1
+
+            return String.Join(" ", L1.ToArray());
+        }
